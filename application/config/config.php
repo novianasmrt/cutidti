@@ -23,7 +23,17 @@ defined('BASEPATH') or exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'http://localhost/cutidti/';
+if (isset($_SERVER['HTTP_HOST'])) {
+    $base_url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'];
+    if (strpos($_SERVER['HTTP_HOST'], 'localhost') !== false) {
+        $base_url .= '/cutidti/';
+    } else {
+        $base_url .= '/';
+    }
+    $config['base_url'] = $base_url;
+} else {
+    $config['base_url'] = 'http://localhost/cutidti/';
+}
 
 /*
 |--------------------------------------------------------------------------
@@ -138,7 +148,7 @@ $config['subclass_prefix'] = 'MY_';
 | Note: This will NOT disable or override the CodeIgniter-specific
 |	autoloading (application/config/autoload.php)
 */
-$config['composer_autoload'] = 'vendor/autoload.php';
+$config['composer_autoload'] = FCPATH . 'vendor/autoload.php';
 
 /*
 |--------------------------------------------------------------------------

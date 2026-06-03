@@ -1,3 +1,3 @@
 <?php
-// Mengarahkan Vercel untuk membaca file index utama CodeIgniter Anda
-require __DIR__ . '/../public/index.php';
+// Karena index.php CI3 ada di luar, kita arahkan langsung ke sana
+require __DIR__ . '/../index.php';
