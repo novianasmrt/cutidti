@@ -87,19 +87,26 @@
 
         <div style="float: right; width: 300px; margin-top: 30px; text-align: left;">
             <div>Yogyakarta, <?= date('j') . ' ' . $bulan[(int)date('n')] . ' ' . date('Y'); ?></div>
-            <div style="margin-bottom: 10px;">Sekretaris<br>Direktur Teknologi Informasi</div>
+            <div style="margin-bottom: 10px;">Direktur<br>Direktorat Teknologi Informasi</div>
             
             <?php 
-            $nama_sekdir = isset($sekdir) && $sekdir ? $sekdir->name : 'Sekretaris Direktur';
-            $nip_sekdir = isset($sekdir) && $sekdir ? $sekdir->nip : '...................';
-            $qr_sekdir = "Tanda Tangan Digital\nNama: " . $nama_sekdir . "\nNIP: " . $nip_sekdir;
+            $nama_direktur = isset($direktur) && $direktur ? $direktur->name : 'Direktur';
+            $nip_direktur = isset($direktur) && $direktur ? $direktur->nip : '...................';
+            
+            // Barcode/QR Code hanya muncul jika pengajuan di-approve
+            $show_barcode = ($cuti->status == 'Disetujui');
+            if ($show_barcode):
+                $qr_direktur = "Tanda Tangan Digital\nNama: " . $nama_direktur . "\nNIP: " . $nip_direktur;
             ?>
-            <img src="https://quickchart.io/qr?text=<?= rawurlencode($qr_sekdir); ?>&size=100" alt="QR Sekdir" style="margin-bottom: 10px;">
+                <img src="https://quickchart.io/qr?text=<?= rawurlencode($qr_direktur); ?>&size=100" alt="QR Direktur" style="margin-bottom: 10px;">
+            <?php else: ?>
+                <div style="height: 100px;"></div>
+            <?php endif; ?>
 
             <div style="font-weight: bold; text-decoration: underline;">
-                <?= $nama_sekdir; ?>
+                <?= $nama_direktur; ?>
             </div>
-            <div>NIP. <?= $nip_sekdir; ?></div>
+            <div>NIP. <?= $nip_direktur; ?></div>
         </div>
         <div style="clear: both;"></div>
     </div>
@@ -274,7 +281,16 @@
                             <span class="box-check <?= $cuti->status=='Ditolak' ? 'bg-black' : ''; ?>"></span> DITOLAK
                         </div>
                         <div style="text-align: center; margin-top: 15px; margin-bottom: 10px;">
-                            <img src="https://quickchart.io/qr?text=<?= rawurlencode($qr_sekdir); ?>&size=90" alt="QR Sekdir" style="margin-bottom: 5px;"><br>
+                            <?php 
+                            $nama_sekdir = isset($sekdir) && $sekdir ? $sekdir->name : 'Sekretaris Direktur';
+                            $nip_sekdir = isset($sekdir) && $sekdir ? $sekdir->nip : '...................';
+                            $qr_sekdir = "Tanda Tangan Digital\nNama: " . $nama_sekdir . "\nNIP: " . $nip_sekdir;
+                            
+                            if ($show_barcode): ?>
+                                <img src="https://quickchart.io/qr?text=<?= rawurlencode($qr_sekdir); ?>&size=90" alt="QR Sekdir" style="margin-bottom: 5px;"><br>
+                            <?php else: ?>
+                                <div style="height: 90px;"></div>
+                            <?php endif; ?>
                             <u style="font-weight: bold;"><?= $nama_sekdir; ?></u><br>
                             NIP. <?= $nip_sekdir; ?>
                         </div>

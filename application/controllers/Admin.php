@@ -189,8 +189,11 @@ class Admin extends CI_Controller
             ->result();
 
         // 4. Update nilai dari database ke map
+        // Hanya update jika nama ada di daftar admin saat ini (skip nama lama yang sudah diubah)
         foreach ($chart_query as $row) {
-            $atasan_map[$row->atasan_bidang] = (int) $row->total_cuti;
+            if (array_key_exists($row->atasan_bidang, $atasan_map)) {
+                $atasan_map[$row->atasan_bidang] = (int) $row->total_cuti;
+            }
         }
 
         // 5. Susun ke array label dan data
@@ -395,6 +398,15 @@ class Admin extends CI_Controller
 
             $this->User_model->update($update_data);
 
+            // ✅ Sync nama atasan_bidang di tabel cuti jika nama berubah
+            // (karena atasan_bidang menyimpan nama sebagai teks, bukan ID)
+            $nama_baru = htmlspecialchars($this->input->post('nama', true));
+            $nama_lama = $current_user->name;
+            if ($nama_baru !== $nama_lama) {
+                $this->db->where('atasan_bidang', $nama_lama);
+                $this->db->update('cuti', ['atasan_bidang' => $nama_baru]);
+            }
+
             $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Data staff berhasil diperbarui!</div>');
             redirect('admin/datastaff');
         }
@@ -500,9 +512,19 @@ class Admin extends CI_Controller
 
                 // 5. Feedback ke User
                 if ($jumlah_sukses > 0) {
-                    $this->session->set_flashdata('message', "success|Berhasil mengimport $jumlah_sukses data pegawai baru!");
+                    $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert">
+                                <strong>Berhasil!</strong> Mengimport ' . $jumlah_sukses . ' data pegawai baru.
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                              </div>');
                 } else {
-                    $this->session->set_flashdata('message', "warning|Tidak ada data baru yang diimport atau format file salah.");
+                    $this->session->set_flashdata('message', '<div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                <strong>Pemberitahuan:</strong> Tidak ada data baru yang diimport atau format file salah.
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                              </div>');
                 }
 
                 redirect('admin/datastaff');
@@ -678,6 +700,9 @@ class Admin extends CI_Controller
 
         // D. Ambil Data Atasan Bidang berdasarkan nama yang tersimpan
         $data['atasan'] = $this->db->get_where('user', ['name' => $data_ditemukan->atasan_bidang])->row();
+
+        // E. Ambil Data Direktur (Role ID = 4)
+        $data['direktur'] = $this->db->get_where('user', ['role_id' => 4])->row();
 
         // 6. LOAD VIEW CETAK
         // PERBAIKAN: Kirim variable $data, BUKAN $id
@@ -903,6 +928,71 @@ class Admin extends CI_Controller
         $this->db->update('cuti', ['no_surat' => $no_surat]);
 
         $this->session->set_flashdata('message', '<div class="alert alert-success">Nomor surat berhasil disimpan!</div>');
+        redirect('admin/datacuti');
+    }
+
+    // ===============================================================
+    // SYNC ATASAN BIDANG DI TABEL CUTI (DATA HISTORIS)
+    // Dipanggil sekali untuk memperbaiki nama lama yang masih tersimpan
+    // URL: admin/sync_atasan_cuti
+    // ===============================================================
+    public function sync_atasan_cuti()
+    {
+        // Ambil semua admin/atasan yang ada di tabel user saat ini
+        $all_admins = $this->User_model->get_admins();
+
+        // Buat map id_user -> nama terbaru
+        $nama_admin_map = [];
+        foreach ($all_admins as $admin) {
+            $nama_admin_map[$admin->id_user] = $admin->name;
+        }
+
+        // Ambil semua nilai atasan_bidang unik yang ada di tabel cuti
+        $distinct_atasan = $this->db
+            ->select('DISTINCT atasan_bidang')
+            ->where('atasan_bidang IS NOT NULL')
+            ->where('atasan_bidang !=', '')
+            ->get('cuti')
+            ->result();
+
+        $updated = 0;
+        $not_found = [];
+
+        foreach ($distinct_atasan as $row) {
+            $nama_di_cuti = $row->atasan_bidang;
+
+            // Cek apakah nama ini masih ada di tabel user
+            $match = $this->db
+                ->where('name', $nama_di_cuti)
+                ->where_in('role_id', [1, 3])
+                ->get('user')
+                ->row();
+
+            if (!$match) {
+                // Nama sudah tidak ada — cari admin berdasarkan kemiripan (LIKE)
+                $kemungkinan = $this->db
+                    ->like('name', explode(' ', $nama_di_cuti)[0])
+                    ->where_in('role_id', [1, 3])
+                    ->get('user')
+                    ->row();
+
+                if ($kemungkinan) {
+                    // Update record cuti yang masih pakai nama lama
+                    $this->db->where('atasan_bidang', $nama_di_cuti);
+                    $this->db->update('cuti', ['atasan_bidang' => $kemungkinan->name]);
+                    $updated++;
+                } else {
+                    $not_found[] = $nama_di_cuti;
+                }
+            }
+        }
+
+        $msg = "Sync selesai. $updated nama atasan berhasil diperbarui.";
+        if (!empty($not_found)) {
+            $msg .= " Nama berikut tidak dapat dipetakan otomatis: " . implode(', ', $not_found);
+        }
+
+        $this->session->set_flashdata('message', '<div class="alert alert-info">' . $msg . '</div>');
         redirect('admin/datacuti');
     }
 }

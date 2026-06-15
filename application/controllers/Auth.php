@@ -60,6 +60,15 @@ class Auth extends CI_Controller
                     ];
                     $this->session->set_userdata($data);
 
+                    // Set Remember Me Cookie (30 hari)
+                    if ($this->input->post('remember')) {
+                        setcookie('remember_email', $email, time() + (86400 * 30), "/");
+                    } else {
+                        if (isset($_COOKIE['remember_email'])) {
+                            setcookie('remember_email', '', time() - 3600, "/");
+                        }
+                    }
+
                     // Redirect berdasarkan role
                     if (in_array($user->role_id, [1, 3, 4, 5])) {
                         redirect('admin');

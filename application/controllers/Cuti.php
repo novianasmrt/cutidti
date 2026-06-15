@@ -221,7 +221,7 @@ class Cuti extends CI_Controller
         $ket_approval = $this->input->post('ket_approval');
 
         // Validasi status
-        if (!in_array($status, ['Menunggu', 'Menunggu Atasan', 'Menunggu Sekdir', 'Disetujui', 'Ditolak'])) {
+        if (!in_array($status, ['Menunggu', 'Menunggu Atasan', 'Menunggu Sekdir', 'Menunggu Direktur', 'Disetujui', 'Ditolak'])) {
             $this->session->set_flashdata('error', 'Status tidak valid!');
             redirect('cuti/approval');
             return;

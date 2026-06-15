@@ -143,7 +143,7 @@
                                id="email" 
                                name="email" 
                                placeholder="Enter Email Address..." 
-                               value="<?= set_value('email'); ?>"
+                               value="<?= set_value('email', isset($_COOKIE['remember_email']) ? $_COOKIE['remember_email'] : ''); ?>"
                                autocomplete="off">
                     </div>
                     <?= form_error('email', '<small class="text-danger">', '</small>'); ?>
@@ -161,18 +161,13 @@
                 </div>
 
                 <div class="form-group" style="display: flex; align-items: center;">
-                    <input type="checkbox" id="customCheck" style="width: auto; margin-right: 8px;"> 
+                    <input type="checkbox" id="customCheck" name="remember" style="width: auto; margin-right: 8px;" <?= isset($_COOKIE['remember_email']) ? 'checked' : ''; ?>> 
                     <label for="customCheck" style="font-size: 0.9rem; color: #6b7280; cursor: pointer;">Remember Me</label>
                 </div>
 
                 <button type="submit" class="btn btn-primary">
                     Login
                 </button>
-
-                <div class="footer-links">
-                    <a href="forgot-password.html">Forgot Password?</a>
-                    <a href="<?= base_url('auth/registration'); ?>">Create an Account!</a>
-                </div>
 
             </form>
             </div>

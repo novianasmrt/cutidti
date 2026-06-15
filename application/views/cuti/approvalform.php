@@ -80,16 +80,22 @@
 
                             <select name="status" class="form-control" required>
                                 <option value="">-- Pilih Status --</option>
-                                <?php if ($user->role_id == 3): ?>
-                                    <option value="Disetujui">Disetujui (Final)</option>
+                                <?php
+                                $role_aktif = $this->session->userdata('role_id_active') ?? $this->session->userdata('role_id') ?? $user->role_id;
+                                ?>
+                                <?php if ($role_aktif == 4): ?>
+                                    <!-- Direktur: Persetujuan final - QR akan muncul di surat -->
+                                    <option value="Disetujui">&#10003; Disetujui Final (QR akan muncul di surat)</option>
+                                <?php elseif ($role_aktif == 3): ?>
+                                    <!-- Sekdir: Lanjutkan ke Direktur -->
+                                    <option value="Menunggu Direktur">&#10003; Setujui (Lanjut ke Direktur)</option>
                                 <?php elseif ($p->status == 'Menunggu' || $p->status == 'Menunggu Atasan'): ?>
-                                    <option value="Menunggu Sekdir">Setujui (Lanjut ke Sekretaris Direktur)</option>
-                                <?php elseif ($p->status == 'Menunggu Sekdir'): ?>
-                                    <option value="Disetujui">Disetujui (Final)</option>
+                                    <!-- Atasan / Admin Bidang: Lanjut ke Sekdir -->
+                                    <option value="Menunggu Sekdir">&#10003; Setujui (Lanjut ke Sekretaris Direktur)</option>
                                 <?php else: ?>
-                                    <option value="Disetujui">Disetujui</option>
+                                    <option value="Disetujui">&#10003; Disetujui</option>
                                 <?php endif; ?>
-                                <option value="Ditolak">Ditolak</option>
+                                <option value="Ditolak">&#10007; Ditolak</option>
                             </select>
                         </div>
 

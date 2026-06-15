@@ -143,6 +143,11 @@ class Cuti_model extends CI_Model
             $data['ket_approval'] = $ket_approval;
         }
         
+        // Simpan tanggal approval direktur (final) agar muncul di surat
+        if ($status === 'Disetujui') {
+            $data['tanggal_disetujui'] = date('Y-m-d H:i:s');
+        }
+        
         return $this->db->update('cuti', $data);
     }
     

@@ -53,8 +53,8 @@
                         <tr>
                             <th class="py-3 px-4 text-center" width="5%" style="border-top: none; border-bottom: 1px solid #e3e6f0;">No</th>
                             <th class="py-3" width="25%" style="border-top: none; border-bottom: 1px solid #e3e6f0;">Pegawai</th>
-                            <th class="py-3" width="25%" style="border-top: none; border-bottom: 1px solid #e3e6f0;">Durasi & Tanggal</th>
-                            <th class="py-3" width="30%" style="border-top: none; border-bottom: 1px solid #e3e6f0;">Keterangan</th>
+                            <th class="py-3" width="20%" style="border-top: none; border-bottom: 1px solid #e3e6f0;">Durasi & Tanggal</th>
+                            <th class="py-3" width="35%" style="border-top: none; border-bottom: 1px solid #e3e6f0;">Keterangan</th>
                             <th class="py-3 px-4 text-center" width="15%" style="border-top: none; border-bottom: 1px solid #e3e6f0;">Aksi</th>
                         </tr>
                     </thead>
@@ -67,26 +67,32 @@
                             <?php foreach ($pengajuan as $p) : ?>
 
                                 <?php
-                                // ✅ LOGIKA FILTERING BERJENJANG
+                                // ✅ LOGIKA FILTERING BERJENJANG 4 LEVEL
                                 $show = false;
+                                $role_aktif = $this->session->userdata('role_id_active') ?? $this->session->userdata('role_id') ?? $user->role_id;
 
-                                if ($user->role_id == 1) {
-                                    // Admin melihat semua yang sedang menunggu (Atasan / Sekdir)
-                                    if ($p->status == 'Menunggu' || $p->status == 'Menunggu Atasan' || $p->status == 'Menunggu Sekdir') {
+                                if ($role_aktif == 1) {
+                                    // Admin (Kepala Bidang): melihat yang menunggu atasan dan atasan_bidang-nya sesuai
+                                    if (($p->status == 'Menunggu' || $p->status == 'Menunggu Atasan') && $p->atasan_bidang == $user->name) {
                                         $show = true;
                                     }
-                                    // KECUALI jika Admin ini adalah Kepala Bidang yang baru saja menyetujui (Menunggu Sekdir)
-                                    if ($p->status == 'Menunggu Sekdir' && $p->atasan_bidang == $user->name) {
-                                        $show = false;
+                                } elseif ($role_aktif == 3) {
+                                    // Sekdir: melihat yang sudah lolos Atasan Bidang (Menunggu Sekdir)
+                                    if ($p->status == 'Menunggu Sekdir') {
+                                        $show = true;
                                     }
-                                } elseif ($user->role_id == 3) {
-                                    // Sekdir melihat yang sudah lolos Atasan Bidang
-                                    // ATAU jika Sekdir tersebut dipilih sebagai atasan_bidang (untuk Kepala Bidang)
-                                    if ($p->status == 'Menunggu Sekdir' || (($p->status == 'Menunggu' || $p->status == 'Menunggu Atasan') && $p->atasan_bidang == $user->name)) {
+                                } elseif ($role_aktif == 4) {
+                                    // Direktur: melihat yang sudah disetujui Sekdir (Menunggu Direktur)
+                                    if ($p->status == 'Menunggu Direktur') {
+                                        $show = true;
+                                    }
+                                } elseif ($role_aktif == 5) {
+                                    // Admin SDM: melihat semua yang sedang menunggu
+                                    if (in_array($p->status, ['Menunggu', 'Menunggu Atasan', 'Menunggu Sekdir', 'Menunggu Direktur'])) {
                                         $show = true;
                                     }
                                 } else {
-                                    // Atasan Bidang melihat jika namanya tercantum sebagai atasan_bidang
+                                    // Atasan Bidang lainnya
                                     if (($p->status == 'Menunggu' || $p->status == 'Menunggu Atasan') && $p->atasan_bidang == $user->name) {
                                         $show = true;
                                     }
@@ -97,6 +103,22 @@
                                 }
 
                                 $ada_data_menunggu = true;
+
+                                // Badge warna berdasarkan status
+                                switch ($p->status) {
+                                    case 'Menunggu Atasan':
+                                    case 'Menunggu':
+                                        $badge_color = '#FFF3CD'; $badge_text = '#856404'; $badge_label = 'Menunggu Atasan';
+                                        break;
+                                    case 'Menunggu Sekdir':
+                                        $badge_color = '#CCE5FF'; $badge_text = '#004085'; $badge_label = 'Menunggu Sekdir';
+                                        break;
+                                    case 'Menunggu Direktur':
+                                        $badge_color = '#D4EDDA'; $badge_text = '#155724'; $badge_label = 'Menunggu Direktur';
+                                        break;
+                                    default:
+                                        $badge_color = '#E2E3E5'; $badge_text = '#383D41'; $badge_label = $p->status;
+                                }
 
                                 // ✅ AMAN DARI NULL DATE
                                 $tgl_mulai   = !empty($p->tanggal_mulai) ? $p->tanggal_mulai : date('Y-m-d');
@@ -114,7 +136,7 @@
                                         <?= $no++; ?>
                                     </td>
 
-                                    <!-- ✅ DATA USER (SUDAH FIX) -->
+                                    <!-- ✅ DATA USER -->
                                     <td class="align-middle">
                                         <div style="font-weight: bold; color: #333;">
                                             <?= htmlspecialchars($p->name); ?>
@@ -123,6 +145,9 @@
                                             <i class="far fa-id-card mr-1"></i>
                                             <?= htmlspecialchars($p->nip); ?>
                                         </div>
+                                        <span style="font-size:0.7rem; background:<?= $badge_color; ?>; color:<?= $badge_text; ?>; padding:2px 8px; border-radius:10px; font-weight:600;">
+                                            <?= $badge_label; ?>
+                                        </span>
                                     </td>
 
                                     <!-- ✅ DURASI -->
