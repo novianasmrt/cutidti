@@ -16,49 +16,14 @@ jobs:
         uses: actions/checkout@v4
 
       # Langkah 2: Inject kredensial database dari GitHub Secrets ke database.php
-      # Cara ini memastikan password TIDAK pernah ada di dalam kode/GitHub
+      # hostname menggunakan 'localhost' karena PHP dan MySQL ada di server yang sama (InfinityFree)
+      # username, password, database diambil dari GitHub Secrets agar tidak masuk ke kode
       - name: 🔧 Inject Konfigurasi Database Production
-        env:
-          DB_HOST: ${{ secrets.DB_HOST }}
-          DB_USERNAME: ${{ secrets.DB_USERNAME }}
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          DB_NAME: ${{ secrets.DB_NAME }}
         run: |
-          cat > application/config/database.php << 'PHPEOF'
-          <?php
-          defined('BASEPATH') or exit('No direct script access allowed');
-
-          $active_group = 'default';
-          $query_builder = TRUE;
-
-          $db['default'] = array(
-              'dsn'          => '',
-              'hostname'     => '${DB_HOST}',
-              'username'     => '${DB_USERNAME}',
-              'password'     => '${DB_PASSWORD}',
-              'database'     => '${DB_NAME}',
-              'dbdriver'     => 'mysqli',
-              'port'         => '',
-              'dbprefix'     => '',
-              'pconnect'     => FALSE,
-              'db_debug'     => FALSE,
-              'cache_on'     => FALSE,
-              'cachedir'     => '',
-              'char_set'     => 'utf8',
-              'dbcollat'     => 'utf8_general_ci',
-              'swap_pre'     => '',
-              'encrypt'      => FALSE,
-              'compress'     => FALSE,
-              'stricton'     => FALSE,
-              'failover'     => array(),
-              'save_queries' => TRUE
-          );
-          PHPEOF
-          # Ganti placeholder dengan nilai dari Secrets
-          sed -i "s|\${DB_HOST}|$DB_HOST|g" application/config/database.php
-          sed -i "s|\${DB_USERNAME}|$DB_USERNAME|g" application/config/database.php
-          sed -i "s|\${DB_PASSWORD}|$DB_PASSWORD|g" application/config/database.php
-          sed -i "s|\${DB_NAME}|$DB_NAME|g" application/config/database.php
+          sed -i "s/'username' => 'root'/'username' => '${{ secrets.DB_USERNAME }}'/" application/config/database.php
+          sed -i "s/'password' => ''/'password' => '${{ secrets.DB_PASSWORD }}'/" application/config/database.php
+          sed -i "s/'database' => 'db_cuti'/'database' => '${{ secrets.DB_NAME }}'/" application/config/database.php
+          echo "✅ Konfigurasi database berhasil diinjeksi"
 
       # Langkah 3: Upload semua file ke server FTP InfinityFree
       - name: 📂 Upload ke Server InfinityFree via FTP
