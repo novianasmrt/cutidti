@@ -75,36 +75,65 @@ $query_builder = TRUE;
 
 /*
 | -------------------------------------------------------------------
-| KONFIGURASI DATABASE
+| KONFIGURASI DATABASE DENGAN DETEKSI OTOMATIS
 | -------------------------------------------------------------------
-| File ini berisi konfigurasi untuk development lokal (XAMPP).
-|
-| PENTING: Jangan isi nilai production di sini!
-| Nilai production (hostname, username, password InfinityFree)
-| diinjeksi secara otomatis oleh GitHub Actions dari GitHub Secrets
-| saat proses deploy, sehingga tidak pernah masuk ke dalam kode.
+| Mendeteksi secara otomatis apakah aplikasi berjalan di komputer lokal
+| (XAMPP/localhost) atau di server hosting production (InfinityFree),
+| sehingga tidak memerlukan konfigurasi GitHub Secrets untuk database.
 | -------------------------------------------------------------------
 */
-$db['default'] = array(
-	'dsn'      => '',
-	'hostname' => 'localhost',   // LOCAL ONLY - production diisi oleh GitHub Actions (DB_HOST)
-	'username' => 'root',        // LOCAL ONLY - production diisi oleh GitHub Actions
-	'password' => '',            // LOCAL ONLY - production diisi oleh GitHub Actions
-	'database' => 'db_cuti',     // LOCAL ONLY - production diisi oleh GitHub Actions
-	'dbdriver' => 'mysqli',
-	'port'     => '',
-	'dbprefix' => '',
-	'pconnect' => FALSE,
-	'db_debug' => (ENVIRONMENT !== 'production'),
-	'cache_on' => FALSE,
-	'cachedir' => '',
-	'char_set' => 'utf8',
-	'dbcollat' => 'utf8_general_ci',
-	'swap_pre' => '',
-	'encrypt'  => FALSE,
-	'compress' => FALSE,
-	'stricton' => FALSE,
-	'failover' => array(),
-	'save_queries' => TRUE
-);
+
+$is_local = (php_sapi_name() === 'cli') 
+	|| in_array($_SERVER['HTTP_HOST'] ?? '', ['localhost', '127.0.0.1', '::1']) 
+	|| preg_match('/^(192\.168\.|10\.|172\.(1[6-9]|2[0-9]|3[0-1])\.)/', $_SERVER['HTTP_HOST'] ?? '');
+
+if ($is_local) {
+	// Konfigurasi untuk Local Development (XAMPP)
+	$db['default'] = array(
+		'dsn'          => '',
+		'hostname'     => 'localhost',
+		'username'     => 'root',
+		'password'     => '',
+		'database'     => 'db_cuti',
+		'dbdriver'     => 'mysqli',
+		'port'         => '',
+		'dbprefix'     => '',
+		'pconnect'     => FALSE,
+		'db_debug'     => TRUE,
+		'cache_on'     => FALSE,
+		'cachedir'     => '',
+		'char_set'     => 'utf8',
+		'dbcollat'     => 'utf8_general_ci',
+		'swap_pre'     => '',
+		'encrypt'      => FALSE,
+		'compress'     => FALSE,
+		'stricton'     => FALSE,
+		'failover'     => array(),
+		'save_queries' => TRUE
+	);
+} else {
+	// Konfigurasi untuk Production (InfinityFree)
+	$db['default'] = array(
+		'dsn'          => '',
+		'hostname'     => 'sql209.infinityfree.com',
+		'username'     => 'if0_42126904',
+		'password'     => 'Noviana4552',
+		'database'     => 'if0_42126904_db_cuti',
+		'dbdriver'     => 'mysqli',
+		'port'         => '',
+		'dbprefix'     => '',
+		'pconnect'     => FALSE,
+		'db_debug'     => FALSE, // Matikan debug db agar tidak memunculkan detail error teknis ke user
+		'cache_on'     => FALSE,
+		'cachedir'     => '',
+		'char_set'     => 'utf8',
+		'dbcollat'     => 'utf8_general_ci',
+		'swap_pre'     => '',
+		'encrypt'      => FALSE,
+		'compress'     => FALSE,
+		'stricton'     => FALSE,
+		'failover'     => array(),
+		'save_queries' => TRUE
+	);
+}
 
