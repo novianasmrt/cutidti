@@ -73,14 +73,27 @@ defined('BASEPATH') or exit('No direct script access allowed');
 $active_group = 'default';
 $query_builder = TRUE;
 
+/*
+| -------------------------------------------------------------------
+| KONFIGURASI DATABASE - InfinityFree
+| -------------------------------------------------------------------
+| Sesuaikan nilai di bawah ini dengan konfigurasi hosting InfinityFree Anda.
+| Nilai-nilai ini dapat ditemukan di panel kontrol InfinityFree.
+|
+| hostname : biasanya sql*.infinityfree.com
+| username : username database dari panel InfinityFree
+| password : password database dari panel InfinityFree
+| database : nama database dari panel InfinityFree
+| -------------------------------------------------------------------
+*/
 $db['default'] = array(
 	'dsn'	=> '',
-	'hostname' => getenv('DB_HOST') ?: 'localhost',
-	'username' => getenv('DB_USERNAME') ?: 'root',
-	'password' => getenv('DB_PASSWORD') ?: '',
-	'database' => getenv('DB_NAME') ?: 'db_cuti',
-	'dbdriver' => getenv('DB_DRIVER') ?: 'mysqli',
-	'port'     => getenv('DB_PORT') ?: '',
+	'hostname' => 'localhost',        // Ganti dengan hostname dari InfinityFree
+	'username' => 'root',             // Ganti dengan username database InfinityFree
+	'password' => '',                 // Ganti dengan password database InfinityFree
+	'database' => 'db_cuti',          // Ganti dengan nama database InfinityFree
+	'dbdriver' => 'mysqli',
+	'port'     => '',
 	'dbprefix' => '',
 	'pconnect' => FALSE,
 	'db_debug' => (ENVIRONMENT !== 'production'),

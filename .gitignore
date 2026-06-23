@@ -31,8 +31,7 @@ user_guide_src/cilexer/pycilexer.egg-info/*
 /tests/tests/
 /tests/results/
 
-# Vercel
-.vercel
+# InfinityFree - tidak perlu .htaccess khusus
 
 # Local environment configuration
 .env
