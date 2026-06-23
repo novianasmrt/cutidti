@@ -8,7 +8,7 @@ application/logs/*
 
 !application/*/.htaccess
 
-composer.lock
+# composer.lock sengaja di-track agar GitHub Actions bisa install dependensi dengan benar
 tests/mocks/database/ci_test.sqlite
 
 user_guide_src/build/*

@@ -25,7 +25,7 @@ jobs:
       # Langkah 3: Install dependensi Composer (vendor/ diabaikan di .gitignore)
       # Step ini penting karena folder vendor/ tidak ikut di-push ke GitHub
       - name: 📥 Install Composer Dependencies
-        run: composer install --no-dev --optimize-autoloader --no-interaction
+        run: composer install --no-dev --optimize-autoloader --no-interaction --ignore-platform-reqs
 
       # Langkah 4: Sinkronisasi semua file ke server FTP InfinityFree
       - name: 📂 Sinkronisasi File ke Server FTP
@@ -47,6 +47,5 @@ jobs:
             readme.rst
             license.txt
             db_cuti.sql
-            composer.lock
           # Jangan gunakan true (akan menghapus semua file di server dulu!)
           dangerous-clean-slate: false
