@@ -115,7 +115,7 @@ if ($is_local) {
 	// Konfigurasi untuk Production (InfinityFree)
 	$db['default'] = array(
 		'dsn'          => '',
-		'hostname'     => 'sql209.infinityfree.com',
+		'hostname'     => 'sql101.infinityfree.com',
 		'username'     => 'if0_42126904',
 		'password'     => 'Noviana4552',
 		'database'     => 'if0_42126904_db_cuti',
