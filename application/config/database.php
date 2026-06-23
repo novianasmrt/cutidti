@@ -88,10 +88,10 @@ $query_builder = TRUE;
 */
 $db['default'] = array(
 	'dsn'	=> '',
-	'hostname' => 'localhost',        // Ganti dengan hostname dari InfinityFree
-	'username' => 'root',             // Ganti dengan username database InfinityFree
-	'password' => '',                 // Ganti dengan password database InfinityFree
-	'database' => 'db_cuti',          // Ganti dengan nama database InfinityFree
+	'hostname' => 'sql209.infinityfree.com',        // Ganti dengan hostname dari InfinityFree
+	'username' => 'if0_42126904',             // Ganti dengan username database InfinityFree
+	'password' => 'Noviana4552',                 // Ganti dengan password database InfinityFree
+	'database' => 'if0_42126904_db_cuti',          // Ganti dengan nama database InfinityFree
 	'dbdriver' => 'mysqli',
 	'port'     => '',
 	'dbprefix' => '',
