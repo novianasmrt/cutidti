@@ -87,7 +87,7 @@ $query_builder = TRUE;
 */
 $db['default'] = array(
 	'dsn'      => '',
-	'hostname' => 'localhost',   // LOCAL ONLY - production diisi oleh GitHub Actions
+	'hostname' => 'localhost',   // LOCAL ONLY - production diisi oleh GitHub Actions (DB_HOST)
 	'username' => 'root',        // LOCAL ONLY - production diisi oleh GitHub Actions
 	'password' => '',            // LOCAL ONLY - production diisi oleh GitHub Actions
 	'database' => 'db_cuti',     // LOCAL ONLY - production diisi oleh GitHub Actions

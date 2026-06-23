@@ -16,10 +16,10 @@ jobs:
         uses: actions/checkout@v4
 
       # Langkah 2: Inject kredensial database dari GitHub Secrets ke database.php
-      # hostname menggunakan 'localhost' karena PHP dan MySQL ada di server yang sama (InfinityFree)
-      # username, password, database diambil dari GitHub Secrets agar tidak masuk ke kode
+      # hostname, username, password, database diambil dari GitHub Secrets agar tidak masuk ke kode
       - name: 🔧 Inject Konfigurasi Database Production
         run: |
+          sed -i "s/'hostname' => 'localhost'/'hostname' => '${{ secrets.DB_HOST }}'/" application/config/database.php
           sed -i "s/'username' => 'root'/'username' => '${{ secrets.DB_USERNAME }}'/" application/config/database.php
           sed -i "s/'password' => ''/'password' => '${{ secrets.DB_PASSWORD }}'/" application/config/database.php
           sed -i "s/'database' => 'db_cuti'/'database' => '${{ secrets.DB_NAME }}'/" application/config/database.php
