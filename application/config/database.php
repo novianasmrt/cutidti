@@ -88,10 +88,12 @@ $query_builder = TRUE;
 */
 $db['default'] = array(
 	'dsn'	=> '',
-	'hostname' => 'sql209.infinityfree.com',        // Ganti dengan hostname dari InfinityFree
-	'username' => 'if0_42126904',             // Ganti dengan username database InfinityFree
-	'password' => 'Noviana4552',                 // Ganti dengan password database InfinityFree
-	'database' => 'if0_42126904_db_cuti',          // Ganti dengan nama database InfinityFree
+	// Untuk lokal (XAMPP): gunakan nilai default di sini
+	// Untuk production (InfinityFree): nilai diambil dari environment variable
+	'hostname' => getenv('DB_HOST')     ?: 'sql209.infinityfree.com',
+	'username' => getenv('DB_USERNAME') ?: 'if0_42126904',
+	'password' => getenv('DB_PASSWORD') ?: 'Noviana4552',
+	'database' => getenv('DB_NAME')     ?: 'if0_42126904_db_cuti',
 	'dbdriver' => 'mysqli',
 	'port'     => '',
 	'dbprefix' => '',
