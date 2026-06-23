@@ -3,53 +3,80 @@ name: Deploy ke InfinityFree via FTP
 on:
   push:
     branches:
-      - main # Skrip berjalan otomatis setiap kamu push ke branch main
+      - main
 
 jobs:
   web-deploy:
-    name: 🚀 Deploying Perubahan Terbaru
+    name: 🚀 Deploying ke InfinityFree
     runs-on: ubuntu-latest
 
     steps:
       # Langkah 1: Ambil source code terbaru dari GitHub
-      - name: 📦 Mengambil Source Code Terbaru
+      - name: 📦 Checkout Source Code
         uses: actions/checkout@v4
 
-      # Langkah 2: Setup PHP (sesuai kebutuhan CodeIgniter 3)
-      - name: 🐘 Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.1'
-          extensions: mysqli, mbstring, gd, zip
-
-      # Langkah 3: Install dependensi Composer (vendor/ diabaikan di .gitignore)
-      # Step ini penting karena folder vendor/ tidak ikut di-push ke GitHub
-      # COMPOSER_MEMORY_LIMIT=-1 mencegah PHP crash karena memory limit
-      # --no-scripts mencegah error dari post-install-cmd yang merujuk package dev
-      - name: 📥 Install Composer Dependencies
+      # Langkah 2: Inject kredensial database dari GitHub Secrets ke database.php
+      # Cara ini memastikan password TIDAK pernah ada di dalam kode/GitHub
+      - name: 🔧 Inject Konfigurasi Database Production
         env:
-          COMPOSER_MEMORY_LIMIT: -1
-        run: composer install --no-dev --no-scripts --no-interaction --ignore-platform-reqs
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_USERNAME: ${{ secrets.DB_USERNAME }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DB_NAME: ${{ secrets.DB_NAME }}
+        run: |
+          cat > application/config/database.php << 'PHPEOF'
+          <?php
+          defined('BASEPATH') or exit('No direct script access allowed');
 
-      # Langkah 4: Sinkronisasi semua file ke server FTP InfinityFree
-      - name: 📂 Sinkronisasi File ke Server FTP
+          $active_group = 'default';
+          $query_builder = TRUE;
+
+          $db['default'] = array(
+              'dsn'          => '',
+              'hostname'     => '${DB_HOST}',
+              'username'     => '${DB_USERNAME}',
+              'password'     => '${DB_PASSWORD}',
+              'database'     => '${DB_NAME}',
+              'dbdriver'     => 'mysqli',
+              'port'         => '',
+              'dbprefix'     => '',
+              'pconnect'     => FALSE,
+              'db_debug'     => FALSE,
+              'cache_on'     => FALSE,
+              'cachedir'     => '',
+              'char_set'     => 'utf8',
+              'dbcollat'     => 'utf8_general_ci',
+              'swap_pre'     => '',
+              'encrypt'      => FALSE,
+              'compress'     => FALSE,
+              'stricton'     => FALSE,
+              'failover'     => array(),
+              'save_queries' => TRUE
+          );
+          PHPEOF
+          # Ganti placeholder dengan nilai dari Secrets
+          sed -i "s|\${DB_HOST}|$DB_HOST|g" application/config/database.php
+          sed -i "s|\${DB_USERNAME}|$DB_USERNAME|g" application/config/database.php
+          sed -i "s|\${DB_PASSWORD}|$DB_PASSWORD|g" application/config/database.php
+          sed -i "s|\${DB_NAME}|$DB_NAME|g" application/config/database.php
+
+      # Langkah 3: Upload semua file ke server FTP InfinityFree
+      - name: 📂 Upload ke Server InfinityFree via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          # InfinityFree: root FTP sudah mengarah ke /htdocs secara otomatis
-          # Jika project kamu ada di subfolder, ubah menjadi: ./htdocs/nama-folder/
           server-dir: ./htdocs/
           local-dir: ./
-          # Daftar file/folder yang TIDAK perlu dikirim ke server
           exclude: |
             **/.git*
             **/.git*/**
+            **/.github/**
             **/node_modules/**
             .editorconfig
             readme.rst
             license.txt
             db_cuti.sql
-          # Jangan gunakan true (akan menghapus semua file di server dulu!)
+            composer.lock
           dangerous-clean-slate: false

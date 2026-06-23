@@ -75,25 +75,22 @@ $query_builder = TRUE;
 
 /*
 | -------------------------------------------------------------------
-| KONFIGURASI DATABASE - InfinityFree
+| KONFIGURASI DATABASE
 | -------------------------------------------------------------------
-| Sesuaikan nilai di bawah ini dengan konfigurasi hosting InfinityFree Anda.
-| Nilai-nilai ini dapat ditemukan di panel kontrol InfinityFree.
+| File ini berisi konfigurasi untuk development lokal (XAMPP).
 |
-| hostname : biasanya sql*.infinityfree.com
-| username : username database dari panel InfinityFree
-| password : password database dari panel InfinityFree
-| database : nama database dari panel InfinityFree
+| PENTING: Jangan isi nilai production di sini!
+| Nilai production (hostname, username, password InfinityFree)
+| diinjeksi secara otomatis oleh GitHub Actions dari GitHub Secrets
+| saat proses deploy, sehingga tidak pernah masuk ke dalam kode.
 | -------------------------------------------------------------------
 */
 $db['default'] = array(
-	'dsn'	=> '',
-	// Untuk lokal (XAMPP): gunakan nilai default di sini
-	// Untuk production (InfinityFree): nilai diambil dari environment variable
-	'hostname' => getenv('DB_HOST')     ?: 'sql209.infinityfree.com',
-	'username' => getenv('DB_USERNAME') ?: 'if0_42126904',
-	'password' => getenv('DB_PASSWORD') ?: 'Noviana4552',
-	'database' => getenv('DB_NAME')     ?: 'if0_42126904_db_cuti',
+	'dsn'      => '',
+	'hostname' => 'localhost',   // LOCAL ONLY - production diisi oleh GitHub Actions
+	'username' => 'root',        // LOCAL ONLY - production diisi oleh GitHub Actions
+	'password' => '',            // LOCAL ONLY - production diisi oleh GitHub Actions
+	'database' => 'db_cuti',     // LOCAL ONLY - production diisi oleh GitHub Actions
 	'dbdriver' => 'mysqli',
 	'port'     => '',
 	'dbprefix' => '',
@@ -104,9 +101,10 @@ $db['default'] = array(
 	'char_set' => 'utf8',
 	'dbcollat' => 'utf8_general_ci',
 	'swap_pre' => '',
-	'encrypt' => FALSE,
+	'encrypt'  => FALSE,
 	'compress' => FALSE,
 	'stricton' => FALSE,
 	'failover' => array(),
 	'save_queries' => TRUE
 );
+
