@@ -78,8 +78,8 @@ class Admin extends CI_Controller
             }
 
             // CUTI HARI INI
-            if ($c->status == 'Disetujui' && !empty($c->tgl_mulai) && !empty($c->tgl_selesai)) {
-                if ($today >= $c->tgl_mulai && $today <= $c->tgl_selesai) {
+            if ($c->status == 'Disetujui' && !empty($c->tanggal_mulai) && !empty($c->tanggal_selesai)) {
+                if ($today >= $c->tanggal_mulai && $today <= $c->tanggal_selesai) {
                     $cuti_hari_ini++;
                 }
             }
@@ -141,7 +141,7 @@ class Admin extends CI_Controller
         foreach ($all_cuti as $c) {
 
             if ($c->status != 'Disetujui') continue;
-            if (empty($c->tgl_mulai) || empty($c->tgl_selesai)) continue;
+            if (empty($c->tanggal_mulai) || empty($c->tanggal_selesai)) continue;
 
             // WARNA BERDASARKAN JENIS
             $color = '#003366';
@@ -156,8 +156,8 @@ class Admin extends CI_Controller
 
             $events[] = [
                 'title' => ($c->name ?? 'User') . ' (' . $c->jenis_cuti . ')',
-                'start' => $c->tgl_mulai,
-                'end'   => date('Y-m-d', strtotime($c->tgl_selesai . ' +1 day')),
+                'start' => $c->tanggal_mulai,
+                'end'   => date('Y-m-d', strtotime($c->tanggal_selesai . ' +1 day')),
                 'backgroundColor' => $color,
                 'borderColor' => $color,
                 'allDay' => true
