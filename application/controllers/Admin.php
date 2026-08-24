@@ -995,4 +995,22 @@ class Admin extends CI_Controller
         $this->session->set_flashdata('message', '<div class="alert alert-info">' . $msg . '</div>');
         redirect('admin/datacuti');
     }
+
+    public function tandatangani($id_cuti)
+    {
+        $role_id = $this->session->userdata('role_id_active') ?? $this->session->userdata('role_id');
+        
+        // Pastikan hanya Direktur yang bisa tanda tangan manual
+        if ($role_id != 4) {
+            $this->session->set_flashdata('message', '<div class="alert alert-danger">Anda tidak memiliki akses!</div>');
+            redirect('admin/datacuti');
+            return;
+        }
+
+        $this->db->where('id_cuti', $id_cuti);
+        $this->db->update('cuti', ['ttd_direktur' => date('Y-m-d H:i:s')]);
+
+        $this->session->set_flashdata('message', '<div class="alert alert-success">Dokumen berhasil ditandatangani! Barcode Direktur kini akan muncul di Surat.</div>');
+        redirect('admin/datacuti');
+    }
 }

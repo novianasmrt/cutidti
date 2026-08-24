@@ -256,6 +256,17 @@
 
                                             <?php 
                                             $current_role = $this->session->userdata('role_id_active') ?? $user->role_id;
+                                            if ($current_role == 4 && $cuti->status == 'Disetujui' && empty($cuti->ttd_direktur)) : ?>
+                                                <a href="<?= base_url('admin/tandatangani/' . $id_fix); ?>"
+                                                    onclick="return confirm('Apakah Anda yakin ingin membubuhkan tanda tangan (barcode) pada surat ini?');"
+                                                    title="Bubuhi Tanda Tangan"
+                                                    style="width: 35px; height: 35px; display: inline-flex; align-items: center; justify-content: center; border-radius: 10px; margin: 0 4px; text-decoration: none; border: none; background-color: #FFF3CD; color: #856404; transition: all 0.2s;">
+                                                    <i class="fas fa-pen-nib fa-sm"></i>
+                                                </a>
+                                            <?php endif; ?>
+
+                                            <?php
+                                            $current_role = $this->session->userdata('role_id_active') ?? $user->role_id;
                                             if ($current_role == 5) : ?>
                                                 <a href="javascript:void(0);"
                                                     class="btn-input-no-surat"

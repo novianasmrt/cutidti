@@ -93,9 +93,9 @@
             $nama_direktur = isset($direktur) && $direktur ? $direktur->name : 'Direktur';
             $nip_direktur = isset($direktur) && $direktur ? $direktur->nip : '...................';
             
-            // Barcode/QR Code hanya muncul jika pengajuan di-approve
-            $show_barcode = ($cuti->status == 'Disetujui');
-            if ($show_barcode):
+            // Barcode/QR Code hanya muncul jika pengajuan di-approve DAN sudah ditandatangani
+            $show_direktur_barcode = ($cuti->status == 'Disetujui' && !empty($cuti->ttd_direktur));
+            if ($show_direktur_barcode):
                 $qr_direktur = "Tanda Tangan Digital\nNama: " . $nama_direktur . "\nNIP: " . $nip_direktur;
             ?>
                 <img src="https://quickchart.io/qr?text=<?= rawurlencode($qr_direktur); ?>&size=100" alt="QR Direktur" style="margin-bottom: 10px;">
@@ -286,7 +286,7 @@
                             $nip_sekdir = isset($sekdir) && $sekdir ? $sekdir->nip : '...................';
                             $qr_sekdir = "Tanda Tangan Digital\nNama: " . $nama_sekdir . "\nNIP: " . $nip_sekdir;
                             
-                            if ($show_barcode): ?>
+                            if ($cuti->status == 'Disetujui'): ?>
                                 <img src="https://quickchart.io/qr?text=<?= rawurlencode($qr_sekdir); ?>&size=90" alt="QR Sekdir" style="margin-bottom: 5px;"><br>
                             <?php else: ?>
                                 <div style="height: 90px;"></div>

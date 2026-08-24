@@ -147,6 +147,11 @@ class Cuti_model extends CI_Model
         // Simpan tanggal approval direktur (final) agar muncul di surat
         if ($status === 'Disetujui') {
             $data['tanggal_disetujui'] = date('Y-m-d H:i:s');
+            $CI =& get_instance();
+            $role_aktif = $CI->session->userdata('role_id_active') ?? $CI->session->userdata('role_id');
+            if ($role_aktif == 4) {
+                $data['ttd_direktur'] = date('Y-m-d H:i:s');
+            }
         }
         
         return $this->db->update('cuti', $data);
