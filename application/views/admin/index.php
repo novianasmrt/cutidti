@@ -385,10 +385,7 @@
             height: 550,
             locale: 'id',
 
-            // Set tanggal awal agar pas demo langsung kelihatan datanya (Januari 2026 sesuai dummy)
             // Nanti kalau sudah live, baris ini bisa dihapus biar otomatis ke bulan sekarang
-            initialDate: '2026-01-01',
-
 
             headerToolbar: {
                 left: 'prev,next today',
