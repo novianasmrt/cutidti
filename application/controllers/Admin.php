@@ -62,7 +62,7 @@ class Admin extends CI_Controller
         foreach ($all_cuti as $c) {
 
             // STATUS
-            if ($c->status == 'Menunggu') {
+            if (in_array($c->status, ['Menunggu', 'Menunggu Atasan', 'Menunggu Sekdir', 'Menunggu Direktur'])) {
                 $pending++;
             } elseif ($c->status == 'Disetujui') {
                 $disetujui++;
@@ -648,7 +648,7 @@ class Admin extends CI_Controller
         $data['disetujui'] = 0;
 
         foreach ($data['data_cuti'] as $d) {
-            if ($d->status == 'Menunggu') $data['pending']++;
+            if (in_array($d->status, ['Menunggu', 'Menunggu Atasan', 'Menunggu Sekdir', 'Menunggu Direktur'])) $data['pending']++;
             if ($d->status == 'Disetujui') $data['disetujui']++;
         }
 

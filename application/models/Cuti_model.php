@@ -78,7 +78,8 @@ class Cuti_model extends CI_Model
         user.name,
         user.nip,
         user.jabatan,
-        user.no_telpon
+        user.no_telpon,
+        user.role_id as requester_role_id
     ');
 
         $this->db->from('cuti');
@@ -108,7 +109,7 @@ class Cuti_model extends CI_Model
     // ==============================
     public function get_all_cuti()
     {
-        $this->db->select('cuti.*, user.name, user.nip, user.jabatan');
+        $this->db->select('cuti.*, user.name, user.nip, user.jabatan, user.role_id as requester_role_id');
         $this->db->from('cuti');
         $this->db->join('user', 'user.id_user = cuti.id_user', 'left');
         $this->db->order_by('cuti.tgl_pengajuan', 'DESC');
@@ -123,7 +124,7 @@ class Cuti_model extends CI_Model
     // ==============================
     public function get_cuti_by_id($id)
     {
-        $this->db->select('cuti.*, user.name, user.nip, user.jabatan, user.no_telpon, user.sisa_cuti, user.sisa_cuti_2025');
+        $this->db->select('cuti.*, user.name, user.nip, user.jabatan, user.no_telpon, user.sisa_cuti, user.sisa_cuti_2025, user.role_id as requester_role_id');
         $this->db->from('cuti');
         $this->db->join('user', 'user.id_user = cuti.id_user', 'left');
         $this->db->where('cuti.id_cuti', $id);

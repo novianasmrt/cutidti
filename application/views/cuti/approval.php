@@ -77,8 +77,9 @@
                                         $show = true;
                                     }
                                 } elseif ($role_aktif == 3) {
-                                    // Sekdir: melihat yang sudah lolos Atasan Bidang (Menunggu Sekdir)
-                                    if ($p->status == 'Menunggu Sekdir') {
+                                    // Sekdir: melihat yang sudah lolos Atasan Bidang (Menunggu Sekdir) 
+                                    // ATAU melihat yang diajukan langsung kepadanya oleh Admin (Menunggu Atasan / Menunggu)
+                                    if ($p->status == 'Menunggu Sekdir' || (($p->status == 'Menunggu' || $p->status == 'Menunggu Atasan') && $p->atasan_bidang == $user->name)) {
                                         $show = true;
                                     }
                                 } elseif ($role_aktif == 4) {
