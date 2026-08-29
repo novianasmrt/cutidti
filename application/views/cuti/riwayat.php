@@ -140,7 +140,6 @@
                                             <?php endif; ?>
                                         </div>
                                     </td>
-
                                 </tr>
                             <?php endforeach; ?>
                         <?php else : ?>
@@ -156,3 +155,17 @@
         </div>
     </div>
 </div>
+
+<?php if ($this->session->flashdata('success')): ?>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: '<?= $this->session->flashdata('success'); ?>',
+            confirmButtonColor: '#003366',
+            confirmButtonText: 'Tutup'
+        });
+    });
+</script>
+<?php endif; ?>

@@ -3,7 +3,7 @@
     <div class="card shadow-sm mb-4" style="border-radius: 15px; border: none;">
         <div class="card-body" style="padding: 2.5rem;">
 
-            <form action="<?= base_url('cuti/simpan') ?>" method="post" enctype="multipart/form-data">
+            <form id="formPengajuan" action="<?= base_url('cuti/simpan') ?>" method="post" enctype="multipart/form-data">
 
                 <div class="mb-5">
                     <?php if ($this->session->flashdata('error')): ?>
@@ -148,7 +148,7 @@
                 <hr class="mt-5 mb-4">
                 <div class="d-flex justify-content-end mb-3" style="position: relative; z-index: 10;">
                     <a href="<?= base_url('cuti/riwayat') ?>" class="btn btn-light border mr-2 px-4 font-weight-bold" style="color: #6b7280;">Batal</a>
-                    <button type="submit" class="btn text-white px-5 font-weight-bold shadow-sm" style="background-color: #003366; cursor: pointer;">
+                    <button type="submit" id="btnSubmit" class="btn text-white px-5 font-weight-bold shadow-sm" style="background-color: #003366; cursor: pointer;">
                         Simpan
                     </button>
                 </div>
@@ -276,4 +276,25 @@
 
         return false; // Bukan hari libur
     }
+
+    // Tampilkan Loading SweetAlert saat form disubmit
+    document.getElementById('formPengajuan').addEventListener('submit', function(e) {
+        // Cek validasi bawaan HTML5 sebelum menampilkan loading
+        if (this.checkValidity()) {
+            const btn = document.getElementById('btnSubmit');
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Menyimpan...';
+            btn.disabled = true;
+            btn.style.cursor = 'not-allowed';
+
+            Swal.fire({
+                title: 'Menyimpan Pengajuan',
+                html: 'Mohon tunggu sebentar...',
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                didOpen: () => {
+                    Swal.showLoading()
+                }
+            });
+        }
+    });
 </script>
