@@ -249,9 +249,7 @@
                 </div>
 
                 <div class="card-body">
-                    <div class="table-responsive">
-                        <div id='calendar' style="min-width: 700px;"></div>
-                    </div>
+                    <div id='calendar' style="width: 100%;"></div>
                 </div>
             </div>
         </div>
@@ -271,7 +269,6 @@
             initialView: 'dayGridMonth',
             locale: 'id', // Bahasa Indonesia
             height: 600,
-            initialDate: '2026-01-01', // Sesuaikan tanggal awal (Dummy data kamu Jan 2026)
 
             // Toolbar
             headerToolbar: {

@@ -98,11 +98,7 @@
                 </div>
 
                 <div class="card-body pt-0">
-                    <div class="table-responsive">
-
-                        <div id='calendar' style="min-width: 700px;"></div>
-
-                    </div>
+                    <div id='calendar' style="width: 100%;"></div>
                 </div>
             </div>
         </div>
