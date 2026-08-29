@@ -129,8 +129,8 @@
                         <div class="col-md-6">
                             <label class="small font-weight-bold text-gray-700">Lampiran Dokumen (Optional)</label>
 
-                            <div class="upload-area" style="border: 2px dashed #d1d5db; border-radius: 10px; background: #f9fafb; padding: 2rem; text-align: center; position: relative; cursor: pointer; transition: all 0.3s;">
-                                <input type="file" name="lampiran" id="fileUpload" style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; opacity: 0; cursor: pointer;">
+                            <div class="upload-area" style="border: 2px dashed #d1d5db; border-radius: 10px; background: #f9fafb; padding: 2rem; text-align: center; position: relative; cursor: pointer; transition: all 0.3s; overflow: hidden;">
+                                <input type="file" name="lampiran" id="fileUpload" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; z-index: 2;">
 
                                 <div id="uploadPlaceholder">
                                     <i class="fas fa-cloud-upload-alt fa-2x mb-2" style="color: #003366;"></i>
@@ -146,9 +146,9 @@
                 </div>
 
                 <hr class="mt-5 mb-4">
-                <div class="d-flex justify-content-end">
+                <div class="d-flex justify-content-end mb-3" style="position: relative; z-index: 10;">
                     <a href="<?= base_url('cuti/riwayat') ?>" class="btn btn-light border mr-2 px-4 font-weight-bold" style="color: #6b7280;">Batal</a>
-                    <button type="submit" class="btn text-white px-5 font-weight-bold shadow-sm" style="background-color: #003366;">
+                    <button type="submit" class="btn text-white px-5 font-weight-bold shadow-sm" style="background-color: #003366; cursor: pointer;">
                         Simpan
                     </button>
                 </div>
