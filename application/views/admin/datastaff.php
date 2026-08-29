@@ -15,16 +15,16 @@
 
     <div class="card shadow mb-4" style="border: none; border-radius: 15px;">
 
-        <div class="card-header py-4 d-flex align-items-center justify-content-between"
+        <div class="card-header py-4 d-flex flex-column flex-md-row align-items-center justify-content-between"
             style="background-color: #fff; border-bottom: 1px solid #e3e6f0; border-top-left-radius: 15px; border-top-right-radius: 15px;">
 
-            <h6 class="m-0 font-weight-bold text-nowrap mr-3" style="color: #003366; font-size: 1.1rem;">
+            <h6 class="m-0 font-weight-bold mb-3 mb-md-0 w-100 text-center text-md-left" style="color: #003366; font-size: 1.1rem;">
                 <i class="fas fa-users mr-2"></i>Daftar Pegawai
             </h6>
 
-            <div class="d-flex align-items-center">
-                <form action="<?= base_url('admin/datastaff'); ?>" method="get" class="form-inline d-flex flex-nowrap mr-3">
-                    <div class="input-group shadow-sm" style="border-radius: 20px;">
+            <div class="d-flex flex-column flex-md-row align-items-center w-100" style="max-width: 600px; justify-content: flex-end;">
+                <form action="<?= base_url('admin/datastaff'); ?>" method="get" class="form-inline d-flex w-100 mb-2 mb-md-0 mr-md-3">
+                    <div class="input-group shadow-sm w-100" style="border-radius: 20px;">
                         <input type="text" class="form-control border-0 small bg-light"
                             name="keyword"
                             placeholder="Cari nama, email..."
@@ -44,8 +44,8 @@
                     <?php endif; ?>
                 </form>
 
-                <a href="<?= base_url('admin/tambahstaff'); ?>" class="btn shadow-sm text-white text-nowrap"
-                    style="background-color: #003366; border-radius: 2rem; padding: 0.5rem 1.4rem; font-size: 0.85rem;">
+                <a href="<?= base_url('admin/tambahstaff'); ?>" class="btn shadow-sm text-white w-100 text-nowrap"
+                    style="background-color: #003366; border-radius: 2rem; padding: 0.5rem 1.4rem; font-size: 0.85rem; max-width: max-content;">
                     <i class="fas fa-plus fa-sm text-white-50 mr-1"></i> Tambah Staff
                 </a>
             </div>

@@ -64,25 +64,25 @@
     <!-- CARD HASIL -->
     <div class="card shadow mb-4" style="border: none; border-radius: 15px;">
 
-        <div class="card-header py-4 d-flex align-items-center justify-content-between"
+        <div class="card-header py-4 d-flex flex-column flex-md-row align-items-center justify-content-between"
             style="background-color: #fff; border-bottom: 1px solid #e3e6f0; border-top-left-radius: 15px; border-top-right-radius: 15px;">
 
-            <h6 class="m-0 font-weight-bold text-nowrap mr-3" style="color: #003366; font-size: 1.1rem;">
+            <h6 class="m-0 font-weight-bold mb-3 mb-md-0 text-center text-md-left w-100" style="color: #003366; font-size: 1.1rem;">
                 <i class="fas fa-table mr-2"></i>Hasil Data Laporan
-                <span class="text-muted font-weight-normal" style="font-size: 0.85rem; margin-left: 6px;">
+                <span class="text-muted font-weight-normal d-block d-md-inline mt-1 mt-md-0" style="font-size: 0.85rem;">
                     — <?= ($f_status == '') ? 'Semua Status' : $f_status; ?>
                     (<?= count($laporan); ?> data)
                 </span>
             </h6>
 
-            <div class="d-flex flex-nowrap">
+            <div class="d-flex flex-row w-100 w-md-auto justify-content-center justify-content-md-end">
                 <a href="<?= base_url('admin/excel?' . $params); ?>"
-                    class="btn shadow-sm mr-2 font-weight-bold"
+                    class="btn shadow-sm mr-2 font-weight-bold flex-fill flex-md-grow-0"
                     style="background-color: #d1e7dd; color: #0f5132; border-radius: 2rem; padding: 0.4rem 1.2rem; font-size: 0.85rem; border: none;">
                     <i class="fas fa-file-excel mr-1"></i> Excel
                 </a>
                 <a href="<?= base_url('admin/pdf?' . $params); ?>" target="_blank"
-                    class="btn shadow-sm font-weight-bold"
+                    class="btn shadow-sm font-weight-bold flex-fill flex-md-grow-0"
                     style="background-color: #f8d7da; color: #842029; border-radius: 2rem; padding: 0.4rem 1.2rem; font-size: 0.85rem; border: none;">
                     <i class="fas fa-file-pdf mr-1"></i> PDF
                 </a>

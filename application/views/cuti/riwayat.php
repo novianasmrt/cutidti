@@ -12,15 +12,15 @@
 
     <div class="card shadow mb-4" style="border: none; border-radius: 15px;">
 
-        <div class="card-header py-4 d-flex flex-row align-items-center justify-content-between"
+        <div class="card-header py-4 d-flex flex-column flex-md-row align-items-center justify-content-between"
             style="background-color: #fff; border-bottom: 2px solid #f0f1f5; border-top-left-radius: 15px; border-top-right-radius: 15px;">
 
-            <h6 class="m-0 font-weight-bold" style="color: #003366; font-size: 1.1rem;">
+            <h6 class="m-0 font-weight-bold mb-3 mb-md-0 w-100 text-center text-md-left" style="color: #003366; font-size: 1.1rem;">
                 <i class="fas fa-history mr-2"></i> Daftar Riwayat Cuti
             </h6>
 
-            <form action="<?= base_url('cuti/riwayat'); ?>" method="get" class="form-inline">
-                <div class="input-group shadow-sm" style="border-radius: 20px;">
+            <form action="<?= base_url('cuti/riwayat'); ?>" method="get" class="form-inline w-100 d-flex justify-content-center justify-content-md-end">
+                <div class="input-group shadow-sm w-100" style="border-radius: 20px; max-width: 400px;">
 
                     <input type="date" name="tanggal" class="form-control bg-light border-0 small"
                         aria-label="Search"
