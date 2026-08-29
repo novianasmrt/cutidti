@@ -288,10 +288,21 @@
                         <small class="text-muted">
                             <?= ($this->session->userdata('role_id_active') == 1) ? 'Administrator' : 'Pegawai'; ?> </small>
                     </div>
-                    <img
-                        src="<?= base_url('assets/img/profile/' . (!empty($user->image) ? $user->image : 'default.png')); ?>"
-                        class="rounded-circle"
-                        style="width: 40px; height: 40px; object-fit: cover; border: 1px solid #e3e6f0;">
+                    <?php 
+                    $user_img = isset($user->image) ? $user->image : '';
+                    if (empty($user_img) || $user_img == 'default.jpg' || $user_img == 'default.png') : 
+                        $inisial = substr($this->session->userdata('name'), 0, 1); 
+                    ?>
+                        <div class="rounded-circle d-flex align-items-center justify-content-center" 
+                            style="width: 40px; height: 40px; background-color: #E6F0FF; color: #003366; font-size: 1.2rem; font-weight: bold; border: 1px solid #e3e6f0;">
+                            <?= strtoupper($inisial); ?>
+                        </div>
+                    <?php else : ?>
+                        <img
+                            src="<?= base_url('assets/img/profile/' . $user_img); ?>"
+                            class="rounded-circle"
+                            style="width: 40px; height: 40px; object-fit: cover; border: 1px solid #e3e6f0;">
+                    <?php endif; ?>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right shadow" aria-labelledby="userDropdown">
 

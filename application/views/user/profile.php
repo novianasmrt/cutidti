@@ -10,10 +10,18 @@
                 <div class="card-body text-center" style="padding: 3rem 2rem;">
 
                     <div class="mb-4 mx-auto" style="width: 180px; height: 180px; position: relative;">
-                        <img src="<?= base_url('assets/img/profile/' . $user->image) . '?v=' . time(); ?>"
-                            class="img-fluid rounded-circle shadow-sm"
-                            alt="Foto Profil"
-                            style="width: 100%; height: 100%; object-fit: cover; border: 5px solid #f8f9fc;">
+                        <?php if (empty($user->image) || $user->image == 'default.jpg' || $user->image == 'default.png') : ?>
+                            <?php $inisial = substr($user->name, 0, 1); ?>
+                            <div class="rounded-circle shadow-sm d-flex align-items-center justify-content-center" 
+                                style="width: 100%; height: 100%; background-color: #E6F0FF; color: #003366; font-size: 5rem; font-weight: bold; border: 5px solid #f8f9fc;">
+                                <?= strtoupper($inisial); ?>
+                            </div>
+                        <?php else : ?>
+                            <img src="<?= base_url('assets/img/profile/' . $user->image) . '?v=' . time(); ?>"
+                                class="img-fluid rounded-circle shadow-sm"
+                                alt="Foto Profil"
+                                style="width: 100%; height: 100%; object-fit: cover; border: 5px solid #f8f9fc;">
+                        <?php endif; ?>
                     </div>
 
                     <h4 class="font-weight-bold text-gray-800 mb-1"><?= $user->name; ?></h4>
