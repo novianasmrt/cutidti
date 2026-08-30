@@ -100,25 +100,30 @@
                 <i class="fas fa-list-alt mr-2"></i>Rekapitulasi Cuti
             </h6>
 
-            <form action="<?= base_url('admin/datacuti'); ?>" method="get" class="form-inline d-flex flex-column flex-md-row w-100" style="max-width: 500px; justify-content: flex-end;">
-                <select name="status" class="form-control border-0 small mb-2 mb-md-0 mr-md-2 w-100 shadow-sm"
-                    style="border-radius: 20px; height: 38px; color: #6e707e; background-color: #f8f9fc; max-width: 100%;">
-                    <option value="">- Semua Status -</option>
-                    <option value="Menunggu" <?= $f_status == 'Menunggu' ? 'selected' : '' ?>>Menunggu</option>
-                    <option value="Disetujui" <?= $f_status == 'Disetujui' ? 'selected' : '' ?>>Disetujui</option>
-                    <option value="Ditolak" <?= $f_status == 'Ditolak' ? 'selected' : '' ?>>Ditolak</option>
-                    <option value="Ditangguhkan" <?= $f_status == 'Ditangguhkan' ? 'selected' : '' ?>>Ditangguhkan</option>
-                    <option value="Perubahan" <?= $f_status == 'Perubahan' ? 'selected' : '' ?>>Perubahan</option>
-                </select>
-
-                <div class="input-group shadow-sm w-100" style="border-radius: 20px;">
-                    <input type="month" name="bulan" class="form-control border-0 small bg-light"
-                        value="<?= $f_bulan; ?>"
-                        style="border-top-left-radius: 20px; border-bottom-left-radius: 20px; color: #6e707e; height: 38px;">
-                    <div class="input-group-append">
-                        <button class="btn" type="submit" style="background-color: #003366; color: white; border-top-right-radius: 20px; border-bottom-right-radius: 20px; padding-left: 20px; padding-right: 20px;">
-                            <i class="fas fa-search fa-sm"></i>
-                        </button>
+            <form action="<?= base_url('admin/datacuti'); ?>" method="get" class="w-100" style="max-width: 500px;">
+                <div class="row no-gutters">
+                    <div class="col-md-6 mb-2 mb-md-0 pr-md-2">
+                        <select name="status" class="form-control border-0 small w-100 shadow-sm"
+                            style="border-radius: 20px; height: 38px; color: #6e707e; background-color: #f8f9fc;">
+                            <option value="">- Semua Status -</option>
+                            <option value="Menunggu" <?= $f_status == 'Menunggu' ? 'selected' : '' ?>>Menunggu</option>
+                            <option value="Disetujui" <?= $f_status == 'Disetujui' ? 'selected' : '' ?>>Disetujui</option>
+                            <option value="Ditolak" <?= $f_status == 'Ditolak' ? 'selected' : '' ?>>Ditolak</option>
+                            <option value="Ditangguhkan" <?= $f_status == 'Ditangguhkan' ? 'selected' : '' ?>>Ditangguhkan</option>
+                            <option value="Perubahan" <?= $f_status == 'Perubahan' ? 'selected' : '' ?>>Perubahan</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="input-group shadow-sm w-100" style="border-radius: 20px;">
+                            <input type="month" name="bulan" class="form-control border-0 small bg-light"
+                                value="<?= $f_bulan; ?>"
+                                style="border-top-left-radius: 20px; border-bottom-left-radius: 20px; color: #6e707e; height: 38px;">
+                            <div class="input-group-append">
+                                <button class="btn" type="submit" style="background-color: #003366; color: white; border-top-right-radius: 20px; border-bottom-right-radius: 20px; padding-left: 20px; padding-right: 20px;">
+                                    <i class="fas fa-search fa-sm"></i>
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </form>
