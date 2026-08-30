@@ -22,7 +22,7 @@
                 <i class="fas fa-users mr-2"></i>Daftar Pegawai
             </h6>
 
-            <div class="d-flex flex-column flex-md-row align-items-center w-100" style="max-width: 600px; justify-content: flex-end;">
+            <div class="d-flex flex-column flex-md-row align-items-start align-items-md-center w-100" style="max-width: 600px; justify-content: flex-end;">
                 <form action="<?= base_url('admin/datastaff'); ?>" method="get" class="form-inline d-flex w-100 mb-2 mb-md-0 mr-md-3">
                     <div class="input-group shadow-sm w-100" style="border-radius: 20px;">
                         <input type="text" class="form-control border-0 small bg-light"
