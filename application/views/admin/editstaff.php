@@ -28,7 +28,7 @@
                             $inisial = substr($staff->name ?? 'U', 0, 1); 
                             ?>
                             <div id="default-initial" class="rounded-circle shadow-sm d-flex justify-content-center align-items-center mx-auto" 
-                                style="width: 100%; height: 100%; border: 5px solid #fff; background-color: #003366; color: #fff; font-size: 5rem; font-weight: bold; text-transform: uppercase;">
+                                style="width: 100%; height: 100%; border: 5px solid #f8f9fc; background-color: #E6F0FF; color: #003366; font-size: 5rem; font-weight: bold; text-transform: uppercase;">
                                 <?= $inisial; ?>
                             </div>
                             <img id="img-preview" src=""
