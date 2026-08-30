@@ -119,13 +119,8 @@ class Admin extends CI_Controller
         // ==============================
         $events = [];
 
-        // Weekend
-        $events[] = [
-            'groupId' => 'weekend',
-            'daysOfWeek' => [0, 6],
-            'display' => 'background',
-            'backgroundColor' => '#ffacac'
-        ];
+        // Weekend (REMOVED)
+        // Akan dihandle oleh CSS di view agar lebih rapi (tanggal merah)
 
         // Libur Nasional (Dinamis dari DB)
         $hari_libur = $this->db->get('hari_libur')->result();

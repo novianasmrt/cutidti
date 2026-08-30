@@ -305,6 +305,22 @@
         text-decoration: none;
     }
 
+    /* Warna untuk hari Minggu (0) dan Sabtu (6) menjadi merah */
+    .fc-day-sun .fc-daygrid-day-number,
+    .fc-day-sat .fc-daygrid-day-number {
+        color: #e74a3b !important;
+        font-weight: bold;
+    }
+
+    /* Hapus background hijau/warna default yang kurang rapi di event background (jika ada) */
+    .fc-bg-event {
+        opacity: 0.1 !important;
+    }
+    
+    .fc-day-sat, .fc-day-sun {
+        background-color: transparent !important;
+    }
+
     .badge-secondary {
         background-color: #858796;
         /* Abu-abu Bootstrap */
