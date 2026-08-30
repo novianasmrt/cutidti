@@ -48,13 +48,9 @@ class User extends CI_Controller
         $calendar_events = [];
 
         // ===============================
-        // BACKGROUND WEEKEND
+        // BACKGROUND WEEKEND (REMOVED)
+        // Akan dihandle oleh CSS di view agar lebih rapi (tanggal merah)
         // ===============================
-        $calendar_events[] = [
-            'groupId' => 'weekend',
-            'daysOfWeek' => [0, 6],
-            'display' => 'background'
-        ];
 
         // ===============================
         // HARI LIBUR NASIONAL (DB)
@@ -78,9 +74,9 @@ class User extends CI_Controller
             // AMANIN ARRAY
             $status        = $c->status ?? '';
             $jenis_cuti    = $c->jenis_cuti ?? '';
-            $tgl_mulai     = $c->tgl_mulai ?? null;
-            $tgl_selesai   = $c->tgl_selesai ?? null;
-            $jumlah_cuti   = (int) ($c->jumlah_cuti ?? 0);
+            $tgl_mulai     = $c->tanggal_mulai ?? $c->tgl_mulai ?? null;
+            $tgl_selesai   = $c->tanggal_selesai ?? $c->tgl_selesai ?? null;
+            $jumlah_cuti   = (int) ($c->jumlah_cuti ?? $c->lama ?? 0);
 
             // HITUNG PENDING
             if ($status === 'Menunggu') {
