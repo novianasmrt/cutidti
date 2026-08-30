@@ -5,16 +5,20 @@
             <div class="card shadow mb-4" style="border: none; border-radius: 15px;">
                 <div class="card-body text-center" style="padding: 3rem 2rem;">
 
-                    <?php
-                    $foto = (!empty($staff->image) && $staff->image != 'default.jpg')
-                        ? base_url('assets/img/profile/' . $staff->image)
-                        : base_url('assets/img/profile/default.jpg');
-                    ?>
-
                     <div class="mb-4 mx-auto" style="width: 180px; height: 180px; position: relative;">
-                        <img src="<?= $foto; ?>"
-                            class="img-fluid rounded-circle shadow-sm"
-                            style="width: 100%; height: 100%; object-fit: cover; border: 5px solid #fff;">
+                        <?php if (empty($staff->image) || $staff->image == 'default.jpg' || $staff->image == 'default.png') : ?>
+                            <?php 
+                            $inisial = substr($staff->name ?? 'U', 0, 1); 
+                            ?>
+                            <div class="rounded-circle shadow-sm d-flex justify-content-center align-items-center mx-auto" 
+                                style="width: 100%; height: 100%; border: 5px solid #fff; background-color: #003366; color: #fff; font-size: 5rem; font-weight: bold; text-transform: uppercase;">
+                                <?= $inisial; ?>
+                            </div>
+                        <?php else : ?>
+                            <img src="<?= base_url('assets/img/profile/' . $staff->image) . '?v=' . time(); ?>"
+                                class="img-fluid rounded-circle shadow-sm"
+                                style="width: 100%; height: 100%; object-fit: cover; border: 5px solid #fff;">
+                        <?php endif; ?>
                     </div>
 
                     <h4 class="font-weight-bold text-gray-900 mb-1">

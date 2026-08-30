@@ -21,17 +21,24 @@
 
                 <div class="card-body text-center" style="padding: 2rem;">
 
-                    <?php
-                    $foto = (!empty($staff->image) && $staff->image != 'default.jpg')
-                        ? base_url('assets/img/profile/' . $staff->image)
-                        : base_url('assets/img/profile/default.jpg');
-                    ?>
-
                     <!-- PREVIEW FOTO -->
                     <div class="mb-4 mx-auto" style="width: 180px; height: 180px; position: relative;">
-                        <img id="img-preview" src="<?= $foto; ?>?v=<?= time(); ?>"
-                            class="img-fluid rounded-circle shadow-sm"
-                            style="width: 100%; height: 100%; object-fit: cover; border: 5px solid #fff; box-shadow: 0 .125rem .25rem rgba(0,0,0,.075)!important;">
+                        <?php if (empty($staff->image) || $staff->image == 'default.jpg' || $staff->image == 'default.png') : ?>
+                            <?php 
+                            $inisial = substr($staff->name ?? 'U', 0, 1); 
+                            ?>
+                            <div id="default-initial" class="rounded-circle shadow-sm d-flex justify-content-center align-items-center mx-auto" 
+                                style="width: 100%; height: 100%; border: 5px solid #fff; background-color: #003366; color: #fff; font-size: 5rem; font-weight: bold; text-transform: uppercase;">
+                                <?= $inisial; ?>
+                            </div>
+                            <img id="img-preview" src=""
+                                class="img-fluid rounded-circle shadow-sm d-none"
+                                style="width: 100%; height: 100%; object-fit: cover; border: 5px solid #fff; box-shadow: 0 .125rem .25rem rgba(0,0,0,.075)!important;">
+                        <?php else : ?>
+                            <img id="img-preview" src="<?= base_url('assets/img/profile/' . $staff->image) . '?v=' . time(); ?>"
+                                class="img-fluid rounded-circle shadow-sm"
+                                style="width: 100%; height: 100%; object-fit: cover; border: 5px solid #fff; box-shadow: 0 .125rem .25rem rgba(0,0,0,.075)!important;">
+                        <?php endif; ?>
                     </div>
 
                     <h5 class="font-weight-bold text-gray-900 mb-1">
@@ -271,8 +278,14 @@
             nextSibling.style.fontWeight = 'bold';
 
             var imgPreview = document.getElementById('img-preview');
+            var defaultInitial = document.getElementById('default-initial');
+
             var reader = new FileReader();
             reader.onload = function() {
+                if(defaultInitial) {
+                    defaultInitial.classList.add('d-none');
+                }
+                imgPreview.classList.remove('d-none');
                 imgPreview.src = reader.result;
             };
             reader.readAsDataURL(e.target.files[0]);
