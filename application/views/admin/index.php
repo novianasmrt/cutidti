@@ -16,7 +16,7 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-ugm text-uppercase mb-1">Total Pegawai</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                            <div class="h2 mb-0 font-weight-bold text-gray-800">
                                 <?= $stats->total_pegawai; ?> <span class="text-xs text-muted">Orang</span>
                             </div>
                         </div>
@@ -34,7 +34,7 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Sedang Cuti (Hari Ini)</div>
-                            <div class="h4 mb-0 font-weight-bold text-gray-800">
+                            <div class="h2 mb-0 font-weight-bold text-gray-800">
                                 <?= $stats->cuti_hari_ini; ?> <span class="text-xs text-muted">Orang</span>
                             </div>
                         </div>
@@ -52,7 +52,7 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Menunggu Approval</div>
-                            <div class="h4 mb-0 font-weight-bold text-gray-800">
+                            <div class="h2 mb-0 font-weight-bold text-gray-800">
                                 <?= $stats->status_pending; ?> <span class="text-xs text-muted">Request</span>
                             </div>
                         </div>
@@ -70,7 +70,7 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Permohonan Bulan Ini</div>
-                            <div class="h4 mb-0 font-weight-bold text-gray-800">
+                            <div class="h2 mb-0 font-weight-bold text-gray-800">
                                 <?= $stats->req_bulan_ini; ?> <span class="text-xs text-muted">Request</span>
                             </div>
                         </div>
