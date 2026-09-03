@@ -247,6 +247,20 @@ class Cuti extends CI_Controller
         if ($cuti) {
             $pemohon = $this->User_model->get_user_by_id($cuti->id_user);
             
+            // 1. Selalu beri tahu pemohon untuk SETIAP perubahan status
+            if ($pemohon && $pemohon->email) {
+                $subject = 'Update Status Pengajuan Cuti Anda: ' . $status;
+                $message = "Halo {$pemohon->name},<br><br>";
+                $message .= "Pengajuan cuti Anda yang dimulai pada tanggal <b>" . date('d-m-Y', strtotime($cuti->tanggal_mulai)) . "</b> saat ini telah berubah status menjadi: <b>{$status}</b>.<br>";
+                if ($ket_approval) {
+                    $message .= "Catatan Approval: {$ket_approval}<br>";
+                }
+                $message .= "Silakan login ke aplikasi untuk melihat detail surat cuti Anda.<br><br>";
+                $message .= "Terima kasih.";
+                $this->_send_email($pemohon->email, $subject, $message);
+            }
+
+            // 2. Beri tahu approver selanjutnya atau pihak terkait (Direktur untuk TTE)
             if ($status == 'Menunggu Sekdir') {
                 // Cari Sekdir (role_id = 3)
                 $sekdirs = $this->User_model->get_users_by_role(3);
@@ -260,31 +274,23 @@ class Cuti extends CI_Controller
                         $this->_send_email($sekdir->email, $subject, $message);
                     }
                 }
-            } elseif ($status == 'Menunggu Direktur') {
-                // Cari Direktur (role_id = 4)
+            } elseif ($status == 'Menunggu Direktur' || $status == 'Disetujui') {
+                // Jika Menunggu Direktur, Direktur perlu menyetujui.
+                // Jika Disetujui (oleh Sekdir/Admin), dokumen siap untuk dibubuhkan/TTE Direktur.
                 $direkturs = $this->User_model->get_users_by_role(4);
                 foreach ($direkturs as $direktur) {
                     if ($direktur->email) {
-                        $subject = 'Pengajuan Cuti Final - Menunggu Persetujuan Anda';
+                        $subject = $status == 'Disetujui' ? 'Dokumen Cuti Siap untuk TTE Direktur' : 'Pengajuan Cuti Final - Menunggu Persetujuan Anda';
                         $message = "Halo {$direktur->name},<br><br>";
-                        $message .= "Pengajuan cuti dari <b>{$pemohon->name}</b> telah disetujui oleh Sekretaris Direktur dan kini menunggu persetujuan akhir Anda sebagai Direktur.<br>";
-                        $message .= "Silakan login ke sistem untuk memproses pengajuan ini.<br><br>";
+                        if ($status == 'Disetujui') {
+                            $message .= "Pengajuan cuti dari <b>{$pemohon->name}</b> telah Disetujui dan dokumennya sudah siap untuk dibubuhkan Tanda Tangan Elektronik (TTE) Anda.<br>";
+                        } else {
+                            $message .= "Pengajuan cuti dari <b>{$pemohon->name}</b> telah disetujui oleh Sekretaris Direktur dan kini menunggu persetujuan akhir Anda sebagai Direktur.<br>";
+                        }
+                        $message .= "Silakan login ke sistem untuk memproses pengajuan atau membubuhkan TTE pada dokumen terkait.<br><br>";
                         $message .= "Terima kasih.";
                         $this->_send_email($direktur->email, $subject, $message);
                     }
-                }
-            } elseif ($status == 'Disetujui' || $status == 'Ditolak') {
-                // Notifikasi ke Pemohon
-                if ($pemohon && $pemohon->email) {
-                    $subject = 'Status Pengajuan Cuti Anda: ' . $status;
-                    $message = "Halo {$pemohon->name},<br><br>";
-                    $message .= "Pengajuan cuti Anda yang dimulai pada tanggal <b>" . date('d-m-Y', strtotime($cuti->tanggal_mulai)) . "</b> berstatus: <b>{$status}</b>.<br>";
-                    if ($ket_approval) {
-                        $message .= "Catatan Approval: {$ket_approval}<br>";
-                    }
-                    $message .= "Silakan login ke aplikasi untuk melihat detail.<br><br>";
-                    $message .= "Terima kasih.";
-                    $this->_send_email($pemohon->email, $subject, $message);
                 }
             }
 

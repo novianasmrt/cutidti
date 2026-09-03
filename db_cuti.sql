@@ -38,7 +38,7 @@ CREATE TABLE `cuti` (
   `jumlah_cuti` int(11) DEFAULT NULL,
   `keterangan` text DEFAULT NULL,
   `alamat` varchar(255) DEFAULT NULL,
-  `status` enum('Menunggu','Menunggu Atasan','Menunggu Sekdir','Disetujui','Ditolak') DEFAULT 'Menunggu Atasan',
+  `status` enum('Menunggu','Menunggu Atasan','Menunggu Sekdir','Menunggu Direktur','Disetujui','Ditolak') DEFAULT 'Menunggu Atasan',
   `atasan_bidang` varchar(255) DEFAULT NULL,
   `ket_approval` text DEFAULT NULL,
   `dokumen_pengajuan` varchar(255) DEFAULT NULL,
