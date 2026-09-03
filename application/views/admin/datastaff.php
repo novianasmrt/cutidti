@@ -207,5 +207,57 @@
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         $('[data-toggle="tooltip"]').tooltip();
+
+        // Fitur pencarian otomatis (Live Search DOM)
+        const searchInput = document.querySelector('input[name="keyword"]');
+        const form = searchInput.closest('form');
+        const tableRows = document.querySelectorAll('tbody tr');
+        const emptyRowTemplate = `
+            <tr id="empty-search-row">
+                <td colspan="6" class="text-center py-5 text-gray-500">
+                    <i class="fas fa-search fa-3x mb-3" style="opacity: 0.3;"></i><br>
+                    Data tidak ditemukan.
+                </td>
+            </tr>`;
+
+        if (searchInput) {
+            // Cegah form melakukan submit (reload halaman) saat dienter
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+            });
+
+            // Filter saat user mengetik
+            searchInput.addEventListener('input', function(e) {
+                const keyword = this.value.toLowerCase();
+                let hasVisibleRow = false;
+                
+                // Hapus pesan kosong sebelumnya jika ada
+                const emptyMsg = document.getElementById('empty-search-row');
+                if (emptyMsg) emptyMsg.remove();
+                
+                tableRows.forEach(row => {
+                    // Lewati baris "Belum ada data" bawaan
+                    if (row.querySelector('td[colspan]')) return;
+                    
+                    const text = row.textContent.toLowerCase();
+                    if (text.includes(keyword)) {
+                        row.style.display = '';
+                        hasVisibleRow = true;
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+
+                // Jika tabel memiliki data tetapi hasil pencarian kosong, tampilkan pesan
+                if (!hasVisibleRow && tableRows.length > 0 && !tableRows[0].querySelector('td[colspan]')) {
+                    document.querySelector('tbody').insertAdjacentHTML('beforeend', emptyRowTemplate);
+                }
+            });
+            
+            // Trigger pencarian pertama kali jika ada value (misalnya dari URL sebelumnya)
+            if(searchInput.value) {
+                searchInput.dispatchEvent(new Event('input'));
+            }
+        }
     });
 </script>
