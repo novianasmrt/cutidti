@@ -175,7 +175,7 @@
                                     <?php endif; ?>
                                 </td>
                                 <td class="align-middle text-center">
-                                    <span class="badge badge-light border mb-1 shadow-sm" style="color: #4e73df; background-color: #f0f4ff;"><?= $durasi; ?> Hari</span>
+                                    <span class="badge badge-light border mb-1" style="color: #4e73df; background-color: #f0f4ff;"><?= $durasi; ?> Hari</span>
                                     <div style="font-size: 0.85rem; font-weight: 600; color: #4b5563;">
                                         <?= date('d M', strtotime($cuti->tanggal_mulai)); ?> - <?= date('d M Y', strtotime($cuti->tanggal_selesai)); ?>
                                     </div>
@@ -216,7 +216,7 @@
                                         // Atau jika ingin Cyan: $bg='#cff4fc'; $txt='#055160';
                                     }
                                     ?>
-                                    <span class="badge px-3 py-2 rounded-pill font-weight-bold shadow-sm" style="background-color: <?= $bg; ?>; color: <?= $txt; ?>; font-size: 0.75rem;">
+                                    <span class="badge px-3 py-2 rounded-pill font-weight-bold" style="background-color: <?= $bg; ?>; color: <?= $txt; ?>; font-size: 0.75rem;">
                                         <?= $cuti->status; ?>
                                     </span>
                                 </td>

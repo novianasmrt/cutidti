@@ -146,9 +146,9 @@
 
                                     <!-- SISA CUTI -->
                                     <td class="align-middle">
-                                        <div class="d-flex justify-content-between mb-1">
-                                            <span><b><?= $sisa_cuti; ?> Hari</b></span>
-                                            <small class="text-muted">dari <?= $jatah_cuti; ?></small>
+                                        <div class="d-flex justify-content-between mb-1 align-items-center">
+                                            <span style="font-size: 0.85rem; font-weight: 600; color: #374151;"><?= $sisa_cuti; ?> Hari</span>
+                                            <span style="font-size: 0.75rem; color: #6b7280;">dari <?= $jatah_cuti; ?></span>
                                         </div>
                                         <div class="progress" style="height: 6px; border-radius: 10px;">
                                             <div class="progress-bar <?= $warna_bar; ?>" style="width: <?= $persen; ?>%; border-radius: 10px;"></div>
