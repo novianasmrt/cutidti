@@ -66,29 +66,21 @@
 
     <style>
         .table-hover tbody tr:hover {
-            background-color: #f8f9fc !important;
+            background-color: #f8fafc !important;
         }
-
         .table-hover tbody tr:hover td {
-            color: #000000 !important;
+            color: #1f2937 !important;
         }
-
-        .action-btn {
-            background-color: #eaecf4;
-            color: #6e707e;
-            border-radius: 50%;
-            width: 32px;
-            height: 32px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            transition: 0.2s;
+        .btn-action-soft {
+            width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center;
+            border-radius: 8px; margin: 0 4px; text-decoration: none; border: none; transition: all 0.2s;
+            background-color: transparent;
         }
-
-        .action-btn:hover {
-            background-color: #d1d3e2;
-            color: #4e73df;
-        }
+        .btn-view { color: #3b82f6; } .btn-view:hover { background-color: #eff6ff; color: #2563eb; }
+        .btn-print { color: #059669; } .btn-print:hover { background-color: #d1fae5; color: #047857; }
+        .btn-sign { color: #f59e0b; } .btn-sign:hover { background-color: #fef3c7; color: #d97706; }
+        .btn-input { color: #4b5563; } .btn-input:hover { background-color: #f3f4f6; color: #374151; }
+        .btn-disabled { color: #9ca3af; cursor: not-allowed; } 
     </style>
 
     <div class="card shadow mb-4" style="border: none; border-radius: 15px;">
@@ -132,7 +124,7 @@
         <div class="card-body p-0">
             <div class="table-responsive">
                 <table class="table table-hover text-nowrap mb-0" width="100%" cellspacing="0" style="color: #000000;">
-                    <thead style="background-color: #f8f9fc; color: #003366;font-weight: 700; text-transform: uppercase; font-size: 0.85rem;">
+                    <thead style="background-color: #f9fafb; color: #6b7280; font-weight: 600; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.5px;">
                         <tr>
                             <th class="py-3 px-4 text-center border-0" width="5%">No</th>
                             <th class="py-3 border-0">Pegawai</th>
@@ -176,7 +168,7 @@
                             <tr style="border-bottom: 1px solid #f0f1f5;">
                                 <td class="align-middle text-center px-4 font-weight-bold text-gray-600"><?= $no++; ?></td>
                                 <td class="align-middle">
-                                    <div class="font-weight-bold" style="font-size: 0.95rem; color: #1f2937;"><?= $cuti->nama; ?></div>
+                                    <div style="font-size: 0.9rem; font-weight: 600; color: #374151;"><?= $cuti->nama; ?></div>
                                     <div class="small text-muted mt-1"><i class="far fa-id-card mr-1"></i> <?= $cuti->nip ?? rand(10000, 99999); ?></div>
                                     <?php if (!empty($cuti->no_surat)) : ?>
                                         <div class="small mt-1" style="color: #003366; font-weight: bold;"><i class="fas fa-file-alt mr-1"></i> No: <?= htmlspecialchars($cuti->no_surat); ?></div>
@@ -234,7 +226,7 @@
                                     <div class="d-flex justify-content-center align-items-center">
 
                                         <a href="javascript:void(0);"
-                                            class="btn-detail"
+                                            class="btn-detail btn-action-soft btn-view"
                                             data-toggle="modal"
                                             data-target="#modalDetail"
                                             data-nama="<?= $cuti->nama; ?>"
@@ -244,9 +236,7 @@
                                             data-keterangan="<?= $ket_fix; ?>"
                                             data-status="<?= $cuti->status; ?>"
                                             data-catatan="<?= htmlspecialchars($cuti->ket_approval ?? ''); ?>"
-
-                                            title="Detail Permohonan"
-                                            style="width: 35px; height: 35px; display: inline-flex; align-items: center; justify-content: center; border-radius: 10px; margin: 0 4px; text-decoration: none; border: none; background-color: #E6F0FF; color: #003366; transition: all 0.2s;">
+                                            title="Detail Permohonan">
                                             <i class="fas fa-eye fa-sm"></i>
                                         </a>
 
@@ -255,7 +245,7 @@
                                             <a href="<?= base_url('admin/cetaksurat/' . $id_fix); ?>"
                                                 target="_blank"
                                                 title="Cetak Surat"
-                                                style="width: 35px; height: 35px; display: inline-flex; align-items: center; justify-content: center; border-radius: 10px; margin: 0 4px; text-decoration: none; border: none; background-color: #E6FFFA; color: #006644; transition: all 0.2s;">
+                                                class="btn-action-soft btn-print">
                                                 <i class="fas fa-print fa-sm"></i>
                                             </a>
 
@@ -265,7 +255,7 @@
                                                 <a href="<?= base_url('admin/tandatangani/' . $id_fix); ?>"
                                                     onclick="return confirm('Apakah Anda yakin ingin membubuhkan tanda tangan (barcode) pada surat ini?');"
                                                     title="Bubuhi Tanda Tangan"
-                                                    style="width: 35px; height: 35px; display: inline-flex; align-items: center; justify-content: center; border-radius: 10px; margin: 0 4px; text-decoration: none; border: none; background-color: #FFF3CD; color: #856404; transition: all 0.2s;">
+                                                    class="btn-action-soft btn-sign">
                                                     <i class="fas fa-pen-nib fa-sm"></i>
                                                 </a>
                                             <?php endif; ?>
@@ -274,12 +264,11 @@
                                             $current_role = $this->session->userdata('role_id_active') ?? $user->role_id;
                                             if ($current_role == 5) : ?>
                                                 <a href="javascript:void(0);"
-                                                    class="btn-input-no-surat"
+                                                    class="btn-input-no-surat btn-action-soft btn-input"
                                                     data-id="<?= $id_fix; ?>"
                                                     data-no-surat="<?= htmlspecialchars($cuti->no_surat ?? ''); ?>"
                                                     data-nama="<?= htmlspecialchars($cuti->nama); ?>"
-                                                    title="Input Nomor Surat"
-                                                    style="width: 35px; height: 35px; display: inline-flex; align-items: center; justify-content: center; border-radius: 10px; margin: 0 4px; text-decoration: none; border: none; background-color: #E2E3E5; color: #383D41; transition: all 0.2s;">
+                                                    title="Input Nomor Surat">
                                                     <i class="fas fa-file-signature fa-sm"></i>
                                                 </a>
                                             <?php endif; ?>
@@ -289,7 +278,7 @@
                                             <button type="button"
                                                 disabled
                                                 title="Belum Disetujui"
-                                                style="width: 35px; height: 35px; display: inline-flex; align-items: center; justify-content: center; border-radius: 10px; margin: 0 4px; border: none; background-color: #f1f3f9; color: #b7b9cc; cursor: not-allowed;">
+                                                class="btn-action-soft btn-disabled">
                                                 <i class="fas fa-print fa-sm"></i>
                                             </button>
 

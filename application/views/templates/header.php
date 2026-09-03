@@ -19,15 +19,23 @@
         :root {
             --ugm-blue: #003366;
             --ugm-light-blue: #004080;
-            --bg-color: #f3f4f6;
+            --bg-color: #f8f9fa; /* Softer background */
             --white: #ffffff;
-            --text-dark: #1f2937;
+            --text-dark: #374151; /* Softer text */
             --text-gray: #6b7280;
+            --success-green: #10b981; /* Emerald modern */
+            --warning-yellow: #f59e0b;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
 
-        body { background-color: var(--bg-color); display: flex; min-height: 100vh; overflow-x: hidden; }
+        body { background-color: var(--bg-color); display: flex; min-height: 100vh; overflow-x: hidden; color: var(--text-dark); }
+        
+        /* Modern Overrides */
+        .card { border-radius: 12px; border: none; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
+        .table { color: var(--text-dark); }
+        .bg-success { background-color: var(--success-green) !important; }
+        .text-success { color: var(--success-green) !important; }
 
         /* SIDEBAR STYLE */
         .sidebar {

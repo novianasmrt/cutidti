@@ -6,11 +6,20 @@
 
     <style>
         .table-hover tbody tr:hover {
-            background-color: #f8f9fc !important;
+            background-color: #f8fafc !important;
         }
         .table-hover tbody tr:hover td {
-            color: #000000 !important;
+            color: #1f2937 !important;
         }
+        .btn-action-soft {
+            width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center;
+            border-radius: 8px; margin: 0 4px; text-decoration: none; border: none; transition: all 0.2s;
+            background-color: transparent;
+        }
+        .btn-view { color: #3b82f6; } .btn-view:hover { background-color: #eff6ff; color: #2563eb; }
+        .btn-edit { color: #f59e0b; } .btn-edit:hover { background-color: #fef3c7; color: #d97706; }
+        .btn-toggle-on { color: #10b981; } .btn-toggle-on:hover { background-color: #d1fae5; color: #059669; }
+        .btn-toggle-off { color: #9ca3af; } .btn-toggle-off:hover { background-color: #f3f4f6; color: #6b7280; }
     </style>
 
     <div class="card shadow mb-4" style="border: none; border-radius: 15px;">
@@ -54,7 +63,7 @@
         <div class="card-body p-0">
             <div class="table-responsive">
                 <table class="table table-hover text-nowrap mb-0" width="100%" cellspacing="0" style="color: #000000;">
-                    <thead style="background-color: #f8f9fc; color: #003366; font-weight: 700; text-transform: uppercase; font-size: 0.85rem;">
+                    <thead style="background-color: #f9fafb; color: #6b7280; font-weight: 600; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.5px;">
                         <tr>
                             <th class="py-3 px-4 text-center border-0" width="5%">No</th>
                             <th class="py-3 border-0">Profil Pegawai</th>
@@ -117,7 +126,7 @@
                                                 </div>
                                             <?php endif; ?>
                                             <div>
-                                                <div class="font-weight-bold" style="font-size: 0.95rem; color: #1f2937;"><?= $s->name ?? '-'; ?></div>
+                                                <div style="font-size: 0.9rem; font-weight: 600; color: #374151;"><?= $s->name ?? '-'; ?></div>
                                                 <div class="small text-muted mt-1"><i class="far fa-envelope mr-1"></i><?= $s->email ?? '-'; ?></div>
                                             </div>
                                         </div>
@@ -125,7 +134,7 @@
 
                                     <!-- JABATAN & ROLE -->
                                     <td class="align-middle">
-                                        <div class="font-weight-bold" style="font-size: 0.9rem; color: #1f2937; white-space: normal; max-width: 280px;">
+                                        <div style="font-size: 0.85rem; font-weight: 500; color: #4b5563; white-space: normal; max-width: 280px;">
                                             <?= $s->jabatan ?? '-'; ?>
                                         </div>
                                         <div class="mt-1">
@@ -160,29 +169,25 @@
                                         <div class="d-flex justify-content-center align-items-center">
                                             <?php if ($id_user) : ?>
                                                 <a href="<?= base_url('admin/detailstaff/' . $id_user); ?>"
-                                                    title="Detail Staff"
-                                                    style="width:35px;height:35px;display:inline-flex;align-items:center;justify-content:center;border-radius:10px;margin:0 4px;text-decoration:none;border:none;background-color:#E6F0FF;color:#003366;transition:all 0.2s;">
+                                                    title="Detail Staff" class="btn-action-soft btn-view">
                                                     <i class="fas fa-eye fa-sm"></i>
                                                 </a>
 
                                                 <a href="<?= base_url('admin/editstaff/' . $id_user); ?>"
-                                                    title="Edit Staff"
-                                                    style="width:35px;height:35px;display:inline-flex;align-items:center;justify-content:center;border-radius:10px;margin:0 4px;text-decoration:none;border:none;background-color:#FFF3CD;color:#856404;transition:all 0.2s;">
+                                                    title="Edit Staff" class="btn-action-soft btn-edit">
                                                     <i class="fas fa-edit fa-sm"></i>
                                                 </a>
 
                                                 <?php if (($s->is_active ?? 1) == 1) : ?>
                                                     <a href="<?= base_url('admin/ubah_status_staff/' . $id_user . '/0'); ?>"
                                                         onclick="return confirm('Nonaktifkan pegawai ini?')"
-                                                        title="Nonaktifkan"
-                                                        style="width:35px;height:35px;display:inline-flex;align-items:center;justify-content:center;border-radius:10px;margin:0 4px;text-decoration:none;border:none;background-color:#E6FFFA;color:#006644;transition:all 0.2s;">
+                                                        title="Nonaktifkan" class="btn-action-soft btn-toggle-on">
                                                         <i class="fas fa-toggle-on fa-sm"></i>
                                                     </a>
                                                 <?php else : ?>
                                                     <a href="<?= base_url('admin/ubah_status_staff/' . $id_user . '/1'); ?>"
                                                         onclick="return confirm('Aktifkan kembali?')"
-                                                        title="Aktifkan"
-                                                        style="width:35px;height:35px;display:inline-flex;align-items:center;justify-content:center;border-radius:10px;margin:0 4px;text-decoration:none;border:none;background-color:#F1F3F5;color:#ADB5BD;transition:all 0.2s;">
+                                                        title="Aktifkan" class="btn-action-soft btn-toggle-off">
                                                         <i class="fas fa-toggle-off fa-sm"></i>
                                                     </a>
                                                 <?php endif; ?>
