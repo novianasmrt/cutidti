@@ -113,6 +113,18 @@ class Cuti extends CI_Controller
         ];
 
         $this->Cuti_model->insert_cuti($data_insert);
+        
+        // --- NOTIFIKASI EMAIL KE ATASAN ---
+        $atasan_nama = $this->input->post('atasan_bidang');
+        $atasan = $this->db->get_where('user', ['name' => $atasan_nama])->row();
+        if ($atasan && $atasan->email) {
+            $subject = 'Pengajuan Cuti Baru - Menunggu Persetujuan Anda';
+            $message = "Halo {$atasan->name},<br><br>";
+            $message .= "Ada pengajuan cuti baru dari <b>{$user->name}</b> yang menunggu persetujuan Anda.<br>";
+            $message .= "Silakan login ke aplikasi untuk melihat detail dan memberikan persetujuan.<br><br>";
+            $message .= "Terima kasih.";
+            $this->_send_email($atasan->email, $subject, $message);
+        }
 
         $this->session->set_flashdata('success', 'Pengajuan cuti berhasil!');
         redirect('cuti/riwayat');
@@ -230,9 +242,53 @@ class Cuti extends CI_Controller
         // Update ke database
         $this->Cuti_model->update_status($id, $status, $ket_approval);
         
-        // Recalculate sisa cuti if status changed
+        // --- LOGIKA NOTIFIKASI EMAIL BERTINGKAT ---
         $cuti = $this->Cuti_model->get_cuti_by_id($id);
         if ($cuti) {
+            $pemohon = $this->User_model->get_user_by_id($cuti->id_user);
+            
+            if ($status == 'Menunggu Sekdir') {
+                // Cari Sekdir (role_id = 3)
+                $sekdirs = $this->User_model->get_users_by_role(3);
+                foreach ($sekdirs as $sekdir) {
+                    if ($sekdir->email) {
+                        $subject = 'Pengajuan Cuti Lanjutan - Menunggu Persetujuan Anda';
+                        $message = "Halo {$sekdir->name},<br><br>";
+                        $message .= "Pengajuan cuti dari <b>{$pemohon->name}</b> telah disetujui oleh Atasan Bidang dan kini menunggu persetujuan Anda sebagai Sekretaris Direktur.<br>";
+                        $message .= "Silakan login ke sistem untuk memproses pengajuan ini.<br><br>";
+                        $message .= "Terima kasih.";
+                        $this->_send_email($sekdir->email, $subject, $message);
+                    }
+                }
+            } elseif ($status == 'Menunggu Direktur') {
+                // Cari Direktur (role_id = 4)
+                $direkturs = $this->User_model->get_users_by_role(4);
+                foreach ($direkturs as $direktur) {
+                    if ($direktur->email) {
+                        $subject = 'Pengajuan Cuti Final - Menunggu Persetujuan Anda';
+                        $message = "Halo {$direktur->name},<br><br>";
+                        $message .= "Pengajuan cuti dari <b>{$pemohon->name}</b> telah disetujui oleh Sekretaris Direktur dan kini menunggu persetujuan akhir Anda sebagai Direktur.<br>";
+                        $message .= "Silakan login ke sistem untuk memproses pengajuan ini.<br><br>";
+                        $message .= "Terima kasih.";
+                        $this->_send_email($direktur->email, $subject, $message);
+                    }
+                }
+            } elseif ($status == 'Disetujui' || $status == 'Ditolak') {
+                // Notifikasi ke Pemohon
+                if ($pemohon && $pemohon->email) {
+                    $subject = 'Status Pengajuan Cuti Anda: ' . $status;
+                    $message = "Halo {$pemohon->name},<br><br>";
+                    $message .= "Pengajuan cuti Anda yang dimulai pada tanggal <b>" . date('d-m-Y', strtotime($cuti->tanggal_mulai)) . "</b> berstatus: <b>{$status}</b>.<br>";
+                    if ($ket_approval) {
+                        $message .= "Catatan Approval: {$ket_approval}<br>";
+                    }
+                    $message .= "Silakan login ke aplikasi untuk melihat detail.<br><br>";
+                    $message .= "Terima kasih.";
+                    $this->_send_email($pemohon->email, $subject, $message);
+                }
+            }
+
+            // Recalculate sisa cuti if status changed
             $this->Cuti_model->hitung_sisa_cuti_tahunan($cuti->id_user);
         }
 
@@ -261,5 +317,24 @@ class Cuti extends CI_Controller
         $this->load->view('templates/topbar', $data);
         $this->load->view('cuti/approvalform', $data);
         $this->load->view('templates/footer');
+    }
+
+    // ===================================================
+    // SEND EMAIL NOTIFICATION (PRIVATE)
+    // ===================================================
+    private function _send_email($to_email, $subject, $message_body)
+    {
+        // Pastikan ada email tujuan
+        if (empty($to_email)) return false;
+
+        $this->load->library('email');
+
+        // Note: Pengaturan SMTP sudah ada di config/email.php
+        $this->email->from('no-reply@cutisistem.com', 'Sistem Cuti');
+        $this->email->to($to_email);
+        $this->email->subject($subject);
+        $this->email->message($message_body);
+
+        return $this->email->send();
     }
 }

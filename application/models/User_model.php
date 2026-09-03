@@ -33,6 +33,21 @@ class User_model extends CI_Model
     }
 
     // ==============================
+    // 1C. AMBIL USER BERDASARKAN ROLE
+    // ==============================
+    public function get_users_by_role($role_id)
+    {
+        return $this->db
+            ->select('user.*, user_role.role')
+            ->from('user')
+            ->join('user_role', 'user_role.id_role = user.role_id', 'left')
+            ->where('user.role_id', $role_id)
+            ->order_by('user.name', 'ASC')
+            ->get()
+            ->result(); // ✅ OBJECT
+    }
+
+    // ==============================
     // 2. AMBIL USER BY ID
     // ==============================
     public function get_user_by_id($id)
