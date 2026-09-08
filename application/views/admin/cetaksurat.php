@@ -117,7 +117,7 @@
         
         <div style="text-align: right; margin-bottom: 20px; font-size: 10pt;">
             Yogyakarta, <?= date('j') . ' ' . $bulan[(int)date('n')] . ' ' . date('Y'); ?><br>
-            Kepada Yth. Direktur Sumber Daya Manusia UGM<br>
+            YTH. Direktur Teknologi Informsi UGM<br>
             di Yogyakarta
         </div>
 
@@ -201,15 +201,13 @@
             <table class="tbl-border">
                 <tr style="text-align: center; background-color: #f0f0f0;">
                     <td style="width: 20%;">Tahun</td>
-                    <td style="width: 15%;">Sisa</td>
-                    <td style="width: 30%;">Keterangan</td>
-                    <td style="width: 35%;">TTD Pejabat</td>
+                    <td style="width: 20%;">Sisa</td>
+                    <td style="width: 60%;">Keterangan</td>
                 </tr>
                 <tr>
                     <td>N-2</td>
                     <td style="text-align: center;">-</td>
                     <td></td>
-                    <td rowspan="3" style="vertical-align: middle; text-align: center; color: #ccc;">(Paraf)</td>
                 </tr>
                 <tr>
                     <td>N-1</td>

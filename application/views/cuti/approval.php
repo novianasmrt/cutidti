@@ -89,7 +89,7 @@
                                     }
                                 } elseif ($role_aktif == 5) {
                                     // Admin SDM: melihat semua yang sedang menunggu
-                                    if (in_array($p->status, ['Menunggu', 'Menunggu Atasan', 'Menunggu Sekdir', 'Menunggu Direktur'])) {
+                                    if (in_array($p->status, ['Menunggu', 'Menunggu Atasan', 'Menunggu Sekdir', 'Menunggu Admin SDM', 'Menunggu Direktur'])) {
                                         $show = true;
                                     }
                                 } else {
@@ -113,6 +113,9 @@
                                         break;
                                     case 'Menunggu Sekdir':
                                         $badge_color = '#CCE5FF'; $badge_text = '#004085'; $badge_label = 'Menunggu Sekdir';
+                                        break;
+                                    case 'Menunggu Admin SDM':
+                                        $badge_color = '#E2D9F3'; $badge_text = '#5A2A8C'; $badge_label = 'Menunggu Admin SDM';
                                         break;
                                     case 'Menunggu Direktur':
                                         $badge_color = '#D4EDDA'; $badge_text = '#155724'; $badge_label = 'Menunggu Direktur';

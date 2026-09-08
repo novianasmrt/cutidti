@@ -81,6 +81,10 @@
         .btn-sign { color: #f59e0b; } .btn-sign:hover { background-color: #fef3c7; color: #d97706; }
         .btn-input { color: #4b5563; } .btn-input:hover { background-color: #f3f4f6; color: #374151; }
         .btn-disabled { color: #9ca3af; cursor: not-allowed; } 
+        .btn-simpan { background-color: #003366; color: white; border: none; transition: all 0.2s; }
+        .btn-simpan:hover { background-color: #002244; color: white; text-decoration: none; }
+        .btn-batal { background-color: #e5e7eb; color: #4b5563; border: none; transition: all 0.2s; }
+        .btn-batal:hover { background-color: #d1d5db; color: #374151; text-decoration: none; }
     </style>
 
     <div class="card shadow mb-4" style="border: none; border-radius: 15px;">
@@ -95,8 +99,11 @@
             <form action="<?= base_url('admin/datacuti'); ?>" method="get" class="w-100" style="max-width: 500px;">
                 <div class="row no-gutters">
                     <div class="col-md-6 mb-2 mb-md-0 pr-md-2">
-                        <select name="status" class="form-control border-0 small w-100 shadow-sm"
-                            style="border-radius: 20px; height: 38px; color: #6e707e; background-color: #f8f9fc;">
+                        <select name="status" class="form-control w-100"
+                            onchange="this.form.submit()"
+                            style="border-radius: 20px; height: 40px; padding: 0 15px; cursor: pointer; color: #4b5563; background-color: #f9fafb; border: 1px solid #e5e7eb; font-size: 0.9rem; transition: all 0.2s; appearance: none;"
+                            onfocus="this.style.backgroundColor='#ffffff'; this.style.borderColor='#3b82f6'; this.style.boxShadow='0 0 0 3px rgba(59, 130, 246, 0.1)';"
+                            onblur="this.style.backgroundColor='#f9fafb'; this.style.borderColor='#e5e7eb'; this.style.boxShadow='none';">
                             <option value="">- Semua Status -</option>
                             <option value="Menunggu" <?= $f_status == 'Menunggu' ? 'selected' : '' ?>>Menunggu</option>
                             <option value="Disetujui" <?= $f_status == 'Disetujui' ? 'selected' : '' ?>>Disetujui</option>
@@ -106,15 +113,13 @@
                         </select>
                     </div>
                     <div class="col-md-6">
-                        <div class="input-group shadow-sm w-100" style="border-radius: 20px;">
-                            <input type="month" name="bulan" class="form-control border-0 small bg-light"
+                        <div class="position-relative w-100">
+                            <input type="month" name="bulan" class="form-control w-100"
                                 value="<?= $f_bulan; ?>"
-                                style="border-top-left-radius: 20px; border-bottom-left-radius: 20px; color: #6e707e; height: 38px;">
-                            <div class="input-group-append">
-                                <button class="btn" type="submit" style="background-color: #003366; color: white; border-top-right-radius: 20px; border-bottom-right-radius: 20px; padding-left: 20px; padding-right: 20px;">
-                                    <i class="fas fa-search fa-sm"></i>
-                                </button>
-                            </div>
+                                onchange="this.form.submit()"
+                                style="border-radius: 20px; height: 40px; padding: 0 15px; cursor: pointer; color: #4b5563; background-color: #f9fafb; border: 1px solid #e5e7eb; font-size: 0.9rem; transition: all 0.2s;"
+                                onfocus="this.style.backgroundColor='#ffffff'; this.style.borderColor='#3b82f6'; this.style.boxShadow='0 0 0 3px rgba(59, 130, 246, 0.1)';"
+                                onblur="this.style.backgroundColor='#f9fafb'; this.style.borderColor='#e5e7eb'; this.style.boxShadow='none';">
                         </div>
                     </div>
                 </div>
@@ -205,6 +210,9 @@
                                     } elseif ($cuti->status == 'Ditolak') {
                                         $bg  = '#f8d7da'; // Merah Soft
                                         $txt = '#842029'; // Merah Tua
+                                    } elseif ($cuti->status == 'Menunggu Admin SDM') {
+                                        $bg  = '#e2d9f3';
+                                        $txt = '#5a2a8c'; // Ungu
                                     } elseif ($cuti->status == 'Ditangguhkan') {
                                         // --- SARAN: ABU-ABU (Grey) ---
                                         $bg  = '#eaecf4';
@@ -216,8 +224,8 @@
                                         // Atau jika ingin Cyan: $bg='#cff4fc'; $txt='#055160';
                                     }
                                     ?>
-                                    <span class="badge px-3 py-2 rounded-pill font-weight-bold" style="background-color: <?= $bg; ?>; color: <?= $txt; ?>; font-size: 0.75rem;">
-                                        <?= $cuti->status; ?>
+                                    <span style="color: <?= $txt; ?>; font-weight: 600; font-size: 0.85rem;">
+                                        <i class="fas fa-circle mr-1" style="font-size: 0.5rem; vertical-align: middle;"></i><?= $cuti->status; ?>
                                     </span>
                                 </td>
 
@@ -317,32 +325,44 @@
 
             <div class="modal-body p-4">
                 <div class="row mb-3 border-bottom pb-2">
-                    <div class="col-4 text-gray-600 small font-weight-bold text-uppercase" style="letter-spacing: 0.5px;">Nama Pegawai</div>
-                    <div class="col-8 text-dark" id="det_nama">...</div>
+                    <div class="col-4 text-gray-600 small font-weight-bold text-uppercase d-flex justify-content-between" style="letter-spacing: 0.5px;">
+                        <span>Nama Pegawai</span> <span>:</span>
+                    </div>
+                    <div class="col-8" id="det_nama" style="text-align: left; font-size: 0.95rem; color: #1f2937;">...</div>
                 </div>
                 <div class="row mb-3 border-bottom pb-2">
-                    <div class="col-4 text-gray-600 small font-weight-bold text-uppercase" style="letter-spacing: 0.5px;">Jenis Cuti</div>
-                    <div class="col-8 text-dark" id="det_jenis">...</div>
+                    <div class="col-4 text-gray-600 small font-weight-bold text-uppercase d-flex justify-content-between" style="letter-spacing: 0.5px;">
+                        <span>Jenis Cuti</span> <span>:</span>
+                    </div>
+                    <div class="col-8" id="det_jenis" style="text-align: left; font-size: 0.95rem; color: #1f2937;">...</div>
                 </div>
                 <div class="row mb-3 border-bottom pb-2">
-                    <div class="col-4 text-gray-600 small font-weight-bold text-uppercase" style="letter-spacing: 0.5px;">Tanggal</div>
-                    <div class="col-8 text-dark" id="det_tanggal">...</div>
+                    <div class="col-4 text-gray-600 small font-weight-bold text-uppercase d-flex justify-content-between" style="letter-spacing: 0.5px;">
+                        <span>Tanggal</span> <span>:</span>
+                    </div>
+                    <div class="col-8" id="det_tanggal" style="text-align: left; font-size: 0.95rem; color: #1f2937;">...</div>
                 </div>
 
-                <div class="row mb-3 border-bottom pb-2">
-                    <div class="col-4 text-gray-600 small font-weight-bold text-uppercase" style="letter-spacing: 0.5px;">Durasi</div>
-                    <div class="col-8" id="div_durasi">
+                <div class="row mb-3 border-bottom pb-2 align-items-center">
+                    <div class="col-4 text-gray-600 small font-weight-bold text-uppercase d-flex justify-content-between" style="letter-spacing: 0.5px;">
+                        <span>Durasi</span> <span>:</span>
+                    </div>
+                    <div class="col-8" id="div_durasi" style="text-align: left; font-size: 0.95rem; color: #1f2937;">
                         <span id="det_durasi">...</span>
                     </div>
                 </div>
 
-                <div class="row mb-3">
-                    <div class="col-4 text-gray-600 small font-weight-bold text-uppercase" style="letter-spacing: 0.5px;">Status</div>
-                    <div class="col-8" id="det_status">...</div>
+                <div class="row mb-3 align-items-center">
+                    <div class="col-4 text-gray-600 small font-weight-bold text-uppercase d-flex justify-content-between" style="letter-spacing: 0.5px;">
+                        <span>Status</span> <span>:</span>
+                    </div>
+                    <div class="col-8" id="det_status" style="text-align: left;">...</div>
                 </div>
                 <div class="row mb-3">
-                    <div class="col-4 text-gray-600 small font-weight-bold text-uppercase" style="letter-spacing: 0.5px;">Catatan</div>
-                    <div class="col-8" id="det_catatan">...</div>
+                    <div class="col-4 text-gray-600 small font-weight-bold text-uppercase d-flex justify-content-between" style="letter-spacing: 0.5px;">
+                        <span>Catatan</span> <span>:</span>
+                    </div>
+                    <div class="col-8" id="det_catatan" style="text-align: left; font-size: 0.95rem; color: #1f2937;">...</div>
                 </div>
 
                 <div class="p-3 mt-3 bg-light rounded" style="border-left: 5px solid #003366;">
@@ -354,8 +374,8 @@
             </div>
 
             <div class="modal-footer border-0 pt-0 pb-4">
-                <button type="button" class="btn shadow-sm font-weight-bold px-4 w-100" data-dismiss="modal"
-                    style="background-color: #003366; color: white; border-radius: 50px;">
+                <button type="button" class="btn btn-batal font-weight-bold px-4 w-100" data-dismiss="modal"
+                    style="border-radius: 50px;">
                     Tutup
                 </button>
             </div>
@@ -378,19 +398,19 @@
                 <div class="modal-body p-4">
                     <input type="hidden" name="id_cuti" id="input_id_cuti">
                     <div class="form-group mb-3">
-                        <label class="font-weight-bold text-gray-700">Nama Pegawai</label>
-                        <div id="input_nama_pegawai" class="form-control-plaintext font-weight-bold text-dark">...</div>
+                        <label class="font-weight-bold" style="color: #4b5563; font-size: 0.9rem;">Nama Pegawai</label>
+                        <div id="input_nama_pegawai" class="font-weight-bold text-dark" style="font-size: 0.95rem; padding-top: 5px;">...</div>
                     </div>
                     <div class="form-group">
-                        <label for="no_surat" class="font-weight-bold text-gray-700">Nomor Surat <span class="text-danger">*</span></label>
-                        <input type="text" name="no_surat" id="input_no_surat" class="form-control" placeholder="Contoh: 123/UN1/DTI/KP.05.01/2026" required style="border-radius: 10px;">
+                        <label for="no_surat" class="font-weight-bold" style="color: #4b5563; font-size: 0.9rem;">Nomor Surat <span class="text-danger">*</span></label>
+                        <input type="text" name="no_surat" id="input_no_surat" class="form-control" placeholder="Contoh: 123/UN1/DTI/KP.05.01/2026" required style="border-radius: 15px; background-color: #f9fafb; border: 1px solid #e5e7eb; padding: 10px 15px; font-size: 0.9rem; transition: all 0.2s;" onfocus="this.style.backgroundColor='#ffffff'; this.style.borderColor='#3b82f6'; this.style.boxShadow='0 0 0 3px rgba(59, 130, 246, 0.1)';" onblur="this.style.backgroundColor='#f9fafb'; this.style.borderColor='#e5e7eb'; this.style.boxShadow='none';">
                     </div>
                 </div>
                 <div class="modal-footer border-0 pt-0 pb-4">
-                    <button type="submit" class="btn shadow-sm font-weight-bold px-4" style="background-color: #003366; color: white; border-radius: 50px; flex: 1;">
+                    <button type="submit" class="btn btn-simpan font-weight-bold px-4" style="border-radius: 50px; flex: 1;">
                         Simpan
                     </button>
-                    <button type="button" class="btn btn-light shadow-sm font-weight-bold px-4" data-dismiss="modal" style="border-radius: 50px; flex: 1;">
+                    <button type="button" class="btn btn-batal font-weight-bold px-4" data-dismiss="modal" style="border-radius: 50px; flex: 1;">
                         Batal
                     </button>
                 </div>
@@ -423,8 +443,7 @@
 
 
             // 3. LOGIC WARNA DURASI (Sama persis dengan Tabel)
-            // Style: color: #4e73df; background-color: #f0f4ff;
-            var durasiHtml = '<span class="badge badge-light border shadow-sm px-3 py-2" style="color: #4e73df; background-color: #f0f4ff; font-size: 0.9rem;">' + durasi + '</span>';
+            var durasiHtml = '<span style="font-size: 0.95rem; color: #1f2937;">' + durasi + '</span>';
             $('#div_durasi').html(durasiHtml);
 
             // 4. LOGIC WARNA STATUS (Sama persis dengan Tabel PHP)
@@ -434,13 +453,16 @@
             if (status == 'Disetujui') {
                 bg = '#d1e7dd';
                 txt = '#0f5132'; // Hijau
+            } else if (status == 'Menunggu Admin SDM') {
+                bg = '#e2d9f3';
+                txt = '#5a2a8c'; // Ungu
             } else if (status == 'Ditolak') {
                 bg = '#f8d7da';
                 txt = '#842029'; // Merah
             }
 
-            // Render Badge Status dengan warna Hex yang sudah ditentukan
-            var statusHtml = '<span class="badge px-3 py-2 rounded-pill font-weight-bold shadow-sm" style="background-color: ' + bg + '; color: ' + txt + '; font-size: 0.9rem;">' + status + '</span>';
+            // Render Status sebagai teks dengan dot warna
+            var statusHtml = '<span style="color: ' + txt + '; font-weight: 600; font-size: 0.95rem;"><i class="fas fa-circle mr-2" style="font-size: 0.5rem; vertical-align: middle;"></i>' + status + '</span>';
             $('#det_status').html(statusHtml);
         });
 
@@ -454,6 +476,10 @@
             $('#input_nama_pegawai').text(nama);
 
             $('#modalInputNoSurat').modal('show');
+        });
+
+        $('#modalInputNoSurat').on('shown.bs.modal', function () {
+            $('#input_no_surat').trigger('focus');
         });
     });
 </script>

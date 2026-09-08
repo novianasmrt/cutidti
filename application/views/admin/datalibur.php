@@ -6,11 +6,17 @@
 
     <style>
         .table-hover tbody tr:hover {
-            background-color: #f8f9fc !important;
+            background-color: #f8fafc !important;
         }
         .table-hover tbody tr:hover td {
-            color: #000000 !important;
+            color: #1f2937 !important;
         }
+        .btn-action-soft {
+            width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center;
+            border-radius: 8px; margin: 0 4px; text-decoration: none; border: none; transition: all 0.2s;
+            background-color: transparent;
+        }
+        .btn-delete { color: #ef4444; } .btn-delete:hover { background-color: #fef2f2; color: #dc2626; }
     </style>
 
     <div class="card shadow mb-4" style="border: none; border-radius: 15px;">
@@ -22,7 +28,7 @@
                 <i class="fas fa-calendar-alt mr-2"></i>Daftar Hari Libur &amp; Cuti Bersama
             </h6>
 
-            <button class="btn shadow-sm text-white text-nowrap w-100 w-md-auto" style="background-color: #003366; border-radius: 2rem; padding: 0.5rem 1.4rem; font-size: 0.85rem;" data-toggle="modal" data-target="#tambahLiburModal">
+            <button class="btn shadow-sm text-white text-nowrap" style="background-color: #003366; border-radius: 2rem; padding: 0.5rem 1.4rem; font-size: 0.85rem; max-width: max-content;" data-toggle="modal" data-target="#tambahLiburModal">
                 <i class="fas fa-plus fa-sm text-white-50 mr-1"></i> Tambah Hari Libur
             </button>
         </div>
@@ -30,7 +36,7 @@
         <div class="card-body p-0">
             <div class="table-responsive">
                 <table class="table table-hover text-nowrap mb-0" width="100%" cellspacing="0" style="color: #000000;">
-                    <thead style="background-color: #f8f9fc; color: #003366; font-weight: 700; text-transform: uppercase; font-size: 0.85rem;">
+                    <thead style="background-color: #f9fafb; color: #6b7280; font-weight: 600; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.5px;">
                         <tr>
                             <th class="py-3 px-4 text-center border-0" width="5%">No</th>
                             <th class="py-3 border-0">Tanggal</th>
@@ -53,7 +59,7 @@
                                     <td class="align-middle text-center px-4 font-weight-bold text-gray-600"><?= $no++; ?></td>
 
                                     <td class="align-middle">
-                                        <div class="font-weight-bold" style="font-size: 0.95rem; color: #1f2937;">
+                                        <div style="font-size: 0.9rem; font-weight: 600; color: #374151;">
                                             <?= date('d M Y', strtotime($l->tanggal)); ?>
                                         </div>
                                         <div class="small text-muted mt-1">
@@ -62,17 +68,16 @@
                                     </td>
 
                                     <td class="align-middle">
-                                        <span class="badge badge-light border text-gray-600 mb-1" style="font-size: 0.8rem; font-weight: 500;">
-                                            <i class="fas fa-umbrella-beach mr-1 text-warning"></i>
+                                        <div style="font-size: 0.9rem; font-weight: 500; color: #4b5563;">
                                             <?= htmlspecialchars($l->keterangan); ?>
-                                        </span>
+                                        </div>
                                     </td>
 
                                     <td class="align-middle text-center px-4">
                                         <a href="<?= base_url('admin/hapus_libur/' . $l->id_libur); ?>"
                                             onclick="return confirm('Yakin ingin menghapus hari libur ini?');"
                                             title="Hapus"
-                                            style="width:35px;height:35px;display:inline-flex;align-items:center;justify-content:center;border-radius:10px;margin:0 4px;text-decoration:none;border:none;background-color:#f8d7da;color:#842029;transition:all 0.2s;">
+                                            class="btn-action-soft btn-delete">
                                             <i class="fas fa-trash fa-sm"></i>
                                         </a>
                                     </td>

@@ -32,26 +32,22 @@
             </h6>
 
             <div class="d-flex flex-column flex-md-row align-items-start align-items-md-center w-100" style="max-width: 600px; justify-content: flex-end;">
-                <form action="<?= base_url('admin/datastaff'); ?>" method="get" class="form-inline d-flex w-100 mb-2 mb-md-0 mr-md-3">
-                    <div class="input-group shadow-sm w-100" style="border-radius: 20px;">
-                        <input type="text" class="form-control border-0 small bg-light"
-                            name="keyword"
-                            placeholder="Cari nama, email..."
-                            autocomplete="off"
-                            value="<?= isset($keyword) ? $keyword : ''; ?>"
-                            style="border-top-left-radius: 20px; border-bottom-left-radius: 20px; color: #6e707e; height: 38px;">
-                        <div class="input-group-append">
-                            <button class="btn" type="submit" style="background-color: #003366; color: white; border-top-right-radius: 20px; border-bottom-right-radius: 20px; padding-left: 20px; padding-right: 20px;">
-                                <i class="fas fa-search fa-sm"></i>
-                            </button>
-                        </div>
-                    </div>
+                <form action="<?= base_url('admin/datastaff'); ?>" method="get" class="form-inline d-flex w-100 mb-2 mb-md-0 mr-md-3 position-relative" onsubmit="return false;">
+                    <i class="fas fa-search position-absolute" style="left: 15px; top: 50%; transform: translateY(-50%); color: #9ca3af; font-size: 0.9rem; z-index: 10;"></i>
+                    <input type="text" class="form-control w-100"
+                        name="keyword"
+                        placeholder="Cari nama, email, jabatan..."
+                        autocomplete="off"
+                        value="<?= isset($keyword) ? $keyword : ''; ?>"
+                        style="border-radius: 20px; color: #4b5563; height: 40px; padding-left: 40px; padding-right: 15px; border: 1px solid #e5e7eb; background-color: #f9fafb; font-size: 0.9rem; transition: all 0.2s;"
+                        onfocus="this.style.backgroundColor='#ffffff'; this.style.borderColor='#3b82f6'; this.style.boxShadow='0 0 0 3px rgba(59, 130, 246, 0.1)';"
+                        onblur="this.style.backgroundColor='#f9fafb'; this.style.borderColor='#e5e7eb'; this.style.boxShadow='none';">
+                </form>
                     <?php if (!empty($keyword)) : ?>
                         <a href="<?= base_url('admin/datastaff'); ?>" class="btn btn-sm btn-link text-danger ml-2" title="Reset">
                             <i class="fas fa-times"></i> Reset
                         </a>
                     <?php endif; ?>
-                </form>
 
                 <a href="<?= base_url('admin/tambahstaff'); ?>" class="btn shadow-sm text-white w-100 text-nowrap"
                     style="background-color: #003366; border-radius: 2rem; padding: 0.5rem 1.4rem; font-size: 0.85rem; max-width: max-content;">
@@ -158,9 +154,9 @@
                                     <!-- STATUS -->
                                     <td class="align-middle text-center">
                                         <?php if (($s->is_active ?? 1) == 1) : ?>
-                                            <span class="badge px-3 py-2 rounded-pill font-weight-bold shadow-sm" style="background-color: #d1e7dd; color: #0f5132; font-size: 0.75rem;">Aktif</span>
+                                            <span style="color: #10b981; font-weight: 600; font-size: 0.85rem;"><i class="fas fa-circle mr-1" style="font-size: 0.5rem; vertical-align: middle;"></i>Aktif</span>
                                         <?php else : ?>
-                                            <span class="badge px-3 py-2 rounded-pill font-weight-bold shadow-sm" style="background-color: #f8d7da; color: #842029; font-size: 0.75rem;">Non-Aktif</span>
+                                            <span style="color: #ef4444; font-weight: 600; font-size: 0.85rem;"><i class="fas fa-circle mr-1" style="font-size: 0.5rem; vertical-align: middle;"></i>Non-Aktif</span>
                                         <?php endif; ?>
                                     </td>
 

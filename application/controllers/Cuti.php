@@ -114,6 +114,13 @@ class Cuti extends CI_Controller
 
         $this->Cuti_model->insert_cuti($data_insert);
         
+        // Update nomor telepon user di profile
+        $telepon = $this->input->post('telepon');
+        if (!empty($telepon)) {
+            $this->db->where('id_user', $user->id_user);
+            $this->db->update('user', ['no_telpon' => $telepon]);
+        }
+        
         // --- NOTIFIKASI EMAIL KE ATASAN ---
         $atasan_nama = $this->input->post('atasan_bidang');
         $atasan = $this->db->get_where('user', ['name' => $atasan_nama])->row();
@@ -233,7 +240,7 @@ class Cuti extends CI_Controller
         $ket_approval = $this->input->post('ket_approval');
 
         // Validasi status
-        if (!in_array($status, ['Menunggu', 'Menunggu Atasan', 'Menunggu Sekdir', 'Menunggu Direktur', 'Disetujui', 'Ditolak'])) {
+        if (!in_array($status, ['Menunggu', 'Menunggu Atasan', 'Menunggu Sekdir', 'Menunggu Admin SDM', 'Menunggu Direktur', 'Disetujui', 'Ditolak'])) {
             $this->session->set_flashdata('error', 'Status tidak valid!');
             redirect('cuti/approval');
             return;
@@ -272,6 +279,19 @@ class Cuti extends CI_Controller
                         $message .= "Silakan login ke sistem untuk memproses pengajuan ini.<br><br>";
                         $message .= "Terima kasih.";
                         $this->_send_email($sekdir->email, $subject, $message);
+                    }
+                }
+            } elseif ($status == 'Menunggu Admin SDM') {
+                // Cari Admin SDM (role_id = 5)
+                $adminsdm = $this->User_model->get_users_by_role(5);
+                foreach ($adminsdm as $admin) {
+                    if ($admin->email) {
+                        $subject = 'Tugas Tambahan - Input Nomor Surat Cuti';
+                        $message = "Halo {$admin->name},<br><br>";
+                        $message .= "Pengajuan cuti dari <b>{$pemohon->name}</b> telah disetujui oleh Sekretaris Direktur.<br>";
+                        $message .= "Mohon bantuannya untuk menambahkan Nomor Surat pada pengajuan cuti ini melalui menu Data Cuti di sistem, agar dapat diteruskan ke Direktur untuk TTE.<br><br>";
+                        $message .= "Terima kasih.";
+                        $this->_send_email($admin->email, $subject, $message);
                     }
                 }
             } elseif ($status == 'Menunggu Direktur' || $status == 'Disetujui') {

@@ -2,6 +2,39 @@
 <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js'></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+<style>
+    /* Custom Styling for FullCalendar Buttons */
+    .fc .fc-button-primary {
+        background-color: #f8fafc !important;
+        border: 1px solid #e2e8f0 !important;
+        color: #475569 !important;
+        box-shadow: none !important;
+        border-radius: 8px !important;
+        padding: 4px 12px !important;
+        font-size: 0.85rem !important;
+        text-transform: capitalize !important;
+        font-weight: 600 !important;
+        transition: all 0.2s;
+    }
+    .fc .fc-button-primary:hover {
+        background-color: #f1f5f9 !important;
+        color: #0f172a !important;
+    }
+    .fc .fc-button-primary:disabled {
+        background-color: #ffffff !important;
+        color: #cbd5e1 !important;
+        border-color: #f1f5f9 !important;
+    }
+    .fc-icon {
+        font-size: 1rem !important; /* Mengecilkan ikon next/prev */
+    }
+    /* Mengecilkan header kalender (Bulan & Tahun) */
+    .fc-toolbar-title {
+        font-size: 1.1rem !important;
+        font-weight: 700 !important;
+        color: #1e293b !important;
+    }
+</style>
 <div class="container-fluid">
 
     <div class="d-sm-flex align-items-center justify-content-between mb-4">

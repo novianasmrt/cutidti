@@ -107,9 +107,16 @@ class Admin extends CI_Controller
         }
 
         usort($cuti_bulan_ini, function ($a, $b) {
+            $a_menunggu = (stripos($a->status, 'Menunggu') !== false) ? 0 : 1;
+            $b_menunggu = (stripos($b->status, 'Menunggu') !== false) ? 0 : 1;
+
+            if ($a_menunggu !== $b_menunggu) {
+                return $a_menunggu - $b_menunggu;
+            }
+
             $a_date = !empty($a->tgl_pengajuan) ? strtotime($a->tgl_pengajuan) : 0;
             $b_date = !empty($b->tgl_pengajuan) ? strtotime($b->tgl_pengajuan) : 0;
-            return $b_date - $a_date;
+            return $a_date - $b_date;
         });
 
         $data['cuti_bulan_ini'] = $cuti_bulan_ini;
@@ -920,10 +927,42 @@ class Admin extends CI_Controller
         $no_surat = $this->input->post('no_surat');
 
         $this->db->where('id_cuti', $id_cuti);
-        $this->db->update('cuti', ['no_surat' => $no_surat]);
+        $this->db->update('cuti', [
+            'no_surat' => $no_surat,
+            'status'   => 'Menunggu Direktur'
+        ]);
 
-        $this->session->set_flashdata('message', '<div class="alert alert-success">Nomor surat berhasil disimpan!</div>');
+        // Beritahu Direktur bahwa nomor surat sudah siap
+        $cuti = $this->db->get_where('cuti', ['id_cuti' => $id_cuti])->row();
+        if ($cuti) {
+            $pemohon = $this->db->get_where('user', ['id_user' => $cuti->id_user])->row();
+            $direkturs = $this->db->get_where('user', ['role_id' => 4])->result();
+            foreach ($direkturs as $direktur) {
+                if ($direktur->email) {
+                    $subject = 'Pengajuan Cuti Final - Menunggu Persetujuan Anda';
+                    $message = "Halo {$direktur->name},<br><br>";
+                    $message .= "Pengajuan cuti dari <b>{$pemohon->name}</b> telah disetujui oleh Sekretaris Direktur dan Nomor Surat telah ditambahkan oleh Admin SDM.<br>";
+                    $message .= "Kini menunggu persetujuan akhir Anda sebagai Direktur.<br>";
+                    $message .= "Silakan login ke sistem untuk memproses pengajuan atau membubuhkan TTE pada dokumen terkait.<br><br>";
+                    $message .= "Terima kasih.";
+                    $this->_send_email($direktur->email, $subject, $message);
+                }
+            }
+        }
+
+        $this->session->set_flashdata('message', '<div class="alert alert-success">Nomor surat berhasil disimpan dan diteruskan ke Direktur!</div>');
         redirect('admin/datacuti');
+    }
+
+    private function _send_email($to_email, $subject, $message_body)
+    {
+        if (empty($to_email)) return false;
+        $this->load->library('email');
+        $this->email->from('no-reply@cutisistem.com', 'Sistem Cuti');
+        $this->email->to($to_email);
+        $this->email->subject($subject);
+        $this->email->message($message_body);
+        return $this->email->send();
     }
 
     // ===============================================================

@@ -2,10 +2,22 @@
 
     <style>
         .table-hover tbody tr:hover {
-            background-color: #f8f9fc !important;
+            background-color: #f8fafc !important;
         }
         .table-hover tbody tr:hover td {
-            color: #000000 !important;
+            color: #1f2937 !important;
+        }
+        .btn-export-excel {
+            background-color: #d1e7dd; color: #0f5132; border-radius: 2rem; padding: 0.4rem 1.2rem; font-size: 0.85rem; border: none; transition: all 0.2s;
+        }
+        .btn-export-excel:hover {
+            background-color: #badbcc; color: #0c4128; text-decoration: none;
+        }
+        .btn-export-pdf {
+            background-color: #f8d7da; color: #842029; border-radius: 2rem; padding: 0.4rem 1.2rem; font-size: 0.85rem; border: none; transition: all 0.2s;
+        }
+        .btn-export-pdf:hover {
+            background-color: #f5c2c7; color: #6a1a21; text-decoration: none;
         }
     </style>
 
@@ -22,20 +34,26 @@
                 <div class="row align-items-end">
                     <div class="col-md-3 mb-3 mb-md-0">
                         <label class="small font-weight-bold text-gray-600 ml-1">DARI TANGGAL</label>
-                        <input type="date" name="tgl_awal" class="form-control border-0 small bg-light shadow-sm"
+                        <input type="date" name="tgl_awal" class="form-control"
                             value="<?= $this->input->get('tgl_awal'); ?>"
-                            style="border-radius: 20px; height: 38px; padding-left: 16px; color: #6e707e;">
+                            style="border-radius: 20px; height: 40px; padding: 0 15px; color: #4b5563; background-color: #f9fafb; border: 1px solid #e5e7eb; font-size: 0.9rem; transition: all 0.2s;"
+                            onfocus="this.style.backgroundColor='#ffffff'; this.style.borderColor='#3b82f6'; this.style.boxShadow='0 0 0 3px rgba(59, 130, 246, 0.1)';"
+                            onblur="this.style.backgroundColor='#f9fafb'; this.style.borderColor='#e5e7eb'; this.style.boxShadow='none';">
                     </div>
                     <div class="col-md-3 mb-3 mb-md-0">
                         <label class="small font-weight-bold text-gray-600 ml-1">SAMPAI TANGGAL</label>
-                        <input type="date" name="tgl_akhir" class="form-control border-0 small bg-light shadow-sm"
+                        <input type="date" name="tgl_akhir" class="form-control"
                             value="<?= $this->input->get('tgl_akhir'); ?>"
-                            style="border-radius: 20px; height: 38px; padding-left: 16px; color: #6e707e;">
+                            style="border-radius: 20px; height: 40px; padding: 0 15px; color: #4b5563; background-color: #f9fafb; border: 1px solid #e5e7eb; font-size: 0.9rem; transition: all 0.2s;"
+                            onfocus="this.style.backgroundColor='#ffffff'; this.style.borderColor='#3b82f6'; this.style.boxShadow='0 0 0 3px rgba(59, 130, 246, 0.1)';"
+                            onblur="this.style.backgroundColor='#f9fafb'; this.style.borderColor='#e5e7eb'; this.style.boxShadow='none';">
                     </div>
                     <div class="col-md-3 mb-3 mb-md-0">
                         <label class="small font-weight-bold text-gray-600 ml-1">STATUS CUTI</label>
-                        <select name="status" class="form-control border-0 small bg-light shadow-sm"
-                            style="border-radius: 20px; height: 38px; padding-left: 16px; color: #6e707e;">
+                        <select name="status" class="form-control"
+                            style="border-radius: 20px; height: 40px; padding: 0 15px; cursor: pointer; color: #4b5563; background-color: #f9fafb; border: 1px solid #e5e7eb; font-size: 0.9rem; transition: all 0.2s; appearance: none;"
+                            onfocus="this.style.backgroundColor='#ffffff'; this.style.borderColor='#3b82f6'; this.style.boxShadow='0 0 0 3px rgba(59, 130, 246, 0.1)';"
+                            onblur="this.style.backgroundColor='#f9fafb'; this.style.borderColor='#e5e7eb'; this.style.boxShadow='none';">
                             <option value="">- Semua Status -</option>
                             <option value="Disetujui" <?= $f_status == 'Disetujui' ? 'selected' : '' ?>>Disetujui</option>
                             <option value="Menunggu"  <?= $f_status == 'Menunggu'  ? 'selected' : '' ?>>Menunggu</option>
@@ -43,9 +61,9 @@
                         </select>
                     </div>
                     <div class="col-md-3">
-                        <button type="submit" class="btn btn-block shadow-sm font-weight-bold"
-                            style="background-color: #003366; color: white; border-radius: 20px; height: 38px;">
-                            <i class="fas fa-search mr-2"></i> Tampilkan
+                        <button type="submit" class="btn btn-block shadow-sm"
+                            style="background-color: #003366; color: white; border-radius: 20px; height: 40px; font-weight: 600; font-size: 0.9rem;">
+                            <i class="fas fa-search mr-2 text-white-50"></i> Tampilkan
                         </button>
                     </div>
                 </div>
@@ -77,13 +95,11 @@
 
             <div class="d-flex flex-row w-100 w-md-auto justify-content-center justify-content-md-end">
                 <a href="<?= base_url('admin/excel?' . $params); ?>"
-                    class="btn shadow-sm mr-2 font-weight-bold flex-fill flex-md-grow-0"
-                    style="background-color: #d1e7dd; color: #0f5132; border-radius: 2rem; padding: 0.4rem 1.2rem; font-size: 0.85rem; border: none;">
+                    class="btn btn-export-excel mr-2 font-weight-bold flex-fill flex-md-grow-0">
                     <i class="fas fa-file-excel mr-1"></i> Excel
                 </a>
                 <a href="<?= base_url('admin/pdf?' . $params); ?>" target="_blank"
-                    class="btn shadow-sm font-weight-bold flex-fill flex-md-grow-0"
-                    style="background-color: #f8d7da; color: #842029; border-radius: 2rem; padding: 0.4rem 1.2rem; font-size: 0.85rem; border: none;">
+                    class="btn btn-export-pdf font-weight-bold flex-fill flex-md-grow-0">
                     <i class="fas fa-file-pdf mr-1"></i> PDF
                 </a>
             </div>
@@ -92,7 +108,7 @@
         <div class="card-body p-0">
             <div class="table-responsive">
                 <table class="table table-hover text-nowrap mb-0" width="100%" cellspacing="0" style="color: #000000;">
-                    <thead style="background-color: #f8f9fc; color: #003366; font-weight: 700; text-transform: uppercase; font-size: 0.85rem;">
+                    <thead style="background-color: #f9fafb; color: #6b7280; font-weight: 600; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.5px;">
                         <tr>
                             <th class="py-3 px-4 text-center border-0" width="5%">No</th>
                             <th class="py-3 border-0">Pegawai</th>
@@ -119,7 +135,7 @@
                                     <td class="align-middle text-center px-4 font-weight-bold text-gray-600"><?= $no++; ?></td>
 
                                     <td class="align-middle">
-                                        <div class="font-weight-bold" style="font-size: 0.95rem; color: #1f2937;"><?= $lap->nama ?? $lap->name ?? '-'; ?></div>
+                                        <div style="font-size: 0.9rem; font-weight: 600; color: #374151;"><?= $lap->nama ?? $lap->name ?? '-'; ?></div>
                                         <div class="small text-muted mt-1"><i class="far fa-id-card mr-1"></i><?= $lap->nip ?? '-'; ?></div>
                                     </td>
 
@@ -133,7 +149,7 @@
                                     </td>
 
                                     <td class="align-middle text-center">
-                                        <span class="badge badge-light border mb-1 shadow-sm" style="color: #4e73df; background-color: #f0f4ff;">
+                                        <span class="badge badge-light border mb-1" style="color: #4e73df; background-color: #f0f4ff;">
                                             <?= $lap->jumlah_cuti ?? $lap->lama ?? '?'; ?> Hari
                                         </span>
                                         <div style="font-size: 0.85rem; font-weight: 600; color: #4b5563;">
@@ -144,9 +160,8 @@
                                     </td>
 
                                     <td class="align-middle text-center">
-                                        <span class="badge px-3 py-2 rounded-pill font-weight-bold shadow-sm"
-                                            style="background-color: <?= $bg; ?>; color: <?= $txt; ?>; font-size: 0.75rem;">
-                                            <?= $lap->status; ?>
+                                        <span style="color: <?= $txt; ?>; font-weight: 600; font-size: 0.85rem;">
+                                            <i class="fas fa-circle mr-1" style="font-size: 0.5rem; vertical-align: middle;"></i><?= $lap->status; ?>
                                         </span>
                                     </td>
 

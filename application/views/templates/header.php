@@ -19,6 +19,7 @@
         :root {
             --ugm-blue: #003366;
             --ugm-light-blue: #004080;
+            --sidebar-bg: #003366; /* Warna biru UGM sesuai grafik */
             --bg-color: #f8f9fa; /* Softer background */
             --white: #ffffff;
             --text-dark: #374151; /* Softer text */
@@ -39,7 +40,7 @@
 
         /* SIDEBAR STYLE */
         .sidebar {
-            width: 260px !important; background-color: var(--ugm-blue); color: var(--white);
+            width: 260px !important; background-color: var(--sidebar-bg); color: var(--white);
             display: flex; flex-direction: column; position: fixed;
             height: 100vh; transition: all 0.3s ease; z-index: 1000; /* Z-index tinggi agar di atas konten */
             left: 0; top: 0;
@@ -47,7 +48,7 @@
 
         .sidebar-header {
             padding: 1.5rem; display: flex; align-items: center; gap: 12px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
         }
         .sidebar-header img { width: 32px; height: auto; }
         .sidebar-header h2 { font-size: 1.2rem; font-weight: 700; letter-spacing: 0.5px; }
@@ -55,23 +56,30 @@
         .sidebar-menu { padding: 1.5rem 1rem; flex: 1; overflow-y: auto; }
         
         .menu-category {
-            font-size: 0.75rem; text-transform: uppercase; color: rgba(255,255,255,0.5);
-            margin-bottom: 0.8rem; margin-top: 1rem; padding-left: 0.8rem; font-weight: 600;
+            font-size: 0.75rem; text-transform: uppercase; color: rgba(255,255,255,0.4);
+            margin-bottom: 0.8rem; margin-top: 1rem; padding-left: 1rem; font-weight: 700; letter-spacing: 1px;
         }
 
         .nav-link {
             display: flex; align-items: center; padding: 0.8rem 1rem;
-            color: rgba(255,255,255,0.8); text-decoration: none; border-radius: 8px;
+            color: rgba(255,255,255,0.6); text-decoration: none; border-radius: 8px;
             margin-bottom: 0.25rem; transition: all 0.2s; font-size: 0.95rem; cursor: pointer;
+            position: relative; overflow: hidden;
         }
-        .nav-link i { width: 24px; margin-right: 10px; text-align: center; }
-        .nav-link:hover { background-color: rgba(255,255,255,0.1); color: var(--white); }
+        .nav-link i { width: 24px; margin-right: 10px; text-align: center; color: rgba(255,255,255,0.5); transition: color 0.2s; }
+        .nav-link:hover { background-color: rgba(255,255,255,0.05); color: var(--white); }
+        .nav-link:hover i { color: var(--white); }
         .nav-link.active {
-            background-color: var(--white); color: var(--ugm-blue);
-            font-weight: 600; box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            background-color: rgba(255, 255, 255, 0.08); color: var(--white);
+            font-weight: 600; box-shadow: none;
+        }
+        .nav-link.active i { color: var(--white); } /* Ikon putih untuk menu aktif */
+        .nav-link.active::before {
+            content: ''; position: absolute; left: 0; top: 15%; height: 70%; width: 4px;
+            background-color: var(--white); border-radius: 0 4px 4px 0;
         }
 
-        .sidebar-footer { padding: 1rem; border-top: 1px solid rgba(255,255,255,0.1); }
+        .sidebar-footer { padding: 1rem; border-top: 1px solid rgba(255,255,255,0.05); }
 
         /* LAYOUT & TOPBAR STYLE */
         .main-content { 

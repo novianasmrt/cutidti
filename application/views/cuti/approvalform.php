@@ -88,8 +88,8 @@
                                     <option value="Disetujui">&#10003; Disetujui Final (QR akan muncul di surat)</option>
                                 <?php elseif ($role_aktif == 3): ?>
                                     <?php if (isset($p->requester_role_id) && $p->requester_role_id == 1): ?>
-                                        <!-- Sekdir: Admin mengajukan cuti, lanjut ke Direktur -->
-                                        <option value="Menunggu Direktur">&#10003; Setujui (Lanjut ke Direktur)</option>
+                                        <!-- Sekdir: Admin mengajukan cuti, lanjut ke Admin SDM -->
+                                        <option value="Menunggu Admin SDM">&#10003; Setujui (Lanjut ke Admin SDM untuk Nomor Surat)</option>
                                     <?php else: ?>
                                         <!-- Sekdir: User mengajukan cuti, approval final -->
                                         <option value="Disetujui">&#10003; Disetujui Final</option>
