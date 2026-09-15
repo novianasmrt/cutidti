@@ -167,13 +167,22 @@
                     </div>
 
                     <div class="form-row">
-                        <div class="form-group col-md-6 mb-4">
-                            <label class="small font-weight-bold text-ugm ml-1">Sisa Cuti Tahunan (Hari)</label>
-                            <input type="number" class="form-control" name="sisa_cuti" placeholder="12" value="<?= set_value('sisa_cuti', $staff->sisa_cuti); ?>" min="0">
-                            <?= form_error('sisa_cuti', '<small class="text-danger pl-2">', '</small>'); ?>
+                        <div class="form-group col-md-4 mb-4">
+                            <label class="small font-weight-bold text-ugm ml-1">Cuti N (Thn Ini)</label>
+                            <input type="number" class="form-control" name="cuti_n" placeholder="12" value="<?= set_value('cuti_n', isset($staff->cuti_n) ? $staff->cuti_n : 12); ?>" min="0" max="12">
                         </div>
+                        <div class="form-group col-md-4 mb-4">
+                            <label class="small font-weight-bold text-ugm ml-1">Cuti N-1 (Thn Lalu)</label>
+                            <input type="number" class="form-control" name="cuti_n1" placeholder="0" value="<?= set_value('cuti_n1', isset($staff->cuti_n1) ? $staff->cuti_n1 : 0); ?>" min="0" max="6">
+                        </div>
+                        <div class="form-group col-md-4 mb-4">
+                            <label class="small font-weight-bold text-ugm ml-1">Cuti N-2 (2 Thn Lalu)</label>
+                            <input type="number" class="form-control" name="cuti_n2" placeholder="0" value="<?= set_value('cuti_n2', isset($staff->cuti_n2) ? $staff->cuti_n2 : 0); ?>" min="0" max="6">
+                        </div>
+                    </div>
 
-                        <div class="form-group col-md-6 mb-4">
+                    <div class="form-row">
+                        <div class="form-group col-md-12 mb-4">
                             <label class="small font-weight-bold text-ugm ml-1">Role (Hak Akses)</label>
                             <select name="role_id" class="form-control custom-select">
                                 <option value="1" <?= ($staff->role_id == 1) ? 'selected' : ''; ?>>Administrator</option>

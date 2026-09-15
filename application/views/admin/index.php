@@ -226,14 +226,54 @@
     <div class="row mt-4">
         <div class="col-12">
             <div class="card card-dashboard shadow mb-4">
-                <div class="card-header py-3 bg-white border-bottom-0">
+                <div class="card-header py-3 bg-white border-bottom-0 d-flex justify-content-between align-items-center">
                     <h6 class="m-0 font-weight-bold text-ugm">
-                        <i class="fas fa-chart-bar mr-2"></i>Distribusi Cuti per Atasan Bidang (Disetujui)
+                        <i class="fas fa-chart-bar mr-2"></i>Distribusi Cuti per Atasan Bidang (<?= date('M Y', strtotime($filter_bulan)); ?>)
                     </h6>
+                    <form action="" method="GET" class="form-inline">
+                        <input type="month" name="filter_bulan" class="form-control form-control-sm mr-2" value="<?= $filter_bulan; ?>">
+                        <button type="submit" class="btn btn-sm btn-ugm"><i class="fas fa-filter"></i> Filter</button>
+                    </form>
                 </div>
                 <div class="card-body">
-                    <div style="position: relative; height: 350px; width: 100%;">
-                        <canvas id="chartAtasan"></canvas>
+                    <div class="row">
+                        <!-- Kolom Grafik Batang (Kiri) -->
+                        <div class="col-lg-8 mb-4 mb-lg-0">
+                            <div style="position: relative; height: 350px; width: 100%;">
+                                <canvas id="chartAtasan"></canvas>
+                            </div>
+                        </div>
+                        
+                        <!-- Kolom Statistik Persentase (Kanan) -->
+                        <div class="col-lg-4 d-flex flex-column justify-content-center border-left">
+                            <h6 class="font-weight-bold text-center text-muted mb-4">TINGKAT PERSETUJUAN (APPROVAL RATE)</h6>
+                            <div class="d-flex flex-column align-items-center" style="gap: 20px; overflow-y: auto; max-height: 350px;">
+                                <?php if (empty($radial_stats)): ?>
+                                    <p class="text-muted text-center mt-4">Belum ada data persetujuan pada bulan terpilih.</p>
+                                <?php else: ?>
+                                    <?php foreach ($radial_stats as $stat): ?>
+                                    <div class="d-flex align-items-center w-100 px-3">
+                                        <!-- Info Teks -->
+                                        <div class="flex-grow-1">
+                                            <div class="font-weight-bold text-gray-800" style="font-size: 0.95rem;"><?= $stat['nama']; ?></div>
+                                            <div class="text-xs text-muted">
+                                                <?= $stat['disetujui']; ?> disetujui dari <?= $stat['total']; ?> pengajuan
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Radial Chart CSS -->
+                                        <div class="ml-3">
+                                            <div class="radial-progress" style="--progress: <?= $stat['persentase']; ?>%; --color: <?= $stat['color']; ?>;">
+                                                <div class="inner-circle">
+                                                    <span><?= $stat['persentase']; ?>%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <?php endforeach; ?>
+                                <?php endif; ?>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -297,6 +337,45 @@
     .soft-cyan {
         background-color: #E0F7FA;
         color: #006064;
+    }
+
+    /* CSS untuk Radial Progress (Donut Chart murni CSS) */
+    .border-left {
+        border-left: 1px solid #e3e6f0;
+    }
+    @media (max-width: 991px) {
+        .border-left {
+            border-left: none;
+            border-top: 1px solid #e3e6f0;
+            padding-top: 20px;
+        }
+    }
+    
+    .radial-progress {
+        width: 65px;
+        height: 65px;
+        border-radius: 50%;
+        background: conic-gradient(var(--color) var(--progress), #eaecf4 0deg);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0px 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .radial-progress .inner-circle {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background-color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .radial-progress .inner-circle span {
+        font-weight: 800;
+        font-size: 0.85rem;
+        color: #5a5c69;
     }
 
     /* Styling Kalender FullCalendar */
@@ -453,38 +532,38 @@
         calendar.render();
 
         // ==========================================
-        // CHART.JS: DISTRIBUSI CUTI PER ATASAN BIDANG
+        // CHART.JS: DISTRIBUSI CUTI PER ATASAN BIDANG (GROUPED BAR)
         // ==========================================
         var chartLabels = <?= $chart_labels; ?>;
-        var chartData = <?= $chart_data; ?>;
+        var chartDatasets = <?= $chart_datasets; ?>;
 
         var ctx = document.getElementById('chartAtasan').getContext('2d');
         var myChart = new Chart(ctx, {
             type: 'bar',
             data: {
                 labels: chartLabels,
-                datasets: [{
-                    label: 'Jumlah Pengajuan Cuti Disetujui',
-                    data: chartData,
-                    backgroundColor: 'rgba(0, 51, 102, 0.85)',
-                    borderColor: '#003366',
-                    borderWidth: 1.5,
-                    borderRadius: 8,
-                    borderSkipped: false,
-                    hoverBackgroundColor: 'rgba(0, 51, 102, 1)',
-                }]
+                datasets: chartDatasets
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
                     legend: {
-                        display: false
+                        display: true,
+                        position: 'bottom',
+                        labels: {
+                            usePointStyle: true,
+                            padding: 20,
+                            font: {
+                                family: 'Nunito',
+                                size: 12
+                            }
+                        }
                     },
                     tooltip: {
                         callbacks: {
                             label: function(context) {
-                                return ' ' + context.raw + ' Kasus Cuti Disetujui';
+                                return ' ' + context.dataset.label + ': ' + context.raw + ' Kasus Cuti';
                             }
                         }
                     }

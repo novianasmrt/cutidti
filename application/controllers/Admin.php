@@ -57,7 +57,8 @@ class Admin extends CI_Controller
         $request_bulan_ini = 0;
 
         $today = date('Y-m-d');
-        $bulan = date('Y-m');
+        $bulan = $this->input->get('filter_bulan') ?: date('Y-m');
+        $data['filter_bulan'] = $bulan;
 
         foreach ($all_cuti as $c) {
 
@@ -169,45 +170,100 @@ class Admin extends CI_Controller
         $data['json_events'] = json_encode($events);
 
         // ==============================
-        // 6B. GRAFIK DISTRIBUSI CUTI PER ATASAN BIDANG
+        // 6B. GRAFIK DISTRIBUSI CUTI PER ATASAN BIDANG (WEEKLY & PERCENTAGE)
         // ==============================
         // 1. Ambil semua admin yang dapat dipilih sebagai atasan bidang
         $all_admins = $this->User_model->get_admins();
         
-        // 2. Inisialisasi map nama atasan -> 0
-        $atasan_map = [];
+        // Colors array for Chart.js
+        $color_palette = [
+            '#4e73df', '#1cc88a', '#36b9cc', '#f6c23e', '#e74a3b', '#858796', '#5a5c69'
+        ];
+
+        $approver_stats = []; // Simpan data per atasan
+        $color_index = 0;
+        
         foreach ($all_admins as $admin) {
-            $atasan_map[$admin->name] = 0;
+            $approver_stats[$admin->name] = [
+                'minggu' => [0, 0, 0, 0], // M1, M2, M3, M4
+                'total_disetujui' => 0,
+                'total_pengajuan' => 0,
+                'color' => $color_palette[$color_index % count($color_palette)]
+            ];
+            $color_index++;
         }
 
-        // 3. Ambil data cuti disetujui dari database
-        $chart_query = $this->db->select('atasan_bidang, COUNT(id_cuti) as total_cuti')
-            ->from('cuti')
-            ->where('status', 'Disetujui')
-            ->where('atasan_bidang IS NOT NULL')
-            ->where('atasan_bidang !=', '')
-            ->group_by('atasan_bidang')
-            ->get()
-            ->result();
-
-        // 4. Update nilai dari database ke map
-        // Hanya update jika nama ada di daftar admin saat ini (skip nama lama yang sudah diubah)
-        foreach ($chart_query as $row) {
-            if (array_key_exists($row->atasan_bidang, $atasan_map)) {
-                $atasan_map[$row->atasan_bidang] = (int) $row->total_cuti;
+        // 2. Ambil data cuti BULAN INI dari all_cuti
+        $bulan_ini_str = $bulan;
+        
+        foreach ($all_cuti as $c) {
+            // Hanya proses cuti yang masuk ke Atasan Bidang dan terdaftar di approver_stats
+            if (!empty($c->atasan_bidang) && isset($approver_stats[$c->atasan_bidang])) {
+                
+                // Pastikan cuti ini diajukan pada bulan berjalan
+                $tgl_cuti = !empty($c->tgl_pengajuan) ? $c->tgl_pengajuan : (!empty($c->tanggal_mulai) ? $c->tanggal_mulai : null);
+                
+                if ($tgl_cuti && date('Y-m', strtotime($tgl_cuti)) == $bulan_ini_str) {
+                    
+                    // Hitung total pengajuan ke atasan ini
+                    $approver_stats[$c->atasan_bidang]['total_pengajuan']++;
+                    
+                    // Jika disetujui, kelompokkan ke minggu
+                    if ($c->status == 'Disetujui') {
+                        $approver_stats[$c->atasan_bidang]['total_disetujui']++;
+                        
+                        $tanggal = (int) date('d', strtotime($tgl_cuti));
+                        if ($tanggal <= 7) {
+                            $approver_stats[$c->atasan_bidang]['minggu'][0]++; // Minggu 1
+                        } elseif ($tanggal <= 14) {
+                            $approver_stats[$c->atasan_bidang]['minggu'][1]++; // Minggu 2
+                        } elseif ($tanggal <= 21) {
+                            $approver_stats[$c->atasan_bidang]['minggu'][2]++; // Minggu 3
+                        } else {
+                            $approver_stats[$c->atasan_bidang]['minggu'][3]++; // Minggu 4
+                        }
+                    }
+                }
             }
         }
 
-        // 5. Susun ke array label dan data
-        $chart_labels = [];
-        $chart_data = [];
-        foreach ($atasan_map as $nama_atasan => $total_cuti) {
-            $chart_labels[] = $nama_atasan;
-            $chart_data[] = $total_cuti;
+        // 3. Susun data untuk Chart.js (Datasets) dan Persentase
+        $chart_labels = ['Minggu 1', 'Minggu 2', 'Minggu 3', 'Minggu 4'];
+        $chart_datasets = [];
+        $radial_stats = [];
+
+        foreach ($approver_stats as $nama_atasan => $stats) {
+            // Buat dataset untuk chart bar
+            $chart_datasets[] = [
+                'label' => $nama_atasan,
+                'data' => $stats['minggu'],
+                'backgroundColor' => $stats['color'],
+                'borderColor' => $stats['color'],
+                'borderWidth' => 1,
+                'borderRadius' => 4,
+            ];
+            
+            // Hitung persentase approval
+            $persentase = 0;
+            if ($stats['total_pengajuan'] > 0) {
+                $persentase = round(($stats['total_disetujui'] / $stats['total_pengajuan']) * 100);
+            }
+            
+            // Hanya tambahkan ke radial_stats jika atasan tersebut memiliki minimal 1 pengajuan
+            if ($stats['total_pengajuan'] > 0) {
+                $radial_stats[] = [
+                    'nama' => $nama_atasan,
+                    'persentase' => $persentase,
+                    'color' => $stats['color'],
+                    'disetujui' => $stats['total_disetujui'],
+                    'total' => $stats['total_pengajuan']
+                ];
+            }
         }
 
         $data['chart_labels'] = json_encode($chart_labels);
-        $data['chart_data'] = json_encode($chart_data);
+        $data['chart_datasets'] = json_encode($chart_datasets);
+        $data['radial_stats'] = $radial_stats;
 
         // ==============================
         // 7. LOAD VIEW
@@ -388,7 +444,9 @@ class Admin extends CI_Controller
                 'jabatan'        => htmlspecialchars($this->input->post('jabatan', true)),
                 'pangkat'        => htmlspecialchars($this->input->post('pangkat', true)),
                 'atasan_bidang'  => $this->input->post('atasan_bidang') ? htmlspecialchars($this->input->post('atasan_bidang', true)) : null,
-                'sisa_cuti'      => (int)$this->input->post('sisa_cuti'),
+                'cuti_n'         => (int)$this->input->post('cuti_n'),
+                'cuti_n1'        => (int)$this->input->post('cuti_n1'),
+                'cuti_n2'        => (int)$this->input->post('cuti_n2'),
                 'role_id'        => $this->input->post('role_id'),
                 'image'          => $foto
             ];
@@ -470,13 +528,38 @@ class Admin extends CI_Controller
 
                 for ($i = 1; $i < count($sheetdata); $i++) {
 
-                    // Cek baris tidak kosong (Nama di index 0, NIP di index 1, Email di index 2)
+                    // Cek baris tidak kosong (Nama di index 0, Email di index 2)
                     if (!empty($sheetdata[$i][0]) && !empty($sheetdata[$i][2])) {
 
-                        $nama_excel = trim($sheetdata[$i][0]);
-                        $nip_excel = trim($sheetdata[$i][1] ?? '');
-                        $email_excel = trim($sheetdata[$i][2]);
-                        $jabatan_excel = trim($sheetdata[$i][3] ?? 'Staff');
+                        $nama_excel          = trim($sheetdata[$i][0]);
+                        $nip_excel           = trim($sheetdata[$i][1] ?? '');
+                        $email_excel         = trim($sheetdata[$i][2]);
+                        $no_telpon_excel     = trim($sheetdata[$i][3] ?? '-');
+                        $jenis_pegawai_excel = trim($sheetdata[$i][4] ?? '-');
+                        $kategori_excel      = trim($sheetdata[$i][5] ?? '-');
+                        $tipe_pegawai_excel  = trim($sheetdata[$i][6] ?? '-');
+                        $unit_kerja_excel    = trim($sheetdata[$i][7] ?? '-');
+                        $jabatan_excel       = trim($sheetdata[$i][8] ?? '-');
+                        $pangkat_excel       = trim($sheetdata[$i][9] ?? '-');
+                        $role_id_excel       = trim($sheetdata[$i][10] ?? '2'); // Default 2
+                        $cuti_n_excel        = trim($sheetdata[$i][11] ?? '12');
+                        $cuti_n1_excel       = trim($sheetdata[$i][12] ?? '0');
+                        $cuti_n2_excel       = trim($sheetdata[$i][13] ?? '0');
+
+                        // Logika Password (6 angka terakhir NIP)
+                        if (strlen($nip_excel) >= 6) {
+                            $password_plain = substr($nip_excel, -6);
+                        } elseif (!empty($nip_excel)) {
+                            $password_plain = $nip_excel;
+                        } else {
+                            $password_plain = '12345';
+                        }
+
+                        // Validasi angka untuk cuti dan role id
+                        $cuti_n_val  = is_numeric($cuti_n_excel) ? (int)$cuti_n_excel : 12;
+                        $cuti_n1_val = is_numeric($cuti_n1_excel) ? (int)$cuti_n1_excel : 0;
+                        $cuti_n2_val = is_numeric($cuti_n2_excel) ? (int)$cuti_n2_excel : 0;
+                        $role_id_val = is_numeric($role_id_excel) ? (int)$role_id_excel : 2;
 
                         // LOGIKA CEK DUPLIKAT
                         $is_duplicate = false;
@@ -492,14 +575,21 @@ class Admin extends CI_Controller
                                 'name'          => htmlspecialchars($nama_excel),
                                 'nip'           => htmlspecialchars($nip_excel),
                                 'email'         => htmlspecialchars($email_excel),
-                                'image'         => 'default.jpg',
-                                'password'      => password_hash('12345', PASSWORD_DEFAULT), // Default password
-                                'role_id'       => 2, // Default Staff
+                                'no_telpon'     => htmlspecialchars($no_telpon_excel),
+                                'jenis_pegawai' => htmlspecialchars($jenis_pegawai_excel),
+                                'kategori'      => htmlspecialchars($kategori_excel),
+                                'tipe_pegawai'  => htmlspecialchars($tipe_pegawai_excel),
+                                'unit_kerja'    => htmlspecialchars($unit_kerja_excel),
                                 'jabatan'       => htmlspecialchars($jabatan_excel),
+                                'pangkat'       => htmlspecialchars($pangkat_excel),
+                                'image'         => 'default.jpg',
+                                'password'      => password_hash($password_plain, PASSWORD_DEFAULT),
+                                'role_id'       => $role_id_val,
                                 'is_active'     => 1,
                                 'date_created'  => time(),
-                                'sisa_cuti_2025'=> 0,
-                                'sisa_cuti'     => 0
+                                'cuti_n'        => $cuti_n_val,
+                                'cuti_n1'       => $cuti_n1_val,
+                                'cuti_n2'       => $cuti_n2_val
                             ];
                             $this->db->insert('user', $data_insert);
                             $jumlah_sukses++;
@@ -592,8 +682,9 @@ class Admin extends CI_Controller
                 'jabatan'       => htmlspecialchars($this->input->post('jabatan', true)),
                 'is_active'     => 1,
                 'date_created'  => time(),
-                'sisa_cuti_2025'=> 0,
-                'sisa_cuti'     => 0
+                'cuti_n'        => 12,
+                'cuti_n1'       => 0,
+                'cuti_n2'       => 0
             ];
 
             // 5. INSERT DATABASE

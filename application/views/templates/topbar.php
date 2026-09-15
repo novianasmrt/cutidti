@@ -43,6 +43,7 @@
 
     .icon-btn i {
         font-size: 1.1rem;
+        color: inherit !important;
     }
 
     /* 4. Badge Counter (Angka Merah) */
@@ -213,7 +214,7 @@
 
                 <a class="nav-link dropdown-toggle icon-btn" href="#" id="alertsDropdown" role="button"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i class="far fa-bell"></i>
+                    <i class="fas fa-bell"></i>
                     <?php if ($notif_count > 0): ?>
                         <span class="badge-count"><?= $notif_count; ?></span>
                     <?php endif; ?>

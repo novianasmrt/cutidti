@@ -124,7 +124,7 @@ class Cuti_model extends CI_Model
     // ==============================
     public function get_cuti_by_id($id)
     {
-        $this->db->select('cuti.*, user.name, user.nip, user.jabatan, user.no_telpon, user.sisa_cuti, user.sisa_cuti_2025, user.role_id as requester_role_id');
+        $this->db->select('cuti.*, user.name, user.nip, user.jabatan, user.no_telpon, (user.cuti_n + user.cuti_n1 + user.cuti_n2) AS sisa_cuti, user.cuti_n, user.cuti_n1, user.cuti_n2, user.role_id as requester_role_id');
         $this->db->from('cuti');
         $this->db->join('user', 'user.id_user = cuti.id_user', 'left');
         $this->db->where('cuti.id_cuti', $id);
@@ -152,79 +152,46 @@ class Cuti_model extends CI_Model
             if ($role_aktif == 4) {
                 $data['ttd_direktur'] = date('Y-m-d H:i:s');
             }
+            
+            // DEDUCT BUCKETS JIKA CUTI TAHUNAN
+            $cuti = $this->db->get_where('cuti', ['id_cuti' => $id])->row();
+            if ($cuti && $cuti->jenis_cuti == 'Cuti Tahunan') {
+                $user = $this->db->get_where('user', ['id_user' => $cuti->id_user])->row();
+                if ($user) {
+                    $sisa_potong = (int)$cuti->jumlah_cuti;
+                    
+                    $n2 = (int)$user->cuti_n2;
+                    $n1 = (int)$user->cuti_n1;
+                    $n  = (int)$user->cuti_n;
+                    
+                    if ($sisa_potong > 0 && $n2 > 0) {
+                        $potong = min($sisa_potong, $n2);
+                        $n2 -= $potong;
+                        $sisa_potong -= $potong;
+                    }
+                    if ($sisa_potong > 0 && $n1 > 0) {
+                        $potong = min($sisa_potong, $n1);
+                        $n1 -= $potong;
+                        $sisa_potong -= $potong;
+                    }
+                    if ($sisa_potong > 0 && $n > 0) {
+                        $potong = min($sisa_potong, $n);
+                        $n -= $potong;
+                        $sisa_potong -= $potong;
+                    }
+                    
+                    $this->db->where('id_user', $user->id_user)->update('user', [
+                        'cuti_n'  => $n,
+                        'cuti_n1' => $n1,
+                        'cuti_n2' => $n2
+                    ]);
+                }
+            }
         }
         
+        $this->db->where('id_cuti', $id);
         return $this->db->update('cuti', $data);
     }
     
-    // ==============================
-    // 6. HITUNG SISA CUTI TAHUNAN (PNS)
-    // ==============================
-    public function hitung_sisa_cuti_tahunan($id_user)
-    {
-        // 1. Ambil data user
-        $user = $this->db->get_where('user', ['id_user' => $id_user])->row();
-        if (!$user) return 0;
-        
-        $sisa_cuti_2025 = (int) $user->sisa_cuti_2025;
-        
-        // 2. Ambil semua cuti tahunan yang 'Disetujui'
-        $this->db->select('EXTRACT(YEAR FROM tanggal_mulai) as tahun, SUM(jumlah_cuti) as total_taken');
-        $this->db->where('id_user', $id_user);
-        $this->db->where('jenis_cuti', 'Cuti Tahunan');
-        $this->db->where('status', 'Disetujui');
-        $this->db->group_by('EXTRACT(YEAR FROM tanggal_mulai)');
-        $query = $this->db->get('cuti')->result_array();
-        
-        $taken_per_year = [];
-        foreach ($query as $row) {
-            if ($row['tahun']) {
-                $taken_per_year[$row['tahun']] = (int) $row['total_taken'];
-            }
-        }
-        
-        $current_year = (int) date('Y');
-        $start_year = 2026;
-        
-        // Jika current year masih di bawah 2026, tetapkan ke 2026
-        if ($current_year < 2026) {
-            $current_year = 2026;
-        }
-        
-        $history = [];
-        
-        // Loop dari 2026 sampai current_year
-        for ($y = $start_year; $y <= $current_year; $y++) {
-            $taken = isset($taken_per_year[$y]) ? $taken_per_year[$y] : 0;
-            
-            if ($y == 2026) {
-                // Di tahun 2026, bawa carry-over dari 2025
-                $entitlement = 12 + $sisa_cuti_2025;
-            } else {
-                $taken_y1 = isset($taken_per_year[$y - 1]) ? $taken_per_year[$y - 1] : 0;
-                $taken_y2 = isset($taken_per_year[$y - 2]) ? $taken_per_year[$y - 2] : 0;
-                $sisa_y1 = isset($history[$y - 1]['sisa']) ? $history[$y - 1]['sisa'] : 0;
-                
-                // Jika tidak cuti 2 tahun berturut-turut, akumulasi max 24
-                if ($taken_y1 == 0 && $taken_y2 == 0 && $y >= 2028) {
-                    $entitlement = 24;
-                } else {
-                    $entitlement = 12 + min(6, $sisa_y1);
-                }
-            }
-            
-            $sisa = max(0, $entitlement - $taken);
-            
-            $history[$y] = [
-                'sisa' => $sisa
-            ];
-        }
-        
-        $final_sisa = $history[$current_year]['sisa'];
-        
-        // Update ke database
-        $this->db->where('id_user', $id_user)->update('user', ['sisa_cuti' => $final_sisa]);
-        
-        return $final_sisa;
-    }
+
 }

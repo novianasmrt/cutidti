@@ -9,7 +9,7 @@ class User_model extends CI_Model
     public function get_all_users()
     {
         return $this->db
-            ->select('user.*, user_role.role')
+            ->select('user.*, (user.cuti_n + user.cuti_n1 + user.cuti_n2) AS sisa_cuti, user_role.role')
             ->from('user')
             ->join('user_role', 'user_role.id_role = user.role_id', 'left')
             ->order_by('user.id_user', 'DESC')
@@ -23,7 +23,7 @@ class User_model extends CI_Model
     public function get_admins()
     {
         return $this->db
-            ->select('user.*, user_role.role')
+            ->select('user.*, (user.cuti_n + user.cuti_n1 + user.cuti_n2) AS sisa_cuti, user_role.role')
             ->from('user')
             ->join('user_role', 'user_role.id_role = user.role_id', 'left')
             ->where_in('user.role_id', [1, 3])
@@ -38,7 +38,7 @@ class User_model extends CI_Model
     public function get_users_by_role($role_id)
     {
         return $this->db
-            ->select('user.*, user_role.role')
+            ->select('user.*, (user.cuti_n + user.cuti_n1 + user.cuti_n2) AS sisa_cuti, user_role.role')
             ->from('user')
             ->join('user_role', 'user_role.id_role = user.role_id', 'left')
             ->where('user.role_id', $role_id)
@@ -53,17 +53,12 @@ class User_model extends CI_Model
     public function get_user_by_id($id)
     {
         $user = $this->db
-            ->select('user.*, user_role.role')
+            ->select('user.*, (user.cuti_n + user.cuti_n1 + user.cuti_n2) AS sisa_cuti, user_role.role')
             ->from('user')
             ->join('user_role', 'user_role.id_role = user.role_id', 'left')
             ->where('user.id_user', $id)
             ->get()
             ->row(); // ✅ OBJECT
-            
-        if ($user) {
-            $this->load->model('Cuti_model');
-            $user->sisa_cuti = $this->Cuti_model->hitung_sisa_cuti_tahunan($user->id_user);
-        }
         
         return $user;
     }
@@ -74,17 +69,12 @@ class User_model extends CI_Model
     public function get_user_by_email($email)
     {
         $user = $this->db
-            ->select('user.*, user_role.role')
+            ->select('user.*, (user.cuti_n + user.cuti_n1 + user.cuti_n2) AS sisa_cuti, user_role.role')
             ->from('user')
             ->join('user_role', 'user_role.id_role = user.role_id', 'left')
             ->where('user.email', $email)
             ->get()
             ->row(); // ✅ OBJECT
-            
-        if ($user) {
-            $this->load->model('Cuti_model');
-            $user->sisa_cuti = $this->Cuti_model->hitung_sisa_cuti_tahunan($user->id_user);
-        }
         
         return $user;
     }

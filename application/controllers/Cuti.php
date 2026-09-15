@@ -36,9 +36,6 @@ class Cuti extends CI_Controller
         $email = $this->session->userdata('email');
         $data['user'] = $this->User_model->get_user_by_email($email);
         
-        $this->load->model('Cuti_model');
-        $data['user']->sisa_cuti = $this->Cuti_model->hitung_sisa_cuti_tahunan($data['user']->id_user);
-
         $data['admins'] = $this->User_model->get_admins();
 
         // Ambil hari libur dari database
@@ -281,19 +278,6 @@ class Cuti extends CI_Controller
                         $this->_send_email($sekdir->email, $subject, $message);
                     }
                 }
-            } elseif ($status == 'Menunggu Admin SDM') {
-                // Cari Admin SDM (role_id = 5)
-                $adminsdm = $this->User_model->get_users_by_role(5);
-                foreach ($adminsdm as $admin) {
-                    if ($admin->email) {
-                        $subject = 'Tugas Tambahan - Input Nomor Surat Cuti';
-                        $message = "Halo {$admin->name},<br><br>";
-                        $message .= "Pengajuan cuti dari <b>{$pemohon->name}</b> telah disetujui oleh Sekretaris Direktur.<br>";
-                        $message .= "Mohon bantuannya untuk menambahkan Nomor Surat pada pengajuan cuti ini melalui menu Data Cuti di sistem, agar dapat diteruskan ke Direktur untuk TTE.<br><br>";
-                        $message .= "Terima kasih.";
-                        $this->_send_email($admin->email, $subject, $message);
-                    }
-                }
             } elseif ($status == 'Menunggu Direktur' || $status == 'Disetujui') {
                 // Jika Menunggu Direktur, Direktur perlu menyetujui.
                 // Jika Disetujui (oleh Sekdir/Admin), dokumen siap untuk dibubuhkan/TTE Direktur.
@@ -314,8 +298,6 @@ class Cuti extends CI_Controller
                 }
             }
 
-            // Recalculate sisa cuti if status changed
-            $this->Cuti_model->hitung_sisa_cuti_tahunan($cuti->id_user);
         }
 
         $this->session->set_flashdata('success', 'Status berhasil diupdate!');

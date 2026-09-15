@@ -6,14 +6,37 @@
     <title>Dokumen Cuti - <?= $cuti->nama; ?></title>
     
     <style>
-        @page { size: A4; margin: 2cm; }
+        @page { size: A4; margin: 0; }
         @media print {
-            body { background: none !important; -webkit-print-color-adjust: exact; }
+            body { background: none !important; -webkit-print-color-adjust: exact; margin: 0; padding: 0; }
             .no-print { display: none !important; }
-            .page-break { page-break-before: always; }
+            .page-break { display: none !important; }
+            .page {
+                margin: 0 !important;
+                padding: 1.5cm 2cm !important;
+                width: 100% !important;
+                height: auto !important;
+                min-height: 0 !important;
+                box-sizing: border-box !important;
+                box-shadow: none !important;
+                border: none !important;
+                background: none !important;
+                overflow: visible !important;
+                page-break-inside: avoid;
+            }
         }
         body { font-family: "Times New Roman", Times, serif; font-size: 11pt; margin: 0; padding: 0; background-color: #eee; }
         .no-print { position: fixed; top: 20px; right: 20px; z-index: 9999; }
+        
+        .page {
+            width: 210mm; 
+            min-height: 297mm; 
+            background: #fff; 
+            padding: 1.5cm 2cm; 
+            margin: 20px auto; 
+            box-sizing: border-box; 
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
         
         /* Helper Class */
         .tbl-border { width: 100%; border-collapse: collapse; }
@@ -30,7 +53,7 @@
         </button>
     </div>
 
-    <div style="width: 210mm; min-height: 297mm; background: #fff; padding: 1.5cm 2cm; margin: 20px auto; box-sizing: border-box; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+    <div class="page" style="page-break-after: always;">
         
         <div style="position: relative; border-bottom: 3px double #000; padding-bottom: 15px; margin-bottom: 20px;">
             <img src="<?= base_url('assets/img/ugm-logo.png'); ?>" 
@@ -111,13 +134,11 @@
         <div style="clear: both;"></div>
     </div>
 
-    <div class="page-break"></div>
-
-    <div style="width: 210mm; min-height: 297mm; background: #fff; padding: 1.5cm 2cm; margin: 20px auto; box-sizing: border-box; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+    <div class="page">
         
         <div style="text-align: right; margin-bottom: 20px; font-size: 10pt;">
             Yogyakarta, <?= date('j') . ' ' . $bulan[(int)date('n')] . ' ' . date('Y'); ?><br>
-            YTH. Direktur Teknologi Informsi UGM<br>
+            Kepada Yth. Direktur Teknologi Informsi UGM<br>
             di Yogyakarta
         </div>
 
@@ -125,8 +146,8 @@
             FORMULIR PERMINTAAN DAN PEMBERIAN CUTI
         </div>
 
-        <div style="border: 1px solid black; margin-bottom: 10px;">
-            <div style="font-weight: bold; padding: 5px; border-bottom: 1px solid black;">I. DATA PEGAWAI</div>
+        <div style="border: 1px solid black; margin-bottom: 5px;">
+            <div style="font-weight: bold; padding: 4px; border-bottom: 1px solid black;">I. DATA PEGAWAI</div>
             <table class="tbl-border" style="border: none;">
                 <tr>
                     <td style="width: 15%; border: none; border-right: 1px solid black;">Nama</td>
@@ -147,8 +168,8 @@
             </table>
         </div>
 
-        <div style="border: 1px solid black; margin-bottom: 10px;">
-            <div style="font-weight: bold; padding: 5px; border-bottom: 1px solid black;">II. JENIS CUTI YANG DIAMBIL</div>
+        <div style="border: 1px solid black; margin-bottom: 5px;">
+            <div style="font-weight: bold; padding: 4px; border-bottom: 1px solid black;">II. JENIS CUTI YANG DIAMBIL</div>
             <table style="width: 100%;">
                 <tr>
                     <td style="width: 50%; padding: 2px;">
@@ -177,15 +198,15 @@
             </table>
         </div>
 
-        <div style="border: 1px solid black; margin-bottom: 10px;">
-            <div style="font-weight: bold; padding: 5px; border-bottom: 1px solid black;">III. ALASAN CUTI</div>
+        <div style="border: 1px solid black; margin-bottom: 5px;">
+            <div style="font-weight: bold; padding: 4px; border-bottom: 1px solid black;">III. ALASAN CUTI</div>
             <div style="padding: 5px; min-height: 30px;">
                 <?= $cuti->keterangan; ?>
             </div>
         </div>
 
-        <div style="border: 1px solid black; margin-bottom: 10px;">
-            <div style="font-weight: bold; padding: 5px; border-bottom: 1px solid black;">IV. LAMA CUTI</div>
+        <div style="border: 1px solid black; margin-bottom: 5px;">
+            <div style="font-weight: bold; padding: 4px; border-bottom: 1px solid black;">IV. LAMA CUTI</div>
             <table style="width: 100%; border-collapse: collapse;">
                 <tr>
                     <td style="width: 15%; padding: 4px; border-right: 1px solid black;">Selama</td>
@@ -196,9 +217,9 @@
             </table>
         </div>
 
-        <div style="border: 1px solid black; margin-bottom: 10px;">
-            <div style="font-weight: bold; padding: 5px; border-bottom: 1px solid black;">V. CATATAN CUTI</div>
-            <table class="tbl-border">
+        <div style="border: 1px solid black; margin-bottom: 5px;">
+            <div style="font-weight: bold; padding: 4px; border-bottom: 1px solid black;">V. CATATAN CUTI</div>
+            <table class="tbl-border" style="border-style: hidden;">
                 <tr style="text-align: center; background-color: #f0f0f0;">
                     <td style="width: 20%;">Tahun</td>
                     <td style="width: 20%;">Sisa</td>
@@ -206,64 +227,60 @@
                 </tr>
                 <tr>
                     <td>N-2</td>
-                    <td style="text-align: center;">-</td>
+                    <td style="text-align: center;"><?= isset($cuti->cuti_n2) ? $cuti->cuti_n2 : 0; ?></td>
                     <td></td>
                 </tr>
                 <tr>
                     <td>N-1</td>
-                    <td style="text-align: center;">-</td>
+                    <td style="text-align: center;"><?= isset($cuti->cuti_n1) ? $cuti->cuti_n1 : 0; ?></td>
                     <td></td>
                 </tr>
                 <tr>
                     <td>N (Berjalan)</td>
-                    <td style="text-align: center;"><?= $cuti->sisa_cuti ?? 12; ?></td>
+                    <td style="text-align: center;"><?= isset($cuti->cuti_n) ? $cuti->cuti_n : 12; ?></td>
                     <td></td>
                 </tr>
             </table>
         </div>
 
-        <div style="border: 1px solid black; margin-bottom: 10px;">
-            <div style="font-weight: bold; padding: 5px; border-bottom: 1px solid black;">VI. ALAMAT SELAMA MENJALANKAN CUTI</div>
-            <table style="width: 100%;">
-                <tr>
-                    <td style="width: 60%; padding: 4px; vertical-align: top; height: 60px;">
-                        <?= $cuti->alamat ?? '-'; ?>
-                    </td>
-                    <td style="width: 40%; padding: 4px; vertical-align: top;">
-                        Telp: <?= $cuti->no_telpon ?? '-'; ?>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2" style="padding: 10px; text-align: right;">
-                        <div style="display: inline-block; text-align: center; width: 200px;">
-                            Hormat saya,<br>
-                            <?php $qr_pemohon = "Tanda Tangan Digital\nNama: " . $cuti->nama . "\nNIP: " . $cuti->nip; ?>
-                            <img src="https://quickchart.io/qr?text=<?= rawurlencode($qr_pemohon); ?>&size=90" alt="QR Pemohon" style="margin-top: 10px; margin-bottom: 10px;"><br>
-                            <u style="font-weight: bold;"><?= $cuti->nama; ?></u><br>
-                            NIP/NIU. <?= $cuti->nip; ?>
-                        </div>
-                    </td>
-                </tr>
-            </table>
-        </div>
+        <table style="width: 100%; border-collapse: collapse; margin-bottom: 5px;">
+            <tr>
+                <td colspan="3" style="font-weight: bold; padding: 4px; border: 1px solid black;">VI. ALAMAT SELAMA MENJALANKAN CUTI</td>
+            </tr>
+            <tr>
+                <td rowspan="2" style="width: 60%; padding: 10px; text-align: center; vertical-align: top; border: 1px solid black;">
+                    <?= $cuti->alamat ?? '-'; ?>
+                </td>
+                <td style="width: 15%; padding: 4px; text-align: center; font-weight: bold; border: 1px solid black; vertical-align: middle;">TELP</td>
+                <td style="width: 25%; padding: 4px; border: 1px solid black; vertical-align: middle;"><?= $cuti->no_telpon ?? '-'; ?></td>
+            </tr>
+            <tr>
+                <td colspan="2" style="padding: 10px; text-align: center; border: 1px solid black; vertical-align: top;">
+                    Hormat saya<br>
+                    <?php $qr_pemohon = "Tanda Tangan Digital\nNama: " . $cuti->nama . "\nNIP: " . $cuti->nip; ?>
+                    <img src="https://quickchart.io/qr?text=<?= rawurlencode($qr_pemohon); ?>&size=70" alt="QR Pemohon" style="margin-top: 5px; margin-bottom: 5px;"><br>
+                    <?= $cuti->nama; ?>
+                </td>
+            </tr>
+        </table>
 
-        <table style="width: 100%; border-collapse: collapse; margin-bottom: 10px;">
+        <table style="width: 100%; border-collapse: collapse; margin-bottom: 0px;">
             <tr>
                 <td style="width: 50%; padding-right: 5px; vertical-align: top;">
                     <div style="border: 1px solid black; height: 100%;">
-                        <div style="font-weight: bold; padding: 5px; border-bottom: 1px solid black;">VII. PERTIMBANGAN ATASAN LANGSUNG</div>
-                        <div style="padding: 10px;">
+                        <div style="font-weight: bold; padding: 4px; border-bottom: 1px solid black;">VII. PERTIMBANGAN ATASAN LANGSUNG</div>
+                        <div style="padding: 5px;">
                             <span class="box-check <?= $cuti->status=='Disetujui' ? 'bg-black' : ''; ?>"></span> DISETUJUI<br>
                             <span class="box-check <?= $cuti->status=='Menunggu' ? 'bg-black' : ''; ?>"></span> DITANGGUHKAN<br>
                             <span class="box-check <?= $cuti->status=='Ditolak' ? 'bg-black' : ''; ?>"></span> TIDAK DISETUJUI
                         </div>
-                        <div style="text-align: center; margin-top: 15px; margin-bottom: 10px;">
+                        <div style="text-align: center; margin-top: 5px; margin-bottom: 5px;">
                             <?php 
                             $nama_atasan = $cuti->atasan_bidang ?? 'Nama Atasan';
                             $nip_atasan = isset($atasan) && $atasan ? $atasan->nip : '...................';
                             $qr_atasan = "Tanda Tangan Digital\nNama: " . $nama_atasan . "\nNIP: " . $nip_atasan;
                             ?>
-                            <img src="https://quickchart.io/qr?text=<?= rawurlencode($qr_atasan); ?>&size=90" alt="QR Atasan" style="margin-bottom: 5px;"><br>
+                            <img src="https://quickchart.io/qr?text=<?= rawurlencode($qr_atasan); ?>&size=70" alt="QR Atasan" style="margin-bottom: 2px;"><br>
                             <u style="font-weight: bold;"><?= $nama_atasan; ?></u><br>
                             NIP. <?= $nip_atasan; ?>
                         </div>
@@ -272,22 +289,22 @@
                 
                 <td style="width: 50%; padding-left: 5px; vertical-align: top;">
                     <div style="border: 1px solid black; height: 100%;">
-                        <div style="font-weight: bold; padding: 5px; border-bottom: 1px solid black;">VIII. KEPUTUSAN PEJABAT BERWENANG</div>
-                        <div style="padding: 10px;">
+                        <div style="font-weight: bold; padding: 4px; border-bottom: 1px solid black;">VIII. KEPUTUSAN PEJABAT BERWENANG</div>
+                        <div style="padding: 5px;">
                             <span class="box-check <?= $cuti->status=='Disetujui' ? 'bg-black' : ''; ?>"></span> DISETUJUI<br>
                             <span class="box-check"></span> PERUBAHAN<br>
                             <span class="box-check <?= $cuti->status=='Ditolak' ? 'bg-black' : ''; ?>"></span> DITOLAK
                         </div>
-                        <div style="text-align: center; margin-top: 15px; margin-bottom: 10px;">
+                        <div style="text-align: center; margin-top: 5px; margin-bottom: 5px;">
                             <?php 
                             $nama_sekdir = isset($sekdir) && $sekdir ? $sekdir->name : 'Sekretaris Direktur';
                             $nip_sekdir = isset($sekdir) && $sekdir ? $sekdir->nip : '...................';
                             $qr_sekdir = "Tanda Tangan Digital\nNama: " . $nama_sekdir . "\nNIP: " . $nip_sekdir;
                             
                             if ($cuti->status == 'Disetujui'): ?>
-                                <img src="https://quickchart.io/qr?text=<?= rawurlencode($qr_sekdir); ?>&size=90" alt="QR Sekdir" style="margin-bottom: 5px;"><br>
+                                <img src="https://quickchart.io/qr?text=<?= rawurlencode($qr_sekdir); ?>&size=70" alt="QR Sekdir" style="margin-bottom: 2px;"><br>
                             <?php else: ?>
-                                <div style="height: 90px;"></div>
+                                <div style="height: 70px;"></div>
                             <?php endif; ?>
                             <u style="font-weight: bold;"><?= $nama_sekdir; ?></u><br>
                             NIP. <?= $nip_sekdir; ?>

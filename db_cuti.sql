@@ -114,8 +114,9 @@ CREATE TABLE `user` (
   `pangkat` varchar(50) DEFAULT NULL,
   `jenis_pegawai` varchar(20) DEFAULT NULL,
   `kategori` varchar(50) DEFAULT NULL,
-  `sisa_cuti` int(11) NOT NULL,
-  `sisa_cuti_2025` int(11) DEFAULT 0,
+  `cuti_n` int(11) DEFAULT 12,
+  `cuti_n1` int(11) DEFAULT 0,
+  `cuti_n2` int(11) DEFAULT 0,
   `image` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 

@@ -19,21 +19,24 @@
                 <i class="fas fa-history mr-2"></i> Daftar Riwayat Cuti
             </h6>
 
-            <form action="<?= base_url('cuti/riwayat'); ?>" method="get" class="form-inline w-100 d-flex justify-content-center justify-content-md-end">
-                <div class="input-group shadow-sm w-100" style="border-radius: 20px; max-width: 400px;">
-
-                    <input type="date" name="tanggal" class="form-control bg-light border-0 small"
+            <div class="d-flex flex-column flex-md-row align-items-start align-items-md-center w-100" style="max-width: 400px; justify-content: flex-end;">
+                <form action="<?= base_url('cuti/riwayat'); ?>" method="get" class="form-inline d-flex w-100 mb-2 mb-md-0 position-relative">
+                    <i class="fas fa-search position-absolute" style="left: 15px; top: 50%; transform: translateY(-50%); color: #9ca3af; font-size: 0.9rem; z-index: 3;"></i>
+                    <input type="date" class="form-control w-100"
+                        name="tanggal"
                         aria-label="Search"
                         value="<?= $this->input->get('tanggal'); ?>"
-                        style="border-top-left-radius: 20px; border-bottom-left-radius: 20px; color: #6e707e; height: 38px;">
-
-                    <div class="input-group-append">
-                        <button class="btn" type="submit" style="background-color: #003366; color: white; border-top-right-radius: 20px; border-bottom-right-radius: 20px; padding-left: 15px; padding-right: 15px;">
-                            <i class="fas fa-search fa-sm"></i>
-                        </button>
-                    </div>
-                </div>
-            </form>
+                        style="border-radius: 20px; color: #4b5563; height: 40px; padding-left: 40px; padding-right: 15px; border: 1px solid #e5e7eb; background-color: #f9fafb; font-size: 0.9rem; transition: all 0.2s;"
+                        onfocus="this.style.backgroundColor='#ffffff'; this.style.borderColor='#3b82f6'; this.style.boxShadow='0 0 0 3px rgba(59, 130, 246, 0.1)';"
+                        onblur="this.style.backgroundColor='#f9fafb'; this.style.borderColor='#e5e7eb'; this.style.boxShadow='none';"
+                        onchange="this.form.submit()">
+                </form>
+                <?php if ($this->input->get('tanggal')): ?>
+                    <a href="<?= base_url('cuti/riwayat'); ?>" class="btn btn-sm btn-link text-danger ml-2" title="Reset">
+                        <i class="fas fa-times"></i> Reset
+                    </a>
+                <?php endif; ?>
+            </div>
         </div>
         <style>
             .table-hover tbody tr:hover {

@@ -60,5 +60,29 @@ Aplikasi berbasis web untuk mengelola permohonan cuti pegawai secara digital den
 ## 🔐 Akun Default
 Silakan masuk (login) menggunakan kredensial email/password pegawai yang telah terdaftar di database untuk mencoba alur persetujuan. Pastikan kolom email pada tabel *user* valid agar fitur notifikasi dapat diuji.
 
+## 🚀 Panduan Deployment & Migrasi (Server UGM)
+
+Bagi pengembang selanjutnya atau administrator yang bertugas memindahkan repositori ke server produksi (Universitas Gadjah Mada), harap perhatikan langkah-langkah berikut:
+
+1. **Persiapan Server Produksi**
+   * Pastikan server terinstall **PHP 7.4 - 8.x** dengan ekstensi wajib: `mysqli`, `openssl`, `gd`, dan `zip`.
+   * Web Server (Apache/Nginx). Jika menggunakan Apache, pastikan modul `mod_rewrite` diaktifkan agar routing CodeIgniter berfungsi dengan baik (merujuk pada file `.htaccess`).
+   * Buat *database* di server UGM dan *import* file struktur `db_cuti.sql`.
+
+2. **Penyesuaian Konfigurasi (Environment)**
+   * **Base URL:** Buka `application/config/config.php` dan ubah parameter `$config['base_url']` sesuai dengan domain/subdomain resmi yang dialokasikan (contoh: `https://[subdomain].ugm.ac.id/`).
+   * **Database:** Buka `application/config/database.php` dan perbarui kredensial koneksi (`hostname`, `username`, `password`, `database`) sesuai dengan server *database* produksi.
+   * **Email SMTP:** Buka `application/config/email.php`. Jika menggunakan SMTP UGM, sesuaikan `smtp_host`, `smtp_user`, `smtp_pass`, dan `smtp_crypto`. Jika menggunakan Google Workspace/Gmail, gunakan *App Password*.
+
+3. **Keamanan & Hak Akses Folder (Permissions)**
+   * Atur hak akses direktori agar server dapat menyimpan *file* (seperti dokumen PDF surat cuti, atau foto profil).
+   * Biasanya folder *upload* atau penyimpanan sementara membutuhkan *permission* `755` atau `777` (tergantung konfigurasi *ownership* server).
+
+## 📁 Struktur Direktori Penting (Untuk Pengembang)
+
+*   `application/controllers/` - Berisi logika utama aplikasi (misalnya: `Cuti.php` untuk pengajuan, `Admin.php` untuk manajemen).
+*   `application/models/` - Tempat query *database*. **Catatan:** Logika pemotongan sisa cuti secara berurutan (`cuti_n2`, `cuti_n1`, `cuti_n`) dilakukan pada `Cuti_model.php` dan `User_model.php`.
+*   `application/views/` - Halaman *frontend* yang dibangun dengan integrasi Bootstrap.
+
 ---
 *Dikembangkan untuk efisiensi birokrasi dan administrasi kepegawaian.*
