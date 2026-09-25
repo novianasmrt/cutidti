@@ -134,42 +134,10 @@
                 </div>
             <?php endif; ?>
 
-            <form class="user" method="post" action="<?= base_url('auth'); ?>">
-                
-                <div class="form-group">
-                    <div class="input-wrapper">
-                        <i class="far fa-envelope"></i>
-                        <input type="text" 
-                               id="email" 
-                               name="email" 
-                               placeholder="Enter Email Address..." 
-                               value="<?= set_value('email', isset($_COOKIE['remember_email']) ? $_COOKIE['remember_email'] : ''); ?>"
-                               autocomplete="off">
-                    </div>
-                    <?= form_error('email', '<small class="text-danger">', '</small>'); ?>
-                </div>
-
-                <div class="form-group">
-                    <div class="input-wrapper">
-                        <i class="fas fa-lock"></i>
-                        <input type="password" 
-                               id="password" 
-                               name="password" 
-                               placeholder="Password">
-                    </div>
-                    <?= form_error('password', '<small class="text-danger">', '</small>'); ?>
-                </div>
-
-                <div class="form-group" style="display: flex; align-items: center;">
-                    <input type="checkbox" id="customCheck" name="remember" style="width: auto; margin-right: 8px;" <?= isset($_COOKIE['remember_email']) ? 'checked' : ''; ?>> 
-                    <label for="customCheck" style="font-size: 0.9rem; color: #6b7280; cursor: pointer;">Remember Me</label>
-                </div>
-
-                <button type="submit" class="btn btn-primary">
-                    Login
-                </button>
-
-            </form>
+            <a href="<?= isset($google_login_url) ? $google_login_url : '#'; ?>" class="btn btn-google" style="padding: 12px; margin-top: 20px; font-weight: 600; text-decoration: none;">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" width="20" height="20" alt="Google Logo">
+                Login with Google
+            </a>
             </div>
     </div>
 

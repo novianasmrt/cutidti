@@ -14,129 +14,96 @@ class Auth extends CI_Controller
     {
         // Kalau sudah login
         if ($this->session->userdata('email')) {
-            redirect('admin');
+            $role_id = $this->session->userdata('role_id_active') ?? $this->session->userdata('role_id');
+            if (in_array($role_id, [1, 3, 4, 5])) {
+                redirect('admin');
+            } else {
+                redirect('user');
+            }
         }
 
-        // Validasi form
-        $this->form_validation->set_rules('email', 'Email', 'trim|required|valid_email');
-        $this->form_validation->set_rules('password', 'Password', 'trim|required');
+        // Inisialisasi Google Client
+        require_once APPPATH . '../vendor/autoload.php';
+        $this->load->config('google');
 
-        if ($this->form_validation->run() == false) {
-            $data['title'] = 'Login Page';
-            $this->load->view('auth/login', $data);
-        } else {
-            $this->_login();
-        }
+        $client = new Google_Client();
+        $client->setClientId($this->config->item('google_client_id'));
+        $client->setClientSecret($this->config->item('google_client_secret'));
+        $client->setRedirectUri($this->config->item('google_redirect_uri'));
+        $client->addScope("email");
+        $client->addScope("profile");
+
+        $data['google_login_url'] = $client->createAuthUrl();
+        $data['title'] = 'Login Page';
+        
+        $this->load->view('auth/login', $data);
     }
 
-    private function _login()
+    public function google_callback()
     {
-        $email = $this->input->post('email');
-        $password = $this->input->post('password');
+        require_once APPPATH . '../vendor/autoload.php';
+        $this->load->config('google');
 
-        // ✅ Ambil user dari DATABASE (bukan dummy)
-        $user = $this->db->get_where('user', ['email' => $email])->row();
+        $client = new Google_Client();
+        $client->setClientId($this->config->item('google_client_id'));
+        $client->setClientSecret($this->config->item('google_client_secret'));
+        $client->setRedirectUri($this->config->item('google_redirect_uri'));
 
-        if ($user) {
+        if (isset($_GET['code'])) {
+            $token = $client->fetchAccessTokenWithAuthCode($_GET['code']);
+            if (!isset($token['error'])) {
+                $client->setAccessToken($token['access_token']);
+                
+                $google_service = new Google_Service_Oauth2($client);
+                $data = $google_service->userinfo->get();
+                
+                $email = $data['email'];
 
-            // cek aktif
-            if ($user->is_active == 1) {
+                // Cek apakah email ada di database
+                $user = $this->db->get_where('user', ['email' => $email])->row();
 
-                // ✅ CEK PASSWORD HASH
-                if (password_verify($password, $user->password)) {
+                if ($user) {
+                    if ($user->is_active == 1) {
+                        // SET SESSION
+                        $session_data = [
+                            'email'   => $user->email,
+                            'name'    => $user->name,
+                            'id_user' => $user->id_user,
+                            'role_id' => $user->role_id,
+                            'role_id_original' => $user->role_id,
+                            'role_id_active'   => $user->role_id
+                        ];
+                        $this->session->set_userdata($session_data);
 
-                    // SET SESSION
-                    $data = [
-                        'email'   => $user->email,
-                        'name'    => $user->name,
-                        'id_user' => $user->id_user,
-
-                        // legacy (boleh tetap ada)
-                        'role_id' => $user->role_id,
-
-                        // ✅ WAJIB UNTUK SWITCH ROLE
-                        'role_id_original' => $user->role_id,
-                        'role_id_active'   => $user->role_id
-                    ];
-                    $this->session->set_userdata($data);
-
-                    // Set Remember Me Cookie (30 hari)
-                    if ($this->input->post('remember')) {
-                        setcookie('remember_email', $email, time() + (86400 * 30), "/");
-                    } else {
-                        if (isset($_COOKIE['remember_email'])) {
-                            setcookie('remember_email', '', time() - 3600, "/");
+                        // Redirect berdasarkan role
+                        if (in_array($user->role_id, [1, 3, 4, 5])) {
+                            redirect('admin');
+                        } else {
+                            redirect('user');
                         }
-                    }
-
-                    // Redirect berdasarkan role
-                    if (in_array($user->role_id, [1, 3, 4, 5])) {
-                        redirect('admin');
                     } else {
-                        redirect('user');
+                        $this->session->set_flashdata(
+                            'message',
+                            '<div class="alert alert-danger">Akun belum aktif!</div>'
+                        );
+                        redirect('auth');
                     }
                 } else {
                     $this->session->set_flashdata(
                         'message',
-                        '<div class="alert alert-danger">Password salah!</div>'
+                        '<div class="alert alert-danger">Email tidak terdaftar di sistem!</div>'
                     );
                     redirect('auth');
                 }
             } else {
-                $this->session->set_flashdata(
-                    'message',
-                    '<div class="alert alert-danger">Akun belum aktif!</div>'
-                );
                 redirect('auth');
             }
         } else {
-            $this->session->set_flashdata(
-                'message',
-                '<div class="alert alert-danger">Email tidak terdaftar!</div>'
-            );
             redirect('auth');
         }
     }
 
-    // ================= REGISTER =================
-    public function registration()
-    {
-        $this->form_validation->set_rules('name', 'Name', 'required|trim');
-        $this->form_validation->set_rules('email', 'Email', 'required|trim|valid_email|is_unique[user.email]');
-        $this->form_validation->set_rules(
-            'password1',
-            'Password',
-            'required|trim|min_length[3]|matches[password2]'
-        );
-        $this->form_validation->set_rules('password2', 'Password', 'required|trim');
 
-        if ($this->form_validation->run() == false) {
-            $data['title'] = 'Registration';
-            $this->load->view('auth/registration', $data);
-        } else {
-
-            // ✅ HASH PASSWORD
-            $password = password_hash($this->input->post('password1'), PASSWORD_DEFAULT);
-
-            // ✅ SIMPAN KE DATABASE
-            $data = [
-                'name' => htmlspecialchars($this->input->post('name', true)),
-                'email' => htmlspecialchars($this->input->post('email', true)),
-                'password' => $password,
-                'role_id' => 2, // default user
-                'is_active' => 1,
-                'date_created' => time()
-            ];
-
-            $this->db->insert('user', $data);
-
-            $this->session->set_flashdata(
-                'message',
-                '<div class="alert alert-success">Akun berhasil dibuat, silakan login!</div>'
-            );
-            redirect('auth');
-        }
-    }
     // ================= SWITCH Role =================
     public function switch_role()
     {
