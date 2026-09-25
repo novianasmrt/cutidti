@@ -9,8 +9,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | Anda bisa mendapatkannya di: https://console.cloud.google.com/
 */
 
-$config['google_client_id']     = '647749178463-ieo0u917pb0oul41vp729re8gbanf4sj.apps.googleusercontent.com';
-$config['google_client_secret'] = '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';
+$config['google_client_id']     = getenv('GOOGLE_CLIENT_ID') ?: ''; // Dimuat dari .env
+$config['google_client_secret'] = getenv('GOOGLE_CLIENT_SECRET') ?: ''; // Dimuat dari .env
 
 // URL Redirect (Pastikan sesuai dengan yang didaftarkan di Google Cloud Console)
 // Contoh: http://localhost/cutidti/auth/google_callback
