@@ -82,28 +82,46 @@
                             <?php $no = 1; foreach ($staff as $s) : ?>
                                 <?php
                                 $id_user    = $s->id_user ?? null;
-                                $jatah_cuti = 12;
-                                $sisa_cuti  = $s->sisa_cuti ?? 12;
-                                $persen     = ($jatah_cuti > 0) ? ($sisa_cuti / $jatah_cuti) * 100 : 0;
-                                $persen     = min($persen, 100);
 
-                                if ($sisa_cuti <= 3)      { $warna_bar = 'bg-danger'; }
-                                elseif ($sisa_cuti <= 6)  { $warna_bar = 'bg-warning'; }
-                                else                       { $warna_bar = 'bg-success'; }
+                // ====================================
+                // PERHITUNGAN SISA CUTI (SESUAI SOP)
+                // ====================================
+                $cuti_n     = (int)($s->cuti_n  ?? 12);
+                $cuti_n1    = (int)($s->cuti_n1 ?? 0);
+                $cuti_n2    = (int)($s->cuti_n2 ?? 0);
+                $sisa_cuti  = $cuti_n + $cuti_n1 + $cuti_n2;
 
-                                $pake_icon = empty($s->image) || $s->image == 'default.jpg';
+                // Hitung jatah maksimal sesuai SOP:
+                // Jika 2 tahun berturut-turut tidak cuti → maks 24 hari (N=12 + N1=12)
+                // Jika pernah cuti → maks 18 hari (N=12 + N1=6)
+                if ($cuti_n1 == 12) {
+                    $jatah_cuti = 24; // kasus tidak cuti 2 tahun berturut-turut
+                } elseif ($cuti_n1 > 0) {
+                    $jatah_cuti = 18; // kasus pernah cuti, bawa sisa maks 6
+                } else {
+                    $jatah_cuti = 12; // hanya jatah tahun ini
+                }
 
-                                $role_id = $s->role_id ?? 2;
-                                switch ($role_id) {
-                                    case 1:  $role_label = 'Administrator';        break;
-                                    case 3:  $role_label = 'Sekretaris Direktur';  break;
-                                    case 4:  $role_label = 'Direktur';             break;
-                                    case 5:  $role_label = 'Admin SDM';            break;
-                                    default: $role_label = 'Staff';                break;
-                                }
-                                $role_bg    = ($role_id == 2) ? '#F1F3F9' : '#E6F0FF';
-                                $role_color = ($role_id == 2) ? '#5A5C69' : '#003366';
-                                ?>
+                $persen     = ($jatah_cuti > 0) ? ($sisa_cuti / $jatah_cuti) * 100 : 0;
+                $persen     = min($persen, 100);
+
+                if ($sisa_cuti <= 3)      { $warna_bar = 'bg-danger'; }
+                elseif ($sisa_cuti <= 6)  { $warna_bar = 'bg-warning'; }
+                else                       { $warna_bar = 'bg-success'; }
+
+                $pake_icon = empty($s->image) || $s->image == 'default.jpg';
+
+                $role_id = $s->role_id ?? 2;
+                switch ($role_id) {
+                    case 1:  $role_label = 'Administrator';        break;
+                    case 3:  $role_label = 'Sekretaris Direktur';  break;
+                    case 4:  $role_label = 'Direktur';             break;
+                    case 5:  $role_label = 'Admin SDM';            break;
+                    default: $role_label = 'Staff';                break;
+                }
+                $role_bg    = ($role_id == 2) ? '#F1F3F9' : '#E6F0FF';
+                $role_color = ($role_id == 2) ? '#5A5C69' : '#003366';
+                ?>
 
                                 <tr style="border-bottom: 1px solid #f0f1f5;">
 
@@ -143,11 +161,26 @@
                                     <!-- SISA CUTI -->
                                     <td class="align-middle">
                                         <div class="d-flex justify-content-between mb-1 align-items-center">
-                                            <span style="font-size: 0.85rem; font-weight: 600; color: #374151;"><?= $sisa_cuti; ?> Hari</span>
-                                            <span style="font-size: 0.75rem; color: #6b7280;">dari <?= $jatah_cuti; ?></span>
+                                            <span style="font-size: 0.85rem; font-weight: 700; color: #374151;"><?= $sisa_cuti; ?> Hari</span>
+                                            <span style="font-size: 0.7rem; color: #6b7280;">maks <?= $jatah_cuti; ?></span>
                                         </div>
                                         <div class="progress" style="height: 6px; border-radius: 10px;">
                                             <div class="progress-bar <?= $warna_bar; ?>" style="width: <?= $persen; ?>%; border-radius: 10px;"></div>
+                                        </div>
+                                        <!-- Rincian Keranjang -->
+                                        <div class="mt-2" style="font-size: 0.72rem; color: #9ca3af; line-height: 1.6;">
+                                            <span class="mr-2" title="Jatah tahun ini">
+                                                <i class="fas fa-circle" style="color:#10b981;font-size:0.45rem;vertical-align:middle;"></i>
+                                                N: <strong><?= $cuti_n; ?></strong>
+                                            </span>
+                                            <span class="mr-2" title="Sisa tahun lalu">
+                                                <i class="fas fa-circle" style="color:#f59e0b;font-size:0.45rem;vertical-align:middle;"></i>
+                                                N-1: <strong><?= $cuti_n1; ?></strong>
+                                            </span>
+                                            <span title="Sisa 2 tahun lalu">
+                                                <i class="fas fa-circle" style="color:#ef4444;font-size:0.45rem;vertical-align:middle;"></i>
+                                                N-2: <strong><?= $cuti_n2; ?></strong>
+                                            </span>
                                         </div>
                                     </td>
 

@@ -95,11 +95,7 @@
                         </select>
                     </div>
 
-                    <div class="form-group mb-4">
-                        <label class="small font-weight-bold text-ugm ml-1">Password Awal</label>
-                        <input type="password" class="form-control" name="password" placeholder="Minimal 5 karakter">
-                        <?= form_error('password', '<small class="text-danger pl-2">', '</small>'); ?>
-                    </div>
+
 
                     <div class="form-group mb-4">
                         <label class="small font-weight-bold text-ugm ml-1">Foto Profil</label>

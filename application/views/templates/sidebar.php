@@ -26,6 +26,13 @@
             <span>Dashboard</span>
         </a>
 
+        <div class="menu-category">INFORMASI</div>
+
+        <a href="<?= base_url('sop'); ?>" class="nav-link <?= ($title == 'SOP Cuti') ? 'active' : ''; ?>">
+            <i class="fas fa-fw fa-book"></i>
+            <span>SOP Cuti</span>
+        </a>
+
         <?php if ($role_id == 2): ?>
 
             <div class="menu-category">CUTI PRIBADI</div>

@@ -269,45 +269,5 @@ class User extends CI_Controller
         }
     }
 
-    // ===============================================================
-    // CHANGE PASSWORD
-    // ===============================================================
-    public function changepassword()
-    {
-        $data['title'] = 'Change Password';
-        $data['subtitle'] = 'Profile';
 
-        $email = $this->session->userdata('email');
-        $data['user'] = $this->User_model->get_user_by_email($email);
-
-        $this->form_validation->set_rules('current_password', 'Current Password', 'required');
-        $this->form_validation->set_rules('new_password1', 'New Password', 'required|min_length[3]|matches[new_password2]');
-        $this->form_validation->set_rules('new_password2', 'Confirm Password', 'required');
-
-        if ($this->form_validation->run() == false) {
-
-            $this->load->view('templates/header', $data);
-            $this->load->view('templates/sidebar', $data);
-            $this->load->view('templates/topbar', $data);
-            $this->load->view('user/changepassword', $data);
-            $this->load->view('templates/footer');
-        } else {
-
-            if (!password_verify($this->input->post('current_password'), $data['user']->password)) {
-
-                $this->session->set_flashdata('message', '<div class="alert alert-danger">Password saat ini salah!</div>');
-                redirect('user/changepassword');
-            }
-
-            $new_password = password_hash($this->input->post('new_password1'), PASSWORD_DEFAULT);
-
-            $this->User_model->update([
-                'id_user' => $data['user']->id_user,
-                'password' => $new_password
-            ]);
-
-            $this->session->set_flashdata('message', '<div class="alert alert-success">Password berhasil diubah!</div>');
-            redirect('user/profile');
-        }
-    }
 }

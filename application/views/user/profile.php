@@ -31,11 +31,7 @@
                         style="background-color: #003366; color: white; border-radius: 10px;">
                         <i class="fas fa-user-edit mr-2"></i> Edit Profil
                     </a>
-                    
-                    <a href="<?= base_url('user/changepassword/'); ?>" class="btn btn-block shadow-sm font-weight-bold py-2"
-                        style="background-color: #f8f9fc; color: #003366; border: 1px solid #d1d3e2; border-radius: 10px;">
-                        <i class="fas fa-key mr-2"></i> Ubah Password
-                    </a>
+
                 </div>
             </div>
         </div>

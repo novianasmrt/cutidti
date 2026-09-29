@@ -98,11 +98,7 @@
                             <?= form_error('no_telpon', '<small class="text-danger pl-2">', '</small>'); ?>
                         </div>
 
-                        <div class="form-group col-md-6 mb-4">
-                            <label class="small font-weight-bold text-ugm ml-1">Password Baru (Optional)</label>
-                            <input type="password" class="form-control" name="password" placeholder="Isi hanya jika ingin ganti password...">
-                            <?= form_error('password', '<small class="text-danger pl-2">', '</small>'); ?>
-                        </div>
+
                     </div>
 
                     <h6 class="font-weight-bold text-uppercase mb-4 mt-4" style="color: #003366; font-size: 0.85rem; letter-spacing: 0.5px;">

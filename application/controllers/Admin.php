@@ -391,10 +391,6 @@ class Admin extends CI_Controller
             $this->form_validation->set_rules('email', 'Email', 'required|trim|valid_email');
         }
 
-        if ($this->input->post('password')) {
-            $this->form_validation->set_rules('password', 'Password', 'min_length[5]');
-        }
-
         if ($this->form_validation->run() == false) {
             // Jika validasi gagal, tampilkan form edit lagi
             $this->editstaff($id_user);
@@ -450,11 +446,6 @@ class Admin extends CI_Controller
                 'role_id'        => $this->input->post('role_id'),
                 'image'          => $foto
             ];
-
-            // Update password jika diisi
-            if ($this->input->post('password')) {
-                $update_data['password'] = password_hash($this->input->post('password'), PASSWORD_DEFAULT);
-            }
 
             $this->User_model->update($update_data);
 
@@ -546,15 +537,6 @@ class Admin extends CI_Controller
                         $cuti_n1_excel       = trim($sheetdata[$i][12] ?? '0');
                         $cuti_n2_excel       = trim($sheetdata[$i][13] ?? '0');
 
-                        // Logika Password (6 angka terakhir NIP)
-                        if (strlen($nip_excel) >= 6) {
-                            $password_plain = substr($nip_excel, -6);
-                        } elseif (!empty($nip_excel)) {
-                            $password_plain = $nip_excel;
-                        } else {
-                            $password_plain = '12345';
-                        }
-
                         // Validasi angka untuk cuti dan role id
                         $cuti_n_val  = is_numeric($cuti_n_excel) ? (int)$cuti_n_excel : 12;
                         $cuti_n1_val = is_numeric($cuti_n1_excel) ? (int)$cuti_n1_excel : 0;
@@ -583,7 +565,6 @@ class Admin extends CI_Controller
                                 'jabatan'       => htmlspecialchars($jabatan_excel),
                                 'pangkat'       => htmlspecialchars($pangkat_excel),
                                 'image'         => 'default.jpg',
-                                'password'      => password_hash($password_plain, PASSWORD_DEFAULT),
                                 'role_id'       => $role_id_val,
                                 'is_active'     => 1,
                                 'date_created'  => time(),
@@ -639,7 +620,6 @@ class Admin extends CI_Controller
         // 1. Atur Aturan Validasi
         $this->form_validation->set_rules('nama', 'Nama Lengkap', 'required|trim');
         $this->form_validation->set_rules('email', 'Email', 'required|trim|valid_email|is_unique[user.email]');
-        $this->form_validation->set_rules('password', 'Password', 'required|min_length[5]');
         $this->form_validation->set_rules('nip', 'NIP/NIU', 'required|numeric');
         $this->form_validation->set_rules('jabatan', 'Jabatan', 'required|trim');
 
@@ -677,7 +657,6 @@ class Admin extends CI_Controller
                 'nip'           => htmlspecialchars($this->input->post('nip', true)),
                 'email'         => htmlspecialchars($this->input->post('email', true)),
                 'image'         => $foto,
-                'password'      => password_hash($this->input->post('password'), PASSWORD_DEFAULT),
                 'role_id'       => $this->input->post('role_id'),
                 'jabatan'       => htmlspecialchars($this->input->post('jabatan', true)),
                 'is_active'     => 1,

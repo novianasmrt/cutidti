@@ -3,6 +3,66 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class User_model extends CI_Model
 {
+    public function __construct()
+    {
+        parent::__construct();
+        $this->auto_rollover_cuti();
+    }
+
+    // ==============================
+    // RESET CUTI OTOMATIS TAHUN BARU
+    // ==============================
+    public function auto_rollover_cuti()
+    {
+        $current_year = (int) date('Y');
+        
+        $this->db->where('tahun_reset_cuti <', $current_year);
+        $this->db->or_where('tahun_reset_cuti IS NULL');
+        $users = $this->db->get('user')->result();
+        
+        if (!empty($users)) {
+            foreach ($users as $u) {
+                $n = (int) $u->cuti_n;
+                $n1 = (int) $u->cuti_n1;
+                $n2 = (int) $u->cuti_n2;
+                
+                $last_year = (int) $u->tahun_reset_cuti;
+                if ($last_year == 0) $last_year = $current_year - 1;
+                
+                $diff = $current_year - $last_year;
+                
+                if ($diff == 1) {
+                    // Cek apakah 2 tahun berturut-turut tidak pernah cuti (N dan N1 masih utuh 12)
+                    if ($n == 12 && $n1 == 12) {
+                        // Berhak dapat 24 hari (N1 baru = 12, N2 = hangus)
+                        $new_n1 = 12;
+                        $new_n2 = 0;
+                    } else {
+                        // Pernah cuti: hanya N tahun ini yang bisa dibawa, maks 6 hari → jadi N1 baru
+                        // N1 lama & N2 lama → hangus (tidak dibawa lagi)
+                        $new_n1 = min(6, $n);
+                        $new_n2 = 0; // selalu hangus
+                    }
+                    $new_n = 12; // jatah baru
+                } elseif ($diff >= 2) {
+                    $new_n2 = 0;
+                    $new_n1 = min(6, $n); 
+                    $new_n = 12;
+                } else {
+                    continue;
+                }
+                
+                $this->db->where('id_user', $u->id_user);
+                $this->db->update('user', [
+                    'cuti_n' => $new_n,
+                    'cuti_n1' => $new_n1,
+                    'cuti_n2' => $new_n2,
+                    'tahun_reset_cuti' => $current_year
+                ]);
+            }
+        }
+    }
+
     // ==============================
     // 1. AMBIL SEMUA USER
     // ==============================
