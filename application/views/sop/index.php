@@ -132,140 +132,120 @@
     <!-- Accordion / Chapters -->
     <div class="accordion accordion-sop" id="accordionSOP">
 
-        <!-- BAB I -->
+        <!-- Cuti Tahunan -->
         <div class="card">
-            <div class="card-header" id="headingBab1" data-toggle="collapse" data-target="#collapseBab1" aria-expanded="true" aria-controls="collapseBab1">
-                <h5 class="card-title">BAB I &nbsp;&mdash;&nbsp; KETENTUAN UMUM</h5>
+            <div class="card-header" id="heading1" data-toggle="collapse" data-target="#collapse1" aria-expanded="true" aria-controls="collapse1">
+                <h5 class="card-title">1. Cuti Tahunan</h5>
             </div>
-            <div id="collapseBab1" class="collapse show" aria-labelledby="headingBab1" data-parent="#accordionSOP">
+            <div id="collapse1" class="collapse show" aria-labelledby="heading1" data-parent="#accordionSOP">
                 <div class="card-body">
-                    <div class="sop-pasal-title"><i class="fas fa-bookmark"></i> Pasal 1: Pengertian</div>
-                    <ol class="sop-list">
-                        <li>Cuti adalah keadaan tidak masuk kerja yang diizinkan dalam jangka waktu tertentu sesuai dengan ketentuan yang berlaku.</li>
-                        <li>Pegawai yang dimaksud dalam peraturan ini adalah pegawai di lingkungan Direktorat Teknologi Informasi Universitas Gadjah Mada.</li>
-                        <li>Pengajuan cuti dilakukan melalui mekanisme administrasi yang ditetapkan oleh Direktorat Teknologi Informasi Universitas Gadjah Mada.</li>
+                    <ol class="sop-list" type="a">
+                        <li>Pegawai berhak memperoleh cuti tahunan sebanyak 12 (dua belas) hari kerja dalam 1 (satu) tahun;</li>
+                        <li>Apabila pegawai selama 2 (dua) tahun berturut-turut tidak mengambil cuti tahunan, maka hak cuti pada tahun berikutnya dapat diperhitungkan sebanyak 24 (dua puluh empat) hari kerja;</li>
+                        <li>Apabila dalam 2 (dua) tahun sebelumnya pegawai mengambil cuti tahunan pada salah satu tahun, maka hak cuti yang dapat diperhitungkan dan dibawa ke tahun berikutnya adalah paling banyak 6 (enam) hari kerja, sesuai ketentuan yang berlaku;</li>
+                        <li>Cuti tahunan yang telah diajukan tetapi tidak disetujui oleh pimpinan karena adanya tugas kedinasan yang mendesak dapat diperhitungkan sebagai hak cuti pada tahun berikutnya sesuai ketentuan yang berlaku dan pencatatan administrasi kepegawaian.</li>
                     </ol>
                 </div>
             </div>
         </div>
 
-        <!-- BAB II -->
+        <!-- Cuti Besar -->
         <div class="card">
-            <div class="card-header collapsed" id="headingBab2" data-toggle="collapse" data-target="#collapseBab2" aria-expanded="false" aria-controls="collapseBab2">
-                <h5 class="card-title">BAB II &nbsp;&mdash;&nbsp; JENIS DAN KETENTUAN CUTI</h5>
+            <div class="card-header collapsed" id="heading2" data-toggle="collapse" data-target="#collapse2" aria-expanded="false" aria-controls="collapse2">
+                <h5 class="card-title">2. Cuti Besar</h5>
             </div>
-            <div id="collapseBab2" class="collapse" aria-labelledby="headingBab2" data-parent="#accordionSOP">
+            <div id="collapse2" class="collapse" aria-labelledby="heading2" data-parent="#accordionSOP">
                 <div class="card-body">
-                    
-                    <div class="sop-pasal-title"><i class="fas fa-bookmark"></i> Pasal 2: Cuti Tahunan</div>
-                    <ol class="sop-list">
-                        <li>Pegawai berhak memperoleh cuti tahunan sebanyak 12 (dua belas) hari kerja dalam 1 (satu) tahun.</li>
-                        <li>Apabila pegawai selama 2 (dua) tahun berturut-turut tidak menggunakan cuti tahunan, maka hak cuti tahunan pada tahun berikutnya dapat diberikan sebanyak 24 (dua puluh empat) hari kerja, sesuai ketentuan yang berlaku.</li>
-                        <li>Apabila pegawai dalam 2 (dua) tahun sebelumnya telah menggunakan cuti tahunan pada salah satu tahun tersebut, maka hak cuti yang dapat diperhitungkan dan dibawa ke tahun berikutnya adalah paling banyak 6 (enam) hari kerja, sesuai ketentuan yang berlaku.</li>
-                        <li>Apabila permohonan cuti tahunan tidak dapat disetujui oleh pimpinan karena adanya tugas kedinasan yang mendesak, hak cuti yang tidak terlaksana tersebut diperhitungkan sebagai hak cuti pada tahun berikutnya sesuai ketentuan yang berlaku dan hasil persetujuan pimpinan.</li>
-                    </ol>
-
-                    <div class="sop-pasal-title"><i class="fas fa-bookmark"></i> Pasal 3: Cuti Besar</div>
-                    <ol class="sop-list">
-                        <li>Cuti besar diberikan kepada pegawai sesuai masa kerja yang dipersyaratkan dan berlaku untuk periode 5 (lima) tahun.</li>
-                        <li>Cuti besar diberikan paling lama 3 (tiga) bulan.</li>
-                        <li>Pegawai yang menggunakan cuti besar tidak berhak mendapatkan cuti tahunan pada periode yang sama, sesuai ketentuan yang berlaku.</li>
-                        <li>Apabila pegawai telah menggunakan cuti tahunan sebanyak 12 (dua belas) hari sebelum mengajukan cuti besar, penggunaan cuti besar diperhitungkan dengan mempertimbangkan cuti tahunan yang telah digunakan tersebut sesuai ketentuan yang berlaku.</li>
-                    </ol>
-
-                    <div class="sop-pasal-title"><i class="fas fa-bookmark"></i> Pasal 4: Cuti Sakit</div>
-                    <ol class="sop-list">
-                        <li>Cuti sakit diberikan berdasarkan surat keterangan dokter sebagai dokumen pendukung.</li>
-                        <li>Cuti sakit diberikan untuk waktu paling lama 1 (satu) tahun.</li>
-                        <li>Apabila setelah jangka waktu 1 (satu) tahun pegawai masih mengalami sakit, cuti sakit dapat diperpanjang paling lama 6 (enam) bulan sesuai hasil pemeriksaan dan ketentuan yang berlaku.</li>
-                        <li>Apabila setelah jangka waktu sebagaimana dimaksud pada ayat (3) pegawai masih belum dinyatakan sembuh atau tidak dapat menjalankan tugas, penyelesaian status kepegawaiannya dilakukan sesuai ketentuan peraturan perundang-undangan yang berlaku.</li>
-                    </ol>
-
-                    <div class="sop-pasal-title"><i class="fas fa-bookmark"></i> Pasal 5: Cuti Sakit karena Gugur Kandungan</div>
-                    <ol class="sop-list">
-                        <li>PNS yang mengalami gugur kandungan berhak atas cuti sakit paling lama 1,5 (satu setengah) bulan.</li>
-                        <li>Pengajuan cuti sebagaimana dimaksud pada ayat (1) dilengkapi dengan dokumen atau surat keterangan medis yang dipersyaratkan.</li>
-                    </ol>
-
-                    <div class="sop-pasal-title"><i class="fas fa-bookmark"></i> Pasal 6: Cuti Melahirkan</div>
-                    <ol class="sop-list">
-                        <li>Cuti melahirkan diberikan selama 3 (tiga) bulan.</li>
-                        <li>Pengajuan cuti melahirkan dilakukan dengan melampirkan dokumen pendukung sesuai ketentuan administrasi yang berlaku.</li>
-                    </ol>
-
-                    <div class="sop-pasal-title"><i class="fas fa-bookmark"></i> Pasal 7: Cuti karena Alasan Penting bagi Suami yang Istrinya Melahirkan</div>
-                    <ol class="sop-list">
-                        <li>Pegawai yang istrinya melahirkan dapat mengajukan cuti karena alasan penting sesuai ketentuan yang berlaku.</li>
-                        <li>Cuti sebagaimana dimaksud pada ayat (1) diberikan paling lama 1 (satu) bulan.</li>
-                        <li>Pengajuan wajib dilengkapi surat keterangan rawat inap dari Unit Pelayanan Kesehatan atau dokumen medis yang dipersyaratkan.</li>
-                    </ol>
-
-                    <div class="sop-pasal-title"><i class="fas fa-bookmark"></i> Pasal 8: Cuti Menikah</div>
-                    <ol class="sop-list">
-                        <li>Pegawai yang melangsungkan pernikahan dapat mengajukan cuti menikah selama 3 (tiga) sampai dengan 5 (lima) hari kerja.</li>
-                        <li>Pelaksanaan cuti sebagaimana dimaksud pada ayat (1) harus memperoleh persetujuan pimpinan.</li>
-                    </ol>
-
-                </div>
-            </div>
-        </div>
-
-        <!-- BAB III -->
-        <div class="card">
-            <div class="card-header collapsed" id="headingBab3" data-toggle="collapse" data-target="#collapseBab3" aria-expanded="false" aria-controls="collapseBab3">
-                <h5 class="card-title">BAB III &nbsp;&mdash;&nbsp; MEKANISME PENGAJUAN</h5>
-            </div>
-            <div id="collapseBab3" class="collapse" aria-labelledby="headingBab3" data-parent="#accordionSOP">
-                <div class="card-body">
-                    <div class="sop-pasal-title"><i class="fas fa-bookmark"></i> Pasal 9: Pengajuan Cuti</div>
-                    <ol class="sop-list">
-                        <li>Setiap pengajuan cuti dilakukan sebelum tanggal mulai cuti dan memperoleh persetujuan pejabat/pimpinan yang berwenang.</li>
-                        <li>Pengajuan harus mencantumkan jenis cuti, tanggal mulai dan berakhir cuti, jumlah hari cuti, serta dokumen pendukung yang dipersyaratkan.</li>
-                        <li>Pengajuan cuti sakit, cuti melahirkan, cuti karena alasan penting, dan jenis cuti lain yang mensyaratkan bukti pendukung wajib dilengkapi dokumen yang sah.</li>
-                        <li>Pimpinan dapat mempertimbangkan kebutuhan kedinasan dalam memberikan persetujuan cuti.</li>
-                        <li>Dalam hal cuti tahunan tidak dapat dilaksanakan karena tugas kedinasan yang mendesak, hak cuti tersebut dicatat untuk diperhitungkan pada periode berikutnya sesuai ketentuan yang berlaku.</li>
+                    <ol class="sop-list" type="a">
+                        <li>Cuti besar diberikan berdasarkan masa kerja dan berlaku dalam periode 5 (lima) tahun sesuai ketentuan yang berlaku;</li>
+                        <li>Cuti besar dapat diberikan paling lama 3 (tiga) bulan;</li>
+                        <li>Pegawai yang menggunakan cuti besar tidak memperoleh cuti tahunan pada periode yang sama, sesuai ketentuan yang berlaku;</li>
+                        <li>Apabila pegawai telah menggunakan cuti tahunan sebanyak 12 (dua belas) hari kemudian mengajukan cuti besar, maka penggunaan cuti besar diperhitungkan dengan mempertimbangkan cuti tahunan yang telah digunakan sesuai ketentuan yang berlaku.</li>
                     </ol>
                 </div>
             </div>
         </div>
 
-        <!-- BAB IV -->
+        <!-- Cuti Sakit -->
         <div class="card">
-            <div class="card-header collapsed" id="headingBab4" data-toggle="collapse" data-target="#collapseBab4" aria-expanded="false" aria-controls="collapseBab4">
-                <h5 class="card-title">BAB IV &nbsp;&mdash;&nbsp; PENCATATAN DAN PENGENDALIAN</h5>
+            <div class="card-header collapsed" id="heading3" data-toggle="collapse" data-target="#collapse3" aria-expanded="false" aria-controls="collapse3">
+                <h5 class="card-title">3. Cuti Sakit</h5>
             </div>
-            <div id="collapseBab4" class="collapse" aria-labelledby="headingBab4" data-parent="#accordionSOP">
+            <div id="collapse3" class="collapse" aria-labelledby="heading3" data-parent="#accordionSOP">
                 <div class="card-body">
-                    <div class="sop-pasal-title"><i class="fas fa-bookmark"></i> Pasal 10: Pencatatan Hak Cuti</div>
-                    <ol class="sop-list">
-                        <li>Setiap pengajuan, persetujuan, penolakan, dan penggunaan cuti dicatat dalam administrasi kepegawaian Direktorat Teknologi Informasi.</li>
-                        <li>Pengelola administrasi kepegawaian melakukan pencatatan saldo cuti setiap pegawai untuk memastikan jumlah hak cuti yang tersedia.</li>
-                        <li>Perhitungan hari cuti dilakukan berdasarkan jenis cuti dan ketentuan yang berlaku untuk masing-masing jenis cuti.</li>
+                    <ol class="sop-list" type="a">
+                        <li>Cuti sakit diberikan berdasarkan surat keterangan dokter;</li>
+                        <li>Cuti sakit diberikan paling lama 1 (satu) berdasarkan surat keterangan dokter dan sesuai ketentuan yang berlaku;</li>
+                        <li>Apabila setelah 1 (satu) tahun pegawai masih mengalami sakit, cuti sakit dapat diperpanjang paling lama 6 (enam) bulan sesuai hasil pemeriksaan dan ketentuan yang berlaku;</li>
+                        <li>Apabila setelah perpanjangan tersebut pegawai masih belum dapat menjalankan tugas, penyelesaian status kepegawaiannya dilakukan sesuai ketentuan peraturan perundang-undangan yang berlaku.</li>
                     </ol>
                 </div>
             </div>
         </div>
 
-        <!-- BAB V -->
+        <!-- Cuti Sakit karena Gugur Kandungan -->
         <div class="card">
-            <div class="card-header collapsed" id="headingBab5" data-toggle="collapse" data-target="#collapseBab5" aria-expanded="false" aria-controls="collapseBab5">
-                <h5 class="card-title">BAB V &nbsp;&mdash;&nbsp; KETENTUAN PENUTUP</h5>
+            <div class="card-header collapsed" id="heading4" data-toggle="collapse" data-target="#collapse4" aria-expanded="false" aria-controls="collapse4">
+                <h5 class="card-title">4. Cuti Sakit karena Gugur Kandungan</h5>
             </div>
-            <div id="collapseBab5" class="collapse" aria-labelledby="headingBab5" data-parent="#accordionSOP">
+            <div id="collapse4" class="collapse" aria-labelledby="heading4" data-parent="#accordionSOP">
                 <div class="card-body">
-                    <div class="sop-pasal-title"><i class="fas fa-bookmark"></i> Pasal 11: Penutup</div>
-                    <ol class="sop-list">
-                        <li>Hal-hal yang belum diatur dalam peraturan ini mengikuti ketentuan peraturan perundang-undangan dan kebijakan Universitas Gadjah Mada yang berlaku.</li>
-                        <li>Apabila terdapat ketentuan dalam peraturan ini yang berbeda dengan peraturan perundang-undangan yang lebih tinggi, maka yang berlaku adalah ketentuan peraturan perundang-undangan tersebut.</li>
-                        <li>Peraturan ini mulai berlaku sejak tanggal ditetapkan.</li>
+                    <ol class="sop-list" type="a">
+                        <li>PNS yang mengalami gugur kandungan berhak atas cuti sakit paling lama 1,5 (satu setengah) bulan, sesuai ketentuan yang berlaku;</li>
+                        <li>Pengajuan wajib dilengkapi surat keterangan atau dokumen medis yang dipersyaratkan.</li>
                     </ol>
+                </div>
+            </div>
+        </div>
 
-                    <div class="signature-box">
-                        <p class="mb-1 text-muted">Yogyakarta, ......................... 2026</p>
-                        <p class="mb-4 text-dark" style="font-size: 1.05rem;"><strong>Direktur Teknologi Informasi</strong></p>
-                        <br>
-                        <p class="mt-4 text-dark" style="font-size: 1.05rem;"><strong>Universitas Gadjah Mada</strong></p>
-                    </div>
+        <!-- Cuti Melahirkan -->
+        <div class="card">
+            <div class="card-header collapsed" id="heading5" data-toggle="collapse" data-target="#collapse5" aria-expanded="false" aria-controls="collapse5">
+                <h5 class="card-title">5. Cuti Melahirkan</h5>
+            </div>
+            <div id="collapse5" class="collapse" aria-labelledby="heading5" data-parent="#accordionSOP">
+                <div class="card-body">
+                    <ol class="sop-list" type="a">
+                        <li>Cuti melahirkan diberikan selama 3 (tiga) bulan;</li>
+                        <li>Pengajuan cuti melahirkan dilengkapi dokumen pendukung sesuai ketentuan administrasi yang berlaku;</li>
+                        <li>Pegawai yang istrinya melahirkan dapat mengajukan cuti karena alasan penting;</li>
+                        <li>Cuti suami ketika istri melahirkan diberikan paling lama 1 (satu) bulan;</li>
+                        <li>Pengajuan cuti dilengkapi surat keterangan rawat inap dari Unit Pelayanan Kesehatan atau dokumen medis yang dipersyaratkan.</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cuti Menikah -->
+        <div class="card">
+            <div class="card-header collapsed" id="heading6" data-toggle="collapse" data-target="#collapse6" aria-expanded="false" aria-controls="collapse6">
+                <h5 class="card-title">6. Cuti Menikah</h5>
+            </div>
+            <div id="collapse6" class="collapse" aria-labelledby="heading6" data-parent="#accordionSOP">
+                <div class="card-body">
+                    <ol class="sop-list" type="a">
+                        <li>Pegawai yang melangsungkan pernikahan dapat mengajukan cuti selama 3 (tiga) sampai dengan 5 (lima) hari kerja;</li>
+                        <li>Pelaksanaan cuti menikah harus memperoleh persetujuan pimpinan.</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ketentuan Umum Pengajuan Cuti -->
+        <div class="card">
+            <div class="card-header collapsed" id="heading7" data-toggle="collapse" data-target="#collapse7" aria-expanded="false" aria-controls="collapse7">
+                <h5 class="card-title">7. Ketentuan Umum Pengajuan Cuti</h5>
+            </div>
+            <div id="collapse7" class="collapse" aria-labelledby="heading7" data-parent="#accordionSOP">
+                <div class="card-body">
+                    <ol class="sop-list" type="a">
+                        <li>Setiap pengajuan cuti dilakukan sebelum tanggal mulai cuti dan harus memperoleh persetujuan pimpinan/pejabat yang berwenang;</li>
+                        <li>Pengajuan mencantumkan jenis cuti, tanggal mulai dan berakhir cuti, jumlah hari cuti yang diajukan, serta keperluan cuti;</li>
+                        <li>Dokumen pendukung wajib dilampirkan untuk jenis cuti yang mensyaratkannya;</li>
+                        <li>Pengelola administrasi kepegawaian melakukan pencatatan terhadap pengajuan, persetujuan, penggunaan, dan sisa hak cuti setiap pegawai;</li>
+                        <li>Perhitungan hak dan penggunaan cuti dilakukan berdasarkan jenis cuti serta ketentuan peraturan perundang-undangan dan kebijakan Universitas Gadjah Mada yang berlaku;</li>
+                        <li>Apabila terdapat ketentuan dalam dokumen ini yang berbeda dengan peraturan perundang-undangan atau kebijakan Universitas Gadjah Mada yang lebih tinggi, maka ketentuan yang lebih tinggi tersebut yang berlaku.</li>
+                    </ol>
                 </div>
             </div>
         </div>
